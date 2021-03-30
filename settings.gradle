@@ -1,2 +1,0 @@
-include ':app'
-rootProject.name = "CSE 3310 Semester Project"
