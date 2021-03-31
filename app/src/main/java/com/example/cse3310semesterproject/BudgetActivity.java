@@ -11,7 +11,7 @@ import android.widget.Toast;
 public class BudgetActivity extends AppCompatActivity
 {
 
-    Button mReturnHomeFromBudgetBtn, mSignOutFromBudgetBtn;
+    Button mReturnHomeFromBudgetBtn, mPrioritiesBtn, mExpensesBtn, mLoanInformationBtn, mSignOutFromBudgetBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -20,7 +20,44 @@ public class BudgetActivity extends AppCompatActivity
         setContentView(R.layout.activity_budget);
 
         mReturnHomeFromBudgetBtn = findViewById(R.id.returnHomeFromBudgetBtn);
+        mPrioritiesBtn = findViewById(R.id.prioritiesBtn);
+        mExpensesBtn = findViewById(R.id.expensesBtn);
+        mLoanInformationBtn = findViewById(R.id.loanInformationBtn);
+
         mSignOutFromBudgetBtn = findViewById(R.id.signOutFromBudgetBtn2);
+
+        // Let the user go to the priorities page to do anything priority related with their
+        // budget
+        mPrioritiesBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(getApplicationContext(), PrioritiesActivity.class));
+            }
+        });
+
+        // Let the user go to the expenses page to do anything expense/income related with their
+        // budget
+        mExpensesBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(getApplicationContext(), ExpenseActivity.class));
+            }
+        });
+
+        // Let the user go to the loan page to do anything loan related
+        // ***** Causing issues for some reason *****
+        mLoanInformationBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(getApplicationContext(), LoanActivity.class));
+            }
+        });
 
         // Let the user go back to the homepage
         mReturnHomeFromBudgetBtn.setOnClickListener(new View.OnClickListener()

@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CSE3310SemesterProject">
-        <activity android:name=".CreateAccountActivity"></activity>
+        <activity android:name=".LoanActivity"></activity>
+        <activity android:name=".ExpenseActivity" />
+        <activity android:name=".PrioritiesActivity" />
+        <activity android:name=".CreateAccountActivity" />
         <activity android:name=".BudgetActivity" />
         <activity android:name=".FinanceActivity" />
         <activity android:name=".AccountActivity" />
