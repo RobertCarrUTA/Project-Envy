@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+//I hate github and this project
 public class PrioritiesActivity extends AppCompatActivity
 {
 
@@ -44,8 +45,4 @@ public class PrioritiesActivity extends AppCompatActivity
         });
     }
 }
-//This is a comment
-// Robert made a comment
-// I made another comment
-//Making the merge more complex
-//Sydney's comment
+//Nothing left

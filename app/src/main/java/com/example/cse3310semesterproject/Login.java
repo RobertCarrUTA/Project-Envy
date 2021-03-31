@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 public class Login extends AppCompatActivity
 {
     EditText mEmail, mPassword;
@@ -59,7 +60,7 @@ public class Login extends AppCompatActivity
 
                 // This if condition is the one that determine if the login information was correct and tells the user
                 // the login was successful then takes them to the homepage (MainActivity)
-                if(emailValue.equals("CSE3310") && passwordValue.equals("123456"))
+                if((emailValue.equals("CSE3310") || emailValue.equals("cse3310")) && passwordValue.equals("123456"))
                 {
                     Toast.makeText(Login.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
