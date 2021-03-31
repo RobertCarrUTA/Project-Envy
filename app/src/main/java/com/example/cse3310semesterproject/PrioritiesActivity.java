@@ -44,13 +44,4 @@ public class PrioritiesActivity extends AppCompatActivity
         });
     }
 }
-//This is a comment
-// Robert made a comment
-// I made another comment
-//Making the merge more complex
-//Sydney's comment
-//fuck my life into pieces
-//Sydney's comment
-// Robert made a comment
-// I made another comment
-//Making the merge more complex
+//Nothing left
