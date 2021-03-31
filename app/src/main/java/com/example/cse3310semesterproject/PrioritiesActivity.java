@@ -45,4 +45,3 @@ public class PrioritiesActivity extends AppCompatActivity
         });
     }
 }
-//Nothing left
