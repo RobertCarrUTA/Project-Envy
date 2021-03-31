@@ -21,7 +21,7 @@ public class LoanActivity extends AppCompatActivity
 
         mReturnHomeFromLoanBtn = findViewById(R.id.expensesBtn);
 
-        signOutFromLoanBtn = findViewById(R.id.signOutFromBudgetBtn2);
+        signOutFromLoanBtn = findViewById(R.id.signOutFromLoanBtn);
 
         // Let the user go back to the homepage
         mReturnHomeFromLoanBtn.setOnClickListener(new View.OnClickListener()
