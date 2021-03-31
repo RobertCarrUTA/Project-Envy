@@ -19,7 +19,7 @@ public class LoanActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loan);
 
-        mReturnHomeFromLoanBtn = findViewById(R.id.expensesBtn);
+        mReturnHomeFromLoanBtn = findViewById(R.id.returnHomeFromLoanBtn);
 
         signOutFromLoanBtn = findViewById(R.id.signOutFromLoanBtn);
 
