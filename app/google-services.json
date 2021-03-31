@@ -1,62 +1,33 @@
 {
   "project_info": {
-    "project_number": "901400741259",
-    "project_id": "semester-project-1fdd3",
-    "storage_bucket": "semester-project-1fdd3.appspot.com"
+    "project_number": "317538842516",
+    "project_id": "envy-fb4ac",
+    "storage_bucket": "envy-fb4ac.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:901400741259:android:b5dcd8b5364596c312db8e",
+        "mobilesdk_app_id": "1:317538842516:android:11aace31dcb391d0e8c181",
         "android_client_info": {
           "package_name": "com.example.cse3310semesterproject"
         }
       },
       "oauth_client": [
         {
-          "client_id": "901400741259-dhbe7f9htltbc4m4kdb47fl280b91d71.apps.googleusercontent.com",
+          "client_id": "317538842516-d9ocjaops28a8aqlgoue19l4u2v6epl6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCBF5kUkCksyMJd5MU5T7NHmgM7AZgFVdc"
+          "current_key": "AIzaSyCOw8LA8bAdVf_IeFqNw92jbdJ9e53IfOo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "901400741259-dhbe7f9htltbc4m4kdb47fl280b91d71.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:901400741259:android:200728c520a1039c12db8e",
-        "android_client_info": {
-          "package_name": "com.example.cse3310termprojectusingfragments"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "901400741259-dhbe7f9htltbc4m4kdb47fl280b91d71.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCBF5kUkCksyMJd5MU5T7NHmgM7AZgFVdc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "901400741259-dhbe7f9htltbc4m4kdb47fl280b91d71.apps.googleusercontent.com",
+              "client_id": "317538842516-d9ocjaops28a8aqlgoue19l4u2v6epl6.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
