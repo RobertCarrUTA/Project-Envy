@@ -8,12 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class LoanActivity extends AppCompatActivity {
+public class LoanActivity extends AppCompatActivity
+{
 
     Button  mReturnHomeFromLoanBtn, signOutFromLoanBtn;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loan);
 

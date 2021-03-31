@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                // This if condition is the one that determine if the login information was correct and tells the user
-                // the login was successful then takes them to the homepage (MainActivity)
+                // The toast is what makes the message pop up when the user signs out
+                Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getApplicationContext(), Login.class));
             }
         });

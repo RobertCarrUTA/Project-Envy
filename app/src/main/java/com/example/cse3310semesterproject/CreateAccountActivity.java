@@ -8,12 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class CreateAccountActivity extends AppCompatActivity {
+public class CreateAccountActivity extends AppCompatActivity
+{
 
     Button mReturnToLoginBtn;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
 
