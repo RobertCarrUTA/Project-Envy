@@ -7,6 +7,35 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:901400741259:android:b5dcd8b5364596c312db8e",
+        "android_client_info": {
+          "package_name": "com.example.cse3310semesterproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901400741259-dhbe7f9htltbc4m4kdb47fl280b91d71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBF5kUkCksyMJd5MU5T7NHmgM7AZgFVdc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901400741259-dhbe7f9htltbc4m4kdb47fl280b91d71.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:901400741259:android:200728c520a1039c12db8e",
         "android_client_info": {
           "package_name": "com.example.cse3310termprojectusingfragments"
