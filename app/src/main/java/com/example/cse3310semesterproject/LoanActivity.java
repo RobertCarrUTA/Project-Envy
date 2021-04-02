@@ -72,9 +72,5 @@ public class LoanActivity extends AppCompatActivity
                 startActivity(new Intent(getApplicationContext(), Login.class));
             }
         });
-
-
-
-
     }
 }
