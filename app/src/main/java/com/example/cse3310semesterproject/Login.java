@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,7 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 // -------------------------------------------------------------------------------------------------
 
 
-public class Login extends AppCompatActivity
+public class Login extends AppCompatActivity implements View.OnClickListener
 {
     EditText mEmail, mPassword;
     Button loginBtn, createAccountBtn;
@@ -35,8 +36,7 @@ public class Login extends AppCompatActivity
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
 
 
         super.onCreate(savedInstanceState);
@@ -46,44 +46,55 @@ public class Login extends AppCompatActivity
         mPassword = findViewById(R.id.PasswordLoginEntry);
         loginBtn = findViewById(R.id.SignInBtn);
         createAccountBtn = findViewById(R.id.RegisterBtn);
-
+        loginBtn.setOnClickListener(this);
+        createAccountBtn.setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
         // We can replace this with a lambda
-        loginBtn.setOnClickListener(new View.OnClickListener()
-        {
+    }
+
             @Override
             public void onClick(View v) {
-                String email = mEmail.getText().toString(); //storage
-                String password = mPassword.getText().toString();
-                if (TextUtils.isEmpty(email)) {
-                    mEmail.setError("E-mail is required");
-                    return;
+                switch (v.getId()) {
+                    case R.id.RegisterBtn:
+                        startActivity(new Intent(getApplicationContext(), CreateAccountActivity.class));
+                        break;
+                    case R.id.SignInBtn:
+                        userLogin();
+                        break;
                 }
-                // If the password text entry is empty tell the user that the password is required
-                if (TextUtils.isEmpty(password)) {
-                    mPassword.setError("Password is required");
-                    return;
-                }
-                mAuth.signInWithEmailAndPassword(email, password)//function provided by Firebase->authentication->email and password
-                        .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d(TAG, "signInWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    updateUI(user);
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(Login.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                    //updateUI(null);
-                                }
-                            }
-                        });
             }
-});
+
+
+    public void userLogin(){
+        String email = mEmail.getText().toString(); //storage
+        String password = mPassword.getText().toString();
+        if (TextUtils.isEmpty(email)) {
+            mEmail.setError("E-mail is required");
+            return;
+        }
+        // If the password text entry is empty tell the user that the password is required
+        if (TextUtils.isEmpty(password)) {
+            mPassword.setError("Password is required");
+            return;
+        }
+        mAuth.signInWithEmailAndPassword(email, password)//function provided by Firebase->authentication->email and password
+                .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(Login.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+                    }
+                });
     }
 
     public void updateUI(FirebaseUser currentUser) {

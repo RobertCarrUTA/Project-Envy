@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity
         mBudgetingBtn = findViewById(R.id.BudgetingBtn);
         mSignOutBtn = findViewById(R.id.SignOutBtn);
 
+
         mUserAccountBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
