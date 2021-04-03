@@ -19,6 +19,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+// -------------------------------------------------------------------------------------------------
+// ***** LOGIN INFO FOR THE APP *****
+// E-mail: cse3310@gmail.com
+// Password: password123
+// -------------------------------------------------------------------------------------------------
+
 
 public class Login extends AppCompatActivity
 {

@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
@@ -124,8 +126,10 @@ public class LoanActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
+                // The toast is what makes the message pop up when the user signs out
                 Toast.makeText(LoanActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), Login.class));
+                FirebaseAuth.getInstance().signOut(); //firebase command to delete token created for account locally
+                startActivity(new Intent(getApplicationContext(), Login.class)); //back to login screen
             }
         });
     }
