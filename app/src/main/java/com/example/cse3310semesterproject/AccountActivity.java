@@ -1,5 +1,6 @@
 package com.example.cse3310semesterproject;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,74 +11,78 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class AccountActivity extends AppCompatActivity
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+public class AccountActivity extends AppCompatActivity implements View.OnClickListener
 {
     EditText mNewCurrentPasswordEntry;
-    Button mReturnHomeBtn, mSignOutFromAccountBtn, mChangePasswordBtn;
+    Button mReturnHomeBtn, mSignOutFromAccountBtn, mChangePasswordBtn, mAvatarButton;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
         mReturnHomeBtn = findViewById(R.id.ReturnHomeBtn);
         mSignOutFromAccountBtn = findViewById(R.id.SignOutFromAccountBtn);
-        mChangePasswordBtn = findViewById(R.id.changePasswordBtn);
-        mNewCurrentPasswordEntry = findViewById(R.id.newCurrentPasswordEntry);
-
-        // Let the user go back to the homepage
-        mReturnHomeBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            }
-        });
-
-        // Let the user sign out
-        mSignOutFromAccountBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Toast.makeText(AccountActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), Login.class));
-            }
-        });
-
-        // This is for the password change functionality, needs database check I guess
-        mChangePasswordBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                String passwordValue = mNewCurrentPasswordEntry.getText().toString().trim();
-
-                // If the password text entry is empty tell the user that the password is required
-                if(TextUtils.isEmpty(passwordValue))
-                {
-                    mNewCurrentPasswordEntry.setError("Password is required");
-                    return;
-                }
-
-                // We should make the 6 in this case an int value we define and change
-                // once then it changes through the whole program
-                if(passwordValue.length() < 6)
-                {
-                    mNewCurrentPasswordEntry.setError("Password should be more than 6 characters");
-                    return;
-                }
-
-                // This if condition is the one that determine if the login information was correct and tells the user
-                // the login was successful then takes them to the homepage (MainActivity)
-                if(passwordValue.length() > 6)
-                {
-                    Toast.makeText(AccountActivity.this, "Password changed successfully!", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
+        mChangePasswordBtn = findViewById(R.id.changePasswordBtn); //change current password
+        mNewCurrentPasswordEntry = findViewById(R.id.newCurrentPasswordEntry); //user input of password
+        mAvatarButton = findViewById(R.id.AvatarButton);//change user avatar
+        mAvatarButton.setOnClickListener(this);
+        mChangePasswordBtn.setOnClickListener(this);
+        mSignOutFromAccountBtn.setOnClickListener(this);
+        mReturnHomeBtn.setOnClickListener(this);
     }
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ReturnHomeBtn:
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));//jump to homepage
+                break;
+            case R.id.SignOutFromAccountBtn:
+                Toast.makeText(AccountActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getApplicationContext(), Login.class));
+                break;
+            case R.id.changePasswordBtn:
+                changePassword();
+                break;
+            case R.id.AvatarButton://temporary, not yet implemented
+                Toast.makeText(AccountActivity.this, "Please somebody make me work :(", Toast.LENGTH_LONG).show();
+                break;
+        }
+    }
+
+    public void changePassword(){
+        String passwordValue = mNewCurrentPasswordEntry.getText().toString().trim();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        // If the password text entry is empty tell the user that the password is required
+        if(TextUtils.isEmpty(passwordValue))
+        {
+            mNewCurrentPasswordEntry.setError("Password is required");
+            return;
+        }
+
+        // We should make the 6 in this case an int value we define and change
+        // once then it changes through the whole program
+        if(passwordValue.length() < 6)
+        {
+            mNewCurrentPasswordEntry.setError("Password should be more than 6 characters");
+            return;
+        }
+        user.updatePassword(passwordValue).addOnCompleteListener(new OnCompleteListener<Void>() {//very very basic, not making user reauthenticate
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(AccountActivity.this, "Password changed successfully!", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(AccountActivity.this, "Password change failed!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+    }
+
 }
