@@ -41,7 +41,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        //linking button and EditText's to id's in activity_login.xml
         mEmail = findViewById(R.id.EmailLoginEntry);
         mPassword = findViewById(R.id.PasswordLoginEntry);
         loginBtn = findViewById(R.id.SignInBtn);
@@ -53,12 +53,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener
     }
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {//now checks which button is pressed by id
                 switch (v.getId()) {
-                    case R.id.RegisterBtn:
+                    case R.id.RegisterBtn://jump to CreateAccountActivity
                         startActivity(new Intent(getApplicationContext(), CreateAccountActivity.class));
                         break;
-                    case R.id.SignInBtn:
+                    case R.id.SignInBtn://jump to userLogin function to log user in
                         userLogin();
                         break;
                 }

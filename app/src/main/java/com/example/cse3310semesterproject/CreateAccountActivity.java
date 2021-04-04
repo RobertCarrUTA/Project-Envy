@@ -20,17 +20,16 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class CreateAccountActivity extends AppCompatActivity implements View.OnClickListener
+public class CreateAccountActivity extends AppCompatActivity implements View.OnClickListener//implements required for setOnClickListener's(this)
 {
 
     Button mReturnToLoginBtn, mCreateAccount;
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
     private DatabaseReference dataRef;
-    //private static final String USER = "user";
     EditText mEmail, mPassword;
 
-    private static final String TAG = "user"; //required declaration of TAG
+    //private static final String TAG = "user"; //required declaration of TAG
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,24 +37,22 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
         mReturnToLoginBtn = findViewById(R.id.returnToLoginBtn);
 
-        database = FirebaseDatabase.getInstance();
-        dataRef = database.getReference(TAG);
         mAuth = FirebaseAuth.getInstance();
-        mEmail = findViewById(R.id.newEmailEntry);
+        mEmail = findViewById(R.id.newEmailEntry);//link email and password to id of textbox
         mPassword = findViewById(R.id.newPasswordEntry);
-        mCreateAccount = findViewById(R.id.registerUser);
+        mCreateAccount = findViewById(R.id.registerUser);//link mCreateAccount with register user button
         mReturnToLoginBtn.setOnClickListener(this);
         mCreateAccount.setOnClickListener(this);
     }
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {//onClick now checks which id is matched
                 switch (v.getId()) {
-                    case R.id.registerUser:
+                    case R.id.registerUser://user clicked register account
                         userCreate();
                         break;
-                    case R.id.returnToLoginBtn:
-                        startActivity(new Intent(getApplicationContext(), Login.class));
+                    case R.id.returnToLoginBtn://user wants to go back to login screen
+                        startActivity(new Intent(getApplicationContext(), Login.class));//jump to Login.java
                         break;
                 }
             }
@@ -64,7 +61,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                 String password = mPassword.getText().toString().trim();
                 if (TextUtils.isEmpty(email)) {
                     mEmail.setError("E-mail is required");
-                    mEmail.requestFocus();
+                    mEmail.requestFocus();//request focus pings the specified location
                     return;
                 }
                 // If the password text entry is empty tell the user that the password is required
@@ -73,21 +70,21 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                     mPassword.requestFocus();
                     return;
                 }
-                if(password.length() < 6){
+                if(password.length() < 6){//can adjust if we want additional characteristics in password
                     mPassword.setError("Min. of 6 characters!");
                     mPassword.requestFocus();
                     return;
                 }
 
                 mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {//given by Firebase->authentication
                             @Override
 
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
-                                    Log.d(TAG, "createUserWithEmail:success");
-                                    User user = new User(email);
+                                    //Log.d(TAG, "createUserWithEmail:success");
+                                    User user = new User(email); //will use User.java constructor to fill email into string
                                     FirebaseDatabase.getInstance().getReference("Users")
                                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                             .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -112,7 +109,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             }
 
 
-            public void updateUI(){
+            public void updateUI(){//used in task.isSuccessful() condition, jump to login page
                 startActivity(new Intent(getApplicationContext(), Login.class));
             }
 
