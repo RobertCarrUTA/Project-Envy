@@ -25,11 +25,8 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
     Button mReturnToLoginBtn, mCreateAccount;
     private FirebaseAuth mAuth;
-    private FirebaseDatabase database;
-    private DatabaseReference dataRef;
     EditText mEmail, mPassword;
 
-    //private static final String TAG = "user"; //required declaration of TAG
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +80,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
-                                    //Log.d(TAG, "createUserWithEmail:success");
                                     User user = new User(email); //will use User.java constructor to fill email into string
                                     FirebaseDatabase.getInstance().getReference("Users")
                                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -105,7 +101,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                 // This if condition is the one that determine if the login information was correct and tells the user
                 // the login was successful then takes them to the homepage (MainActivity)
                 Toast.makeText(CreateAccountActivity.this, "Successfully Created Account!", Toast.LENGTH_SHORT).show();
-                //startActivity(new Intent(getApplicationContext(), Login.class));
             }
 
 
