@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "317538842516",
+    "firebase_url": "https://envy-fb4ac-default-rtdb.firebaseio.com",
+    "project_id": "envy-fb4ac",
+    "storage_bucket": "envy-fb4ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317538842516:android:11aace31dcb391d0e8c181",
+        "android_client_info": {
+          "package_name": "com.example.cse3310semesterproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "317538842516-d9ocjaops28a8aqlgoue19l4u2v6epl6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOw8LA8bAdVf_IeFqNw92jbdJ9e53IfOo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "317538842516-d9ocjaops28a8aqlgoue19l4u2v6epl6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

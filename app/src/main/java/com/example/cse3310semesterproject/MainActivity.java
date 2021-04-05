@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;//required to call FirebaseAuth commands
+
+
 public class MainActivity extends AppCompatActivity
 {
     // This sets us up to use our buttons that we have on our homepage
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity
         mFinancialReportBtn = findViewById(R.id.FinancialReportBtn);
         mBudgetingBtn = findViewById(R.id.BudgetingBtn);
         mSignOutBtn = findViewById(R.id.SignOutBtn);
+
 
         mUserAccountBtn.setOnClickListener(new View.OnClickListener()
         {
@@ -68,7 +72,8 @@ public class MainActivity extends AppCompatActivity
             {
                 // The toast is what makes the message pop up when the user signs out
                 Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), Login.class));
+                FirebaseAuth.getInstance().signOut(); //firebase command to delete token created for account locally
+                startActivity(new Intent(getApplicationContext(), Login.class)); //back to login screen
             }
         });
     }
