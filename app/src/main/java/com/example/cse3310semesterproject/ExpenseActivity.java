@@ -19,7 +19,7 @@ public class ExpenseActivity extends AppCompatActivity
 {
 
     EditText mIncomeEntryBox, mExpensesEntryBox;
-    Double Income, Expense, Reset;
+    Double Income, Expense;
 
     Button mSaveExpensesBtn, mReturnHomeFromExpenseBtn, mSignOutFromExpenseBtn;
 
@@ -62,20 +62,15 @@ public class ExpenseActivity extends AppCompatActivity
                 Toast.makeText(ExpenseActivity.this, "Input and Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();
 
                 //----------------------------------------------------------------------------------
-                // Set a value to use later so that we can reset the income and expense entry boxes
-                Reset = 0.00;
-
-                //----------------------------------------------------------------------------------
                 // The below code allows for the entry boxes to be represented in US currency
                 Locale usa = new Locale("en", "US");
                 Currency dollars = Currency.getInstance(usa);
                 NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
 
                 //----------------------------------------------------------------------------------
-                // To reset the text in the entry box we reset the values to $0.00
-                // The documentation for setText is here: https://developer.android.com/reference/android/widget/EditText#setText(java.lang.CharSequence,%20android.widget.TextView.BufferType)
-                mIncomeEntryBox.setText(dollarFormat.format(Reset));
-                mExpensesEntryBox.setText(dollarFormat.format(Reset));
+                // To reset the text in the entry box we reset the values to empty
+                mIncomeEntryBox.getText().clear();
+                mExpensesEntryBox.getText().clear();
             }
         });
 
