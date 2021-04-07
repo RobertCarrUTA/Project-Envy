@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class BudgetActivity extends AppCompatActivity
 {
 
@@ -76,7 +78,8 @@ public class BudgetActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 Toast.makeText(BudgetActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), Login.class));
+                FirebaseAuth.getInstance().signOut(); //firebase command to delete token created for account locally
+                startActivity(new Intent(getApplicationContext(), Login.class)); //back to login screen
             }
         });
     }
