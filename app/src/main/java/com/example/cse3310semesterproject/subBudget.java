@@ -7,4 +7,14 @@ public class subBudget {
     public double budgetPiece;
     public Date startDate;
     public Date endDate;
+
+    public subBudget(){}
+
+    public subBudget(int priority, double budgetPiece, Date startDate, Date endDate)
+    {
+        this.priority = priority;
+        this.budgetPiece = budgetPiece;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }

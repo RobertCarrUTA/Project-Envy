@@ -8,4 +8,14 @@ public class Budgets {
     public Date endDate;
     public double budget;
 
+    public Budgets(){}
+
+    public Budgets(String email, Date startDate, Date endDate, double budget)
+    {
+        this.email = email;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.budget = budget;
+    }
+
 }

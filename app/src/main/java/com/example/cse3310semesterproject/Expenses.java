@@ -7,4 +7,14 @@ public class Expenses {
     public double spending;
     public Date startDate;
     public Date endDate;
+
+    public Expenses(){}
+
+    public Expenses(int priority, double spending, Date startDate, Date endDate)
+    {
+        this.priority = priority;
+        this.spending = spending;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }
