@@ -87,8 +87,8 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
             String uid = user.getUid();
             //database.getReference().
-            FirebaseDatabase.getInstance().getReference().child("Inputs").push().child("Income").setValue(Income);
-            FirebaseDatabase.getInstance().getReference().child("Inputs").push().child("Expenses").setValue(Expense);
+            FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Income").setValue(Income);
+            FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Expenses").setValue(Expense);
             //----------------------------------------------------------------------------------
             // Let the user know the user input has been successfully saved.
             Toast.makeText(ExpenseActivity.this, "Input and Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();
