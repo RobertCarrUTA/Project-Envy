@@ -8,14 +8,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.text.TextUtils;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
 
-public class ExpenseActivity extends AppCompatActivity
+
+public class ExpenseActivity extends AppCompatActivity implements View.OnClickListener
 {
 
     EditText mIncomeEntryBox, mExpensesEntryBox;
@@ -24,8 +28,7 @@ public class ExpenseActivity extends AppCompatActivity
     Button mSaveExpensesBtn, mReturnHomeFromExpenseBtn, mSignOutFromExpenseBtn;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense);
 
@@ -40,63 +43,68 @@ public class ExpenseActivity extends AppCompatActivity
         mReturnHomeFromExpenseBtn = findViewById(R.id.returnHomeFromExpenseBtn);
         mSignOutFromExpenseBtn = findViewById(R.id.signOutFromExpenseBtn);
 
+        mIncomeEntryBox.setOnClickListener(this);
+        mExpensesEntryBox.setOnClickListener(this);
+        mSaveExpensesBtn.setOnClickListener(this);
+        mReturnHomeFromExpenseBtn.setOnClickListener(this);
+        mSignOutFromExpenseBtn.setOnClickListener(this);
+    };
 
-        //------------------------------------------------------------------------------------------
-        // WE NEED TO SAVE THESE VALUES TO THE FIREBASE ACCOUNT AND BE ABLE TO PULL THEM BACK FOR
-        // USE IN THE REPORTS PAGE
-        mSaveExpensesBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                //----------------------------------------------------------------------------------
-                // This is where we save the income amount the user entered into a value we can use
-                Income = Double.valueOf(mIncomeEntryBox.getText().toString());
-
-                //----------------------------------------------------------------------------------
-                // This is where we save the expense amount the user entered into a value we can use
-                Expense = Double.valueOf(mExpensesEntryBox.getText().toString());
-
-                //----------------------------------------------------------------------------------
-                // Let the user know the user input has been successfully saved.
-                Toast.makeText(ExpenseActivity.this, "Input and Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();
-
-                //----------------------------------------------------------------------------------
-                // The below code allows for the entry boxes to be represented in US currency
-                Locale usa = new Locale("en", "US");
-                Currency dollars = Currency.getInstance(usa);
-                NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
-
-                //----------------------------------------------------------------------------------
-                // To reset the text in the entry box we reset the values to empty
-                mIncomeEntryBox.getText().clear();
-                mExpensesEntryBox.getText().clear();
-            }
-        });
-
-        //------------------------------------------------------------------------------------------
-        // Let the user go back to the homepage
-        mReturnHomeFromExpenseBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            }
-        });
-
-        //------------------------------------------------------------------------------------------
-        // Let the user sign out
-        mSignOutFromExpenseBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                // The toast is what makes the message pop up when the user signs out
+    public void onClick(View v){
+        switch(v.getId()){
+            case R.id.returnHomeFromExpenseBtn:
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));//jump to homepage
+                break;
+            case R.id.signOutFromExpenseBtn:
                 Toast.makeText(ExpenseActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-                FirebaseAuth.getInstance().signOut(); //firebase command to delete token created for account locally
-                startActivity(new Intent(getApplicationContext(), Login.class)); //back to login screen
-            }
-        });
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getApplicationContext(), Login.class));
+                break;
+            case R.id.saveExpensesBtn:
+                inputInfo();
+                break;
+        }
     }
+    public void inputInfo(){
+        Income = Double.valueOf(mIncomeEntryBox.getText().toString());
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        //----------------------------------------------------------------------------------
+        // This is where we save the expense amount the user entered into a value we can use
+        Expense = Double.valueOf(mExpensesEntryBox.getText().toString());
+
+        if(TextUtils.isEmpty(mIncomeEntryBox.getText()))
+        {
+            mIncomeEntryBox.setError("Please enter an income");
+            return;
+        }
+        else if(TextUtils.isEmpty(mExpensesEntryBox.getText()))
+        {
+            mExpensesEntryBox.setError("Please enter an expense");
+            return;
+        }else{
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            String uid = user.getUid();
+            //database.getReference().
+            FirebaseDatabase.getInstance().getReference().child("Inputs").push().child("Income").setValue(Income);
+            FirebaseDatabase.getInstance().getReference().child("Inputs").push().child("Expenses").setValue(Expense);
+            //----------------------------------------------------------------------------------
+            // Let the user know the user input has been successfully saved.
+            Toast.makeText(ExpenseActivity.this, "Input and Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();
+        }
+
+
+        //----------------------------------------------------------------------------------
+        // The below code allows for the entry boxes to be represented in US currency
+        Locale usa = new Locale("en", "US");
+        Currency dollars = Currency.getInstance(usa);
+        NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
+
+        //----------------------------------------------------------------------------------
+        // To reset the text in the entry box we reset the values to empty
+        mIncomeEntryBox.getText().clear();
+        mExpensesEntryBox.getText().clear();
+    }
+
 }
