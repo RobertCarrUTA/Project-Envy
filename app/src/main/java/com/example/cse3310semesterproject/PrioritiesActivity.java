@@ -12,6 +12,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class PrioritiesActivity extends AppCompatActivity
 {
@@ -54,10 +56,11 @@ public class PrioritiesActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 // All of these values need to be saved to firebase and associated to a user account
-
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 // Save the category title
+                String uid = user.getUid();
                 String CategoryTitle = mCategoryTitleEntry.getText().toString();
-
+                FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("categoryTitle").setValue(CategoryTitle);
                 // Code needs to be added to save the spinner selection
 
                 Toast.makeText(PrioritiesActivity.this, "Category " + CategoryTitle + " created successfully!", Toast.LENGTH_SHORT).show();
