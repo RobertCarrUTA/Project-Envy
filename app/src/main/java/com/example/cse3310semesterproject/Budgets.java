@@ -3,18 +3,16 @@ package com.example.cse3310semesterproject;
 import java.util.Date;
 
 public class Budgets {
-    public String email;
-    public Date startDate;
-    public Date endDate;
+    public int userID;
+    public Date creationDate;
     public double budget;
 
     public Budgets(){}
 
-    public Budgets(String email, Date startDate, Date endDate, double budget)
+    public Budgets(int userID, Date creationDate, double budget)
     {
-        this.email = email;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.userID = userID;
+        this.creationDate = creationDate;
         this.budget = budget;
     }
 

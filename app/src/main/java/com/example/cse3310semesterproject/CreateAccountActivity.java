@@ -27,6 +27,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     private FirebaseAuth mAuth;
     EditText mEmail, mPassword;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +96,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                                             }
                                         }
                                     });
+                                    FirebaseDatabase.getInstance().getReference("Users").child("Email").setValue(user);
                                 }
                             }
                         });
