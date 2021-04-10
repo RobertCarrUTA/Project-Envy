@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,6 +25,8 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
     private static final String[] paths = {"High", "Med", "Low"};
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
+
+    String CategoryTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,6 +55,7 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
         mReturnHomeFromPrioritiesBtn = findViewById(R.id.returnHomeFromPrioritiesBtn);
         mSignOutFromPrioritiesBtn = findViewById(R.id.signOutFromPrioritiesBtn);
 
+        String CategoryTitle;
 
         //------------------------------------------------------------------------------------------
         // Save the user input
@@ -61,11 +65,11 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
             public void onClick(View v)
             {
                 // All of these values need to be saved to firebase and associated to a user account
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
                 // Save the category title
-                String uid = user.getUid();
                 String CategoryTitle = mCategoryTitleEntry.getText().toString();
-                FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("categoryTitle").setValue(CategoryTitle);
+                setCategoryTitle(CategoryTitle);
+
                 // Code needs to be added to save the spinner selection
 
                 Toast.makeText(PrioritiesActivity.this, "Category " + CategoryTitle + " created successfully!", Toast.LENGTH_SHORT).show();
@@ -98,27 +102,46 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
             }
         });
     }
+
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        switch (position) {
-            case 0:
-                BudgetCategory budgetCategory  = new BudgetCategory(uid, "test", "High", 1);
-                FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory);
-                break;
-            case 1:
-                BudgetCategory budgetCategory2  = new BudgetCategory(uid, "test2", "Med", 2);
-                FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory2);
-                break;
-            case 2:
-                BudgetCategory budgetCategory3  = new BudgetCategory(uid, "test3", "Low", 3);
-                FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory3);
-                break;
-
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+    {
+        if (TextUtils.isEmpty(CategoryTitle))
+        {
+            // If it is the category text box is empty, tell the user to add a title
+            Toast.makeText(PrioritiesActivity.this, "Please add a category title.", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            switch (position)
+            {
+                case 0:
+                    BudgetCategory budgetCategory = new BudgetCategory(uid, CategoryTitle, "High", 1);
+                    FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory);
+                    mCategoryTitleEntry.getText().clear();
+                    break;
+                case 1:
+                    BudgetCategory budgetCategory2 = new BudgetCategory(uid, CategoryTitle, "Medium", 2);
+                    FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory2);
+                    mCategoryTitleEntry.getText().clear();
+                    break;
+                case 2:
+                    BudgetCategory budgetCategory3 = new BudgetCategory(uid, CategoryTitle, "Low", 3);
+                    FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory3);
+                    mCategoryTitleEntry.getText().clear();
+                    break;
+            }
         }
     }
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onNothingSelected(AdapterView<?> parent)
+    {
 
+    }
+
+    ///////////////////////////////////////////////////////////////
+    public void setCategoryTitle(String CategoryTitle)
+    {
+        this.CategoryTitle = CategoryTitle;
     }
 }

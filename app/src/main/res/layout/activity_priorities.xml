@@ -34,6 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Budget Priorities"
+        android:textStyle="bold"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,6 +67,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.17000002" />
 
+    <!--
+        This is a comment, the string array that this spinner has access to is located in
+        strings.xml
+         -->
+         <!-- android:spinnerMode="dialog" -->
+
     <Button
         android:id="@+id/createCategoryBtn"
         android:layout_width="wrap_content"
@@ -73,25 +80,20 @@
         android:text="Create Category"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.37" />
-
-        <!--
-        This is a comment, the string array that this spinner has access to is located in
-        strings.xml
-         -->
+        app:layout_constraintVertical_bias="0.27" />
 
     <Spinner
         android:id="@+id/priority_spinner"
-        android:layout_width="210dp"
-        android:layout_height="21dp"
+        android:layout_width="209dp"
+        android:layout_height="42dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.269" />
+        app:layout_constraintVertical_bias="0.404" />
 
     <TextView
         android:id="@+id/textView15"
@@ -103,6 +105,33 @@
         app:layout_constraintHorizontal_bias="0.388"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.242" />
+        app:layout_constraintVertical_bias="0.365" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="288dp"
+        android:layout_height="137dp"
+        android:gravity="center"
+        android:text='To make a catgeory, please enter the category title first and hit the "create category" button. After that, select the priority of the category by selecting an option in the drop down menu.'
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.62" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="288dp"
+        android:layout_height="29dp"
+        android:gravity="center"
+        android:text="Instructions:"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.48000002" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
