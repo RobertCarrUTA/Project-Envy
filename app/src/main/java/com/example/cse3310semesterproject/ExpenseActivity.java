@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.NumberFormat;
 import java.util.Currency;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -24,7 +25,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
     EditText mIncomeEntryBox, mExpensesEntryBox;
     Double Income, Expense;
-
+    Date createDate = new Date(System.currentTimeMillis());
     Button mSaveExpensesBtn, mReturnHomeFromExpenseBtn, mSignOutFromExpenseBtn;
 
     @Override
@@ -48,6 +49,8 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         mSaveExpensesBtn.setOnClickListener(this);
         mReturnHomeFromExpenseBtn.setOnClickListener(this);
         mSignOutFromExpenseBtn.setOnClickListener(this);
+
+
     };
 
     public void onClick(View v){
@@ -83,12 +86,14 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
             mExpensesEntryBox.setError("Please enter an expense");
             return;
         }else{
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             String uid = user.getUid();
+            Expenses expenses = new Expenses(uid, 1, Expense, createDate); //need to add spinner to select priority
+            Income income  = new Income(uid, createDate, Income);
             //database.getReference().
-            FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Income").setValue(Income);
-            FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Expenses").setValue(Expense);
+            FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Income").setValue(income);
+            FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Expenses").setValue(expenses);
             //----------------------------------------------------------------------------------
             // Let the user know the user input has been successfully saved.
             Toast.makeText(ExpenseActivity.this, "Input and Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();
