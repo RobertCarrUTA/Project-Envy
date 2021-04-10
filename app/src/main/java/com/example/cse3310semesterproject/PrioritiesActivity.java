@@ -109,20 +109,14 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
 
         switch (position) {
             case 0:
-                //BudgetCategory budgetCategory  = new BudgetCategory(uid, "test", "High", 1);
-                //FirebaseDatabase.getInstance().getReference("Users").child(uid).setValue(budgetCategory);
                 categoryLevel = "High";
                 priorityLevel = 1;
                 break;
             case 1:
-                //BudgetCategory budgetCategory2  = new BudgetCategory(uid, "test2", "Med", 2);
-                //FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory2);
                 categoryLevel = "Med";
                 priorityLevel = 2;
                 break;
             case 2:
-                //BudgetCategory budgetCategory3  = new BudgetCategory(uid, "test3", "Low", 3);
-                //FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory3);
                 categoryLevel = "Low";
                 priorityLevel = 3;
                 break;
