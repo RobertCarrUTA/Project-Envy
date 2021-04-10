@@ -172,19 +172,22 @@ public class PrioritiesActivity extends AppCompatActivity //implements AdapterVi
                         switch (position) {
                             case 0:
                                 priorityInt = 1;
-                                priorityString = (String) parent.getItemAtPosition(position);;
+                                priorityString = "High";
+                                Toast.makeText(PrioritiesActivity.this, "Category High priority created successfully!", Toast.LENGTH_SHORT).show();
                                 //BudgetCategory budgetCategory  = new BudgetCategory(uid, "test", "High", 1);
                                 //FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory);
                                 break;
                             case 1:
                                 priorityInt = 2;
                                 priorityString = "Medium";
+                                Toast.makeText(PrioritiesActivity.this, "Category Medium priority created successfully!", Toast.LENGTH_SHORT).show();
                                 //BudgetCategory budgetCategory2  = new BudgetCategory(uid, "test2", "Med", 2);
                                 //FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory2);
                                 break;
                             case 2:
                                 priorityInt = 3;
                                 priorityString = "Low";
+                                Toast.makeText(PrioritiesActivity.this, "Category Low priority created successfully!", Toast.LENGTH_SHORT).show();
                                 //BudgetCategory budgetCategory3  = new BudgetCategory(uid, "test3", "Low", 3);
                                 //FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory3);
                                 break;
@@ -219,7 +222,7 @@ public class PrioritiesActivity extends AppCompatActivity //implements AdapterVi
 
                     //String PString = String.valueOf(priorityString);
                     //String P_I_String = String.valueOf(priorityInt);
-                    Toast.makeText(PrioritiesActivity.this, "Category " + CategoryTitle + " created successfully!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(PrioritiesActivity.this, "Category " + CategoryTitle + " created successfully!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
