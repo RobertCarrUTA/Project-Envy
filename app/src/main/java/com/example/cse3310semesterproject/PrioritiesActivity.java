@@ -88,6 +88,8 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
 
 
     //----------------------------------------------------------------------------------------------
+    // The code below deals with the set up and saving of user entered/selected data from the text
+    // box as well as the drop down menu, also called a spinner
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
@@ -97,13 +99,14 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
             @Override
             public void onClick(View v)
             {
-                // All of these values need to be saved to firebase and associated to a user account
-
                 // Save the category title
                 String CategoryTitle = mCategoryTitleEntry.getText().toString();
                 setCategoryTitle(CategoryTitle);
 
-                // Code needs to be added to save the spinner selection
+                // This code below (if statements) has been added to save the spinner selection.
+                // If the text box is empty, it will not allow for the creation of a category.
+                // If it isn't empty, then we can save both the text entry and the drop down menu selection
+                // to the database.
                 if (TextUtils.isEmpty(CategoryTitle))
                 {
                     // If it is the category text box is empty, tell the user to add a title
@@ -113,24 +116,26 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
                 {
                     switch (position)
                     {
-                        case 0:
+                        case 0: // If High is selected on the drop down menu
                             BudgetCategory budgetCategory = new BudgetCategory(uid, CategoryTitle, "High", 1);
                             FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory);
                             mCategoryTitleEntry.getText().clear();
+                            Toast.makeText(PrioritiesActivity.this, "Category " + CategoryTitle + " created successfully!", Toast.LENGTH_SHORT).show();
                             break;
-                        case 1:
+                        case 1: // If Medium is selected on the drop down menu
                             BudgetCategory budgetCategory2 = new BudgetCategory(uid, CategoryTitle, "Medium", 2);
                             FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory2);
                             mCategoryTitleEntry.getText().clear();
+                            Toast.makeText(PrioritiesActivity.this, "Category " + CategoryTitle + " created successfully!", Toast.LENGTH_SHORT).show();
                             break;
-                        case 2:
+                        case 2: // If Low is selected on the drop down menu
                             BudgetCategory budgetCategory3 = new BudgetCategory(uid, CategoryTitle, "Low", 3);
                             FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory3);
                             mCategoryTitleEntry.getText().clear();
+                            Toast.makeText(PrioritiesActivity.this, "Category " + CategoryTitle + " created successfully!", Toast.LENGTH_SHORT).show();
                             break;
                     }
                 }
-                Toast.makeText(PrioritiesActivity.this, "Category " + CategoryTitle + " created successfully!", Toast.LENGTH_SHORT).show();
             }
         });
     }
