@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
-
+//need to have information on How often it compounds
 public class LoanActivity extends AppCompatActivity
 {
 
