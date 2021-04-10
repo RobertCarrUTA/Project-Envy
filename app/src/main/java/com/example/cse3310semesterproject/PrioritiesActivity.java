@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,17 +12,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 
-public class PrioritiesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener
+public class PrioritiesActivity extends AppCompatActivity
 {
+
     EditText mCategoryTitleEntry;
     Button mCreateCategoryBtn, mReturnHomeFromPrioritiesBtn, mSignOutFromPrioritiesBtn;
-    private Spinner spinner2;
-    private static final String[] paths = {"High", "Med", "Low"};
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    String uid = user.getUid();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,13 +32,12 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
         Spinner spinner = (Spinner) findViewById(R.id.priority_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         // The priority_array was made in strings.xml
-        ArrayAdapter<String>adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, paths);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.priority_array, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+
         //------------------------------------------------------------------------------------------
         // This represents the text entry box where the user inputs their category title
         mCategoryTitleEntry = findViewById(R.id.categoryTitleEntry);
@@ -96,28 +89,5 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
                 startActivity(new Intent(getApplicationContext(), Login.class)); //back to login screen
             }
         });
-    }
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        switch (position) {
-            case 0:
-                BudgetCategory budgetCategory  = new BudgetCategory(uid, "test", "High", 1);
-                FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory);
-                break;
-            case 1:
-                BudgetCategory budgetCategory2  = new BudgetCategory(uid, "test2", "Med", 2);
-                FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory2);
-                break;
-            case 2:
-                BudgetCategory budgetCategory3  = new BudgetCategory(uid, "test3", "Low", 3);
-                FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory3);
-                break;
-
-        }
-    }
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 }
