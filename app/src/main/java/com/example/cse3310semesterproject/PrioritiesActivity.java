@@ -25,6 +25,7 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
     private static final String[] paths = {"High", "Med", "Low"};
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
+    String userEmail = user.getEmail();
 
     public PrioritiesActivity() {
     }
@@ -67,10 +68,10 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
                 // All of these values need to be saved to firebase and associated to a user account
 
                 // Save the category title
+                String email2 = userEmail;
                 String CategoryTitle = mCategoryTitleEntry.getText().toString();
-                uid = user.getUid();
                 BudgetCategory budgetCategory  = new BudgetCategory(uid, CategoryTitle, categoryLevel, priorityLevel);
-                FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory);
+                FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Budget Category").push().setValue(budgetCategory);
 
                 // Code needs to be added to save the spinner selection
 
