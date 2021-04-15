@@ -29,6 +29,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
+    //String email = user.getEmail();
     EditText mIncomeEntryBox, mExpensesEntryBox;
     Double Income, Expense;
     Date createDate = new Date(System.currentTimeMillis());
@@ -108,11 +109,15 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         }else{
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Expenses expenses = new Expenses(uid, priorityInt, Expense, createDate); //need to add spinner to select priority
-            Income income  = new Income(uid, createDate, Income);
+            String email = user.getEmail();
+            Expenses expenses = new Expenses(uid, priorityInt, Expense, createDate, email); //need to add spinner to select priority
+            Income income  = new Income(uid, createDate, Income, email);
             //database.getReference().
-            FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Income").setValue(income);
-            FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Expenses").setValue(expenses);
+
+            FirebaseDatabase.getInstance().getReference("Users").child(email).child("Income").push().setValue(income);
+
+            FirebaseDatabase.getInstance().getReference("Users").child(email).child("Expenses").push().setValue(income);
+
             //----------------------------------------------------------------------------------
             // Let the user know the user input has been successfully saved.
             Toast.makeText(ExpenseActivity.this, "Input and Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();

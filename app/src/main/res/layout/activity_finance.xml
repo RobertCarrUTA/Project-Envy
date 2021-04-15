@@ -42,4 +42,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.050000012" />
 
+    <Button
+        android:id="@+id/history_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Spending History"
+        tools:layout_editor_absoluteX="116dp"
+        tools:layout_editor_absoluteY="137dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

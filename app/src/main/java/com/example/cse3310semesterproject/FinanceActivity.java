@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class FinanceActivity extends AppCompatActivity
 {
 
-    Button mReturnHomeFromFinanceBtn, mSignOutFromFinanceBtn;
+    Button mReturnHomeFromFinanceBtn, mSignOutFromFinanceBtn,  mFinanceActivityBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -23,7 +23,7 @@ public class FinanceActivity extends AppCompatActivity
 
         mReturnHomeFromFinanceBtn = findViewById(R.id.returnHomeFromFinanceBtn);
         mSignOutFromFinanceBtn = findViewById(R.id.signOutFromFinanceBtn);
-
+        mFinanceActivityBtn = findViewById(R.id.history_button);
         // Let the user go back to the homepage
         mReturnHomeFromFinanceBtn.setOnClickListener(new View.OnClickListener()
         {
@@ -43,6 +43,15 @@ public class FinanceActivity extends AppCompatActivity
                 Toast.makeText(FinanceActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
                 FirebaseAuth.getInstance().signOut(); //firebase command to delete token created for account locally
                 startActivity(new Intent(getApplicationContext(), Login.class)); //back to login screen
+            }
+        });
+
+        mFinanceActivityBtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(getApplicationContext(), HistoryActivity.class));
             }
         });
     }
