@@ -7,16 +7,14 @@ public class Expenses {
     public int priority;
     public double spending;
     public Date creationDate;
-    public String email;
 
     public Expenses(){}
 
-    public Expenses(String userID, int priority, double spending, Date creationDate, String email)
+    public Expenses(String userID, int priority, double spending, Date creationDate)
     {
         this.userID = userID;
         this.priority = priority;
         this.spending = spending;
         this.creationDate = creationDate;
-        this.email = email;
     }
 }

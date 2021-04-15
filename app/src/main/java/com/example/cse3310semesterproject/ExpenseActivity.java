@@ -110,13 +110,13 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             String email = user.getEmail();
-            Expenses expenses = new Expenses(uid, priorityInt, Expense, createDate, email); //need to add spinner to select priority
-            Income income  = new Income(uid, createDate, Income, email);
+            Expenses expenses = new Expenses(uid, priorityInt, Expense, createDate); //need to add spinner to select priority
+            Income income  = new Income(uid, createDate, Income);
             //database.getReference().
 
-            FirebaseDatabase.getInstance().getReference("Users").child(email).child("Income").push().setValue(income);
+            FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Income").push().setValue(income);
 
-            FirebaseDatabase.getInstance().getReference("Users").child(email).child("Expenses").push().setValue(income);
+            FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Expenses").push().setValue(expenses);
 
             //----------------------------------------------------------------------------------
             // Let the user know the user input has been successfully saved.

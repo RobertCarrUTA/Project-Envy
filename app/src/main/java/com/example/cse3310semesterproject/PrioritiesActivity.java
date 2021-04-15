@@ -25,6 +25,7 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
     private static final String[] paths = {"High", "Medium", "Low"};
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
+    String email = user.getEmail();
 
     String CategoryTitle;
 
@@ -119,21 +120,21 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
                         case 0: // If High is selected on the drop down menu
                             BudgetCategory budgetCategory = new BudgetCategory(uid, CategoryTitle, "High", 1);
                             //FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory);
-                            FirebaseDatabase.getInstance().getReference("Users").child("Budget Category").push().setValue(budgetCategory);
+                            FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Budget Category").push().setValue(budgetCategory);
                             mCategoryTitleEntry.getText().clear();
                             Toast.makeText(PrioritiesActivity.this, "Category " + CategoryTitle + " created successfully!", Toast.LENGTH_SHORT).show();
                             break;
                         case 1: // If Medium is selected on the drop down menu
                             BudgetCategory budgetCategory2 = new BudgetCategory(uid, CategoryTitle, "Medium", 2);
                             //FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory2);
-                            FirebaseDatabase.getInstance().getReference("Users").child("Budget Category").push().setValue(budgetCategory2);
+                            FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Budget Category").push().setValue(budgetCategory2);
                             mCategoryTitleEntry.getText().clear();
                             Toast.makeText(PrioritiesActivity.this, "Category " + CategoryTitle + " created successfully!", Toast.LENGTH_SHORT).show();
                             break;
                         case 2: // If Low is selected on the drop down menu
                             BudgetCategory budgetCategory3 = new BudgetCategory(uid, CategoryTitle, "Low", 3);
                             //FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory3);
-                            FirebaseDatabase.getInstance().getReference("Users").child("Budget Category").push().setValue(budgetCategory3);
+                            FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Budget Category").push().setValue(budgetCategory3);
                             mCategoryTitleEntry.getText().clear();
                             Toast.makeText(PrioritiesActivity.this, "Category " + CategoryTitle + " created successfully!", Toast.LENGTH_SHORT).show();
                             break;
