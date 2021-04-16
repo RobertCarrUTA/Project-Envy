@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.text.TextUtils;
 
@@ -25,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.lang.reflect.Array;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Currency;
 import java.util.Date;
 import java.util.List;
@@ -36,18 +38,28 @@ public class TestRead {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference reff = database.getReference().child("Users").child(uid).child("Expenses");
-    public List<Expenses> expensesList = new ArrayList<>();
+    DatabaseReference reff = database.getReference().child("Users").child(uid).child("Budget Category");
+    final List<BudgetCategory> categoryList = new ArrayList<BudgetCategory>();
+    final List<String> categoryArray = new ArrayList<String>();
+    //ArrayList<String> expenseString = new ArrayList<String>();
 
     public void readFromDatabase(){
         // Read from the database
 
+
+
         reff.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot child : dataSnapshot.getChildren()){
-                    expensesList.add(child.getValue(Expenses.class));
+                int i = 0;
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for(DataSnapshot child : children){
+                    BudgetCategory singleCategory = child.getValue(BudgetCategory.class);
+                    categoryList.add(singleCategory);
+                    categoryArray.add(singleCategory.categoryTitle);
+                    i++;
                 }
+
             }
 
             @Override
@@ -56,6 +68,7 @@ public class TestRead {
                 Log.v("TestRead", "Failed to read value.", error.toException());
             }
         });
+
     }
 
 }
