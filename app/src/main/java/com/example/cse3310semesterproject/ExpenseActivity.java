@@ -9,48 +9,29 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.text.TextUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.lang.reflect.Array;
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Date;
 import java.util.Locale;
 
 
-public class ExpenseActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener
+public class ExpenseActivity extends AppCompatActivity implements View.OnClickListener
 {
 
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    String uid = user.getUid();
-    //String email = user.getEmail();
     EditText mIncomeEntryBox, mExpensesEntryBox;
     Double Income, Expense;
     Date createDate = new Date(System.currentTimeMillis());
     Button mSaveExpensesBtn, mReturnHomeFromExpenseBtn, mSignOutFromExpenseBtn;
-    private static final String[] paths = {"High", "Medium", "Low"};
-    private Spinner spinner2;
-    public static int priorityInt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense);
-
-        //------------------------------------------------------------------------------------------
-
-        Spinner spinner = (Spinner) findViewById(R.id.priority_spinner2);
-        ArrayAdapter<String>adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, paths);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
 
         //------------------------------------------------------------------------------------------
         // This represents the text entry box where the user inputs their income
@@ -86,8 +67,6 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
                 inputInfo();
                 break;
         }
-
-
     }
     public void inputInfo(){
         Income = Double.valueOf(mIncomeEntryBox.getText().toString());
@@ -109,15 +88,12 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         }else{
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            String email = user.getEmail();
-            Expenses expenses = new Expenses(uid, priorityInt, Expense, createDate); //need to add spinner to select priority
+            String uid = user.getUid();
+            Expenses expenses = new Expenses(uid, 1, Expense, createDate); //need to add spinner to select priority
             Income income  = new Income(uid, createDate, Income);
             //database.getReference().
-
-            FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Income").push().setValue(income);
-
-            FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Expenses").push().setValue(expenses);
-
+            FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Income").setValue(income);
+            FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Expenses").setValue(expenses);
             //----------------------------------------------------------------------------------
             // Let the user know the user input has been successfully saved.
             Toast.makeText(ExpenseActivity.this, "Input and Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();
@@ -136,24 +112,4 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         mExpensesEntryBox.getText().clear();
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (position)
-        {
-            case 0: // If High is selected on the drop down menu
-                priorityInt = 1;
-                break;
-            case 1: // If Medium is selected on the drop down menu
-                priorityInt = 2;
-                break;
-            case 2: // If Low is selected on the drop down menu
-                priorityInt = 3;
-                break;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 }
