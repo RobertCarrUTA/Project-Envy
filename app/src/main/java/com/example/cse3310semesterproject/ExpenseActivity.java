@@ -15,12 +15,18 @@ import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -29,7 +35,6 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
-    //String email = user.getEmail();
     EditText mIncomeEntryBox, mExpensesEntryBox;
     Double Income, Expense;
     Date createDate = new Date(System.currentTimeMillis());
@@ -37,14 +42,41 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     private static final String[] paths = {"High", "Medium", "Low"};
     private Spinner spinner2;
     public static int priorityInt;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference reff = database.getReference().child("Users").child(uid).child("Budget Category");
+    final List<BudgetCategory> categoryList = new ArrayList<BudgetCategory>();
+    final List<String> categoryTitle = new ArrayList<String>();
+    //ArrayList<String> expenseString = new ArrayList<String>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense);
 
+        reff.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for(DataSnapshot child : children){
+                    BudgetCategory singleCategory = child.getValue(BudgetCategory.class);
+                    categoryList.add(singleCategory);
+                    categoryTitle.add(singleCategory.categoryTitle);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.v("TestRead", "Failed to read value.", error.toException());
+            }
+        });
+
         //------------------------------------------------------------------------------------------
 
+        //ArrayAdapter<BudgetCategory> categoryArrayAdapter = new ArrayAdapter<BudgetCategory>(this, android.R.layout.simple_list_item_1, categoryList);
+        //categoryArrayAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
         Spinner spinner = (Spinner) findViewById(R.id.priority_spinner2);
         ArrayAdapter<String>adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, paths);
@@ -109,15 +141,11 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         }else{
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            String email = user.getEmail();
             Expenses expenses = new Expenses(uid, priorityInt, Expense, createDate); //need to add spinner to select priority
             Income income  = new Income(uid, createDate, Income);
             //database.getReference().
-
             FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Income").push().setValue(income);
-
             FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Expenses").push().setValue(expenses);
-
             //----------------------------------------------------------------------------------
             // Let the user know the user input has been successfully saved.
             Toast.makeText(ExpenseActivity.this, "Input and Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();
@@ -156,4 +184,5 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
 }
