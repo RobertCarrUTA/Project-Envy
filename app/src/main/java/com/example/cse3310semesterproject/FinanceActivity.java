@@ -21,9 +21,9 @@ public class FinanceActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finance);
 
-        mWeeklyReportBtn = findViewById(R.id.weeklyReportBtn);
+        /*mWeeklyReportBtn = findViewById(R.id.weeklyReportBtn);
         mMonthlyReportBtn = findViewById(R.id.monthlyReportBtn);
-        mBudgetAnalysisBtn = findViewById(R.id.budgetAnalysisBtn);
+        mBudgetAnalysisBtn = findViewById(R.id.budgetAnalysisBtn);*/
 
         mReturnHomeFromFinanceBtn = findViewById(R.id.returnHomeFromFinanceBtn);
         mSignOutFromFinanceBtn = findViewById(R.id.signOutFromFinanceBtn);
