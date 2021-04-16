@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class FinanceActivity extends AppCompatActivity
 {
 
-    Button mReturnHomeFromFinanceBtn, mSignOutFromFinanceBtn,  mFinanceActivityBtn;
+    Button mWeeklyReportBtn, mMonthlyReportBtn, mBudgetAnalysisBtn, mReturnHomeFromFinanceBtn, mSignOutFromFinanceBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -21,9 +21,46 @@ public class FinanceActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finance);
 
+        mWeeklyReportBtn = findViewById(R.id.weeklyReportBtn);
+        mMonthlyReportBtn = findViewById(R.id.monthlyReportBtn);
+        mBudgetAnalysisBtn = findViewById(R.id.budgetAnalysisBtn);
+
         mReturnHomeFromFinanceBtn = findViewById(R.id.returnHomeFromFinanceBtn);
         mSignOutFromFinanceBtn = findViewById(R.id.signOutFromFinanceBtn);
-        mFinanceActivityBtn = findViewById(R.id.history_button);
+
+        //------------------------------------------------------------------------------------------
+        // The below section is just for handling button presses that deal with navigation
+        //
+        // Let the user go to the weekly report page
+        mWeeklyReportBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(getApplicationContext(), WeeklyReportActivity.class));
+            }
+        });
+
+        // Let the user go to the monthly report page
+        mMonthlyReportBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(getApplicationContext(), MonthlyReportActivity.class));
+            }
+        });
+
+        // Let the user go to the budget analysis page
+        mBudgetAnalysisBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(getApplicationContext(), BudgetAnalysisActivity.class));
+            }
+        });
+
         // Let the user go back to the homepage
         mReturnHomeFromFinanceBtn.setOnClickListener(new View.OnClickListener()
         {
@@ -46,13 +83,7 @@ public class FinanceActivity extends AppCompatActivity
             }
         });
 
-        mFinanceActivityBtn.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v)
-            {
-                startActivity(new Intent(getApplicationContext(), HistoryActivity.class));
-            }
-        });
+        // End of navigation button section
+        //------------------------------------------------------------------------------------------
     }
 }

@@ -42,6 +42,10 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.8.0')
     implementation 'com.google.firebase:firebase-analytics'
 
+    // The below is for graphing
+    // Find documentation here: https://github.com/jjoe64/GraphView/wiki/Download-and-Getting-Started
+    implementation 'com.jjoe64:graphview:4.2.2'
+
     //adding this because activities were not recognizing FirebaseAuth
     //implementation 'com.google.firebase:firebase-core:20.0.3'
 }

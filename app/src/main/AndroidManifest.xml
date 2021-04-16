@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CSE3310SemesterProject">
-        <activity android:name=".LoanActivity"></activity>
+        <activity android:name=".BudgetAnalysisActivity"></activity>
+        <activity android:name=".MonthlyReportActivity" />
+        <activity android:name=".WeeklyReportActivity" />
+        <activity android:name=".LoanActivity" />
         <activity android:name=".ExpenseActivity" />
         <activity android:name=".PrioritiesActivity" />
         <activity android:name=".CreateAccountActivity" />
@@ -27,5 +30,3 @@
     </application>
 
 </manifest>
-
-
