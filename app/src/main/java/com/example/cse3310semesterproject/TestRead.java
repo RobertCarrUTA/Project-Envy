@@ -24,7 +24,8 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.Locale;
 
-public class TestRead {
+public class TestRead
+{
   /*  FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
     String emailAddress = user.getEmail();

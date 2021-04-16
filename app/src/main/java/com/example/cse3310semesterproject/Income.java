@@ -2,7 +2,8 @@ package com.example.cse3310semesterproject;
 
 import java.util.Date;
 
-public class Income {
+public class Income
+{
     public String userID;
     public Date createDate;
     public double weeklyIncome;

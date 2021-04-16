@@ -10,12 +10,14 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class BudgetAnalysisActivity extends AppCompatActivity {
+public class BudgetAnalysisActivity extends AppCompatActivity
+{
 
     Button mReturnHomeFromBudgetAnalysisBtn, mSignOutFromBudgetAnalysisBtn;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget_analysis);
 

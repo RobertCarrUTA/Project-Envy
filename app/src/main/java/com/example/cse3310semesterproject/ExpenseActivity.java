@@ -29,7 +29,8 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     Button mSaveExpensesBtn, mReturnHomeFromExpenseBtn, mSignOutFromExpenseBtn;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense);
 
@@ -53,8 +54,10 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
     };
 
-    public void onClick(View v){
-        switch(v.getId()){
+    public void onClick(View v)
+    {
+        switch(v.getId())
+        {
             case R.id.returnHomeFromExpenseBtn:
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));//jump to homepage
                 break;
@@ -68,7 +71,8 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
-    public void inputInfo(){
+    public void inputInfo()
+    {
         Income = Double.valueOf(mIncomeEntryBox.getText().toString());
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -85,8 +89,9 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         {
             mExpensesEntryBox.setError("Please enter an expense");
             return;
-        }else{
-
+        }
+        else
+        {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             String uid = user.getUid();
             Expenses expenses = new Expenses(uid, 1, Expense, createDate); //need to add spinner to select priority
