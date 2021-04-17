@@ -47,6 +47,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     DatabaseReference reff = database.getReference().child("Users").child(uid).child("Budget Category");
     final List<BudgetCategory> categoryList = new ArrayList<BudgetCategory>();
     final List<String> categoryTitle = new ArrayList<String>();
+
     //ArrayList<String> expenseString = new ArrayList<String>();
 
 
@@ -80,7 +81,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         //categoryArrayAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
         Spinner spinner = (Spinner) findViewById(R.id.priority_spinner2);
         ArrayAdapter<String>adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, paths);
+                android.R.layout.simple_spinner_item, categoryTitle);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
