@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class FinanceActivity extends AppCompatActivity
 {
 
-    Button mWeeklyReportBtn, mMonthlyReportBtn, mBudgetAnalysisBtn, mReturnHomeFromFinanceBtn, mSignOutFromFinanceBtn;
+    Button mReturnHomeFromFinanceBtn, mSignOutFromFinanceBtn,  mFinanceActivityBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -83,6 +83,14 @@ public class FinanceActivity extends AppCompatActivity
             }
         });
 
+        mFinanceActivityBtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v)
+            {
+
+            }
+        });
         // End of navigation button section
         //------------------------------------------------------------------------------------------
     }
