@@ -142,7 +142,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
             //----------------------------------------------------------------------------------
             // Let the user know the user input has been successfully saved.
-            Toast.makeText(ExpenseActivity.this, "Input and Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ExpenseActivity.this, "Expense Saved Successfully!", Toast.LENGTH_SHORT).show();
         }
         else if(TextUtils.isEmpty(mExpensesEntryBox.getText()) && !(TextUtils.isEmpty(mIncomeEntryBox.getText())))
         {
@@ -162,7 +162,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
             //----------------------------------------------------------------------------------
             // Let the user know the user input has been successfully saved.
-            Toast.makeText(ExpenseActivity.this, "Input and Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ExpenseActivity.this, "Income Saved Successfully!", Toast.LENGTH_SHORT).show();
         }
         else if(TextUtils.isEmpty(mExpensesEntryBox.getText()) && TextUtils.isEmpty(mIncomeEntryBox.getText()))
         {
@@ -170,7 +170,6 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         }
         else
         {
-
             Income = Double.valueOf(mIncomeEntryBox.getText().toString());
 
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -187,7 +186,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
             //----------------------------------------------------------------------------------
             // Let the user know the user input has been successfully saved.
-            Toast.makeText(ExpenseActivity.this, "Input and Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ExpenseActivity.this, "Income and Expense Saved Successfully!", Toast.LENGTH_SHORT).show();
         }
 
 
