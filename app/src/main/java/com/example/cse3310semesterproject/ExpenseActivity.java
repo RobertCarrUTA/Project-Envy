@@ -123,12 +123,6 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
     }
     public void inputInfo(){
-        Income = Double.valueOf(mIncomeEntryBox.getText().toString());
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //----------------------------------------------------------------------------------
-        // This is where we save the expense amount the user entered into a value we can use
-        Expense = Double.valueOf(mExpensesEntryBox.getText().toString());
 
         if(TextUtils.isEmpty(mIncomeEntryBox.getText()))
         {
@@ -139,8 +133,16 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         {
             mExpensesEntryBox.setError("Please enter an expense");
             return;
-        }else
+        }
+        else
         {
+
+            Income = Double.valueOf(mIncomeEntryBox.getText().toString());
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            //----------------------------------------------------------------------------------
+            // This is where we save the expense amount the user entered into a value we can use
+            Expense = Double.valueOf(mExpensesEntryBox.getText().toString());
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             Expenses expenses = new Expenses(uid, priorityInt, Expense, createDate); //need to add spinner to select priority
