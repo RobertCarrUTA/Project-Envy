@@ -136,31 +136,36 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     public void inputInfo(){
 
 
-        if(TextUtils.isEmpty(mIncomeEntryBox.getText()))
+        if(TextUtils.isEmpty(mIncomeEntryBox.getText()) && TextUtils.isEmpty(mExpensesEntryBox.getText()))
         {
-            mIncomeEntryBox.setError("Please enter an income");
+            mIncomeEntryBox.setError("Please enter an income or expense");
             return;
         }
-        else if(TextUtils.isEmpty(mExpensesEntryBox.getText()))
-        {
-            mExpensesEntryBox.setError("Please enter an expense");
-            return;
-        }else{
-            Income = Double.valueOf(mIncomeEntryBox.getText().toString());
+        else
+            {
 
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            //----------------------------------------------------------------------------------
-            // This is where we save the expense amount the user entered into a value we can use
-            Expense = Double.valueOf(mExpensesEntryBox.getText().toString());
+            if(!(TextUtils.isEmpty(mIncomeEntryBox.getText())))
+            {
+                Income = Double.valueOf(mIncomeEntryBox.getText().toString());
+                //----------------------------------------------------------------------------------
+                // This is where we save the expense amount the user entered into a value we can use
 
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Expenses expenses = new Expenses(uid, priorityInt, Expense, createDate); //need to add spinner to select priority
-            Income income  = new Income(uid, createDate, Income);
-            FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Income").push().setValue(income);
-            FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Expenses").push().setValue(expenses);
+                Income income  = new Income(uid, createDate, Income);
+                FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Income").push().setValue(income);
+                Toast.makeText(ExpenseActivity.this, "Input Saved Successfully!", Toast.LENGTH_SHORT).show();
+            }
+            if(!(TextUtils.isEmpty(mExpensesEntryBox.getText())))
+            {
+                Expense = Double.valueOf(mExpensesEntryBox.getText().toString());
+
+                Expenses expenses = new Expenses(uid, priorityInt, Expense, createDate); //need to add spinner to select priority
+                FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Expenses").push().setValue(expenses);
+                Toast.makeText(ExpenseActivity.this, "Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();
+            }
+
             //----------------------------------------------------------------------------------
             // Let the user know the user input has been successfully saved.
-            Toast.makeText(ExpenseActivity.this, "Input and Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();
+
         }
 
 
