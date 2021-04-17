@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,14 +18,16 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class PrioritiesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener
 {
+    static String categoryLevel;
+    static int priorityLevel;
     EditText mCategoryTitleEntry;
     Button mCreateCategoryBtn, mReturnHomeFromPrioritiesBtn, mSignOutFromPrioritiesBtn;
     private Spinner spinner2;
-    private static final String[] paths = {"High", "Medium", "Low"};
+    private static final String[] paths = {"High", "Med", "Low"};
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
 
-    String CategoryTitle;
+    public PrioritiesActivity() {}
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -34,10 +35,10 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_priorities);
 
-
         //------------------------------------------------------------------------------------------
         // A spinner would make the user selection of the category priority a lot easier.
         // Spinner documentation here: https://developer.android.com/guide/topics/ui/controls/spinner
+
         Spinner spinner = (Spinner) findViewById(R.id.priority_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         // The priority_array was made in strings.xml
@@ -48,15 +49,34 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-
-
         //------------------------------------------------------------------------------------------
         // This represents the text entry box where the user inputs their category title
         mCategoryTitleEntry = findViewById(R.id.categoryTitleEntry);
         mCreateCategoryBtn = findViewById(R.id.createCategoryBtn);
         mReturnHomeFromPrioritiesBtn = findViewById(R.id.returnHomeFromPrioritiesBtn);
         mSignOutFromPrioritiesBtn = findViewById(R.id.signOutFromPrioritiesBtn);
-        String CategoryTitle;
+
+
+        //------------------------------------------------------------------------------------------
+        // Save the user input
+        mCreateCategoryBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // All of these values need to be saved to firebase and associated to a user account
+
+                // Save the category title
+                String CategoryTitle = mCategoryTitleEntry.getText().toString();
+                uid = user.getUid();
+                BudgetCategory budgetCategory  = new BudgetCategory(uid, CategoryTitle, categoryLevel, priorityLevel);
+                FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Budget Category").push().setValue(budgetCategory);
+
+                // Code needs to be added to save the spinner selection
+
+                Toast.makeText(PrioritiesActivity.this, "Category " + CategoryTitle + " created successfully!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         //------------------------------------------------------------------------------------------
@@ -69,7 +89,6 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
-
 
         //------------------------------------------------------------------------------------------
         // Let the user sign out
@@ -85,68 +104,30 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
             }
         });
     }
-
-
-    //----------------------------------------------------------------------------------------------
-    // The code below deals with the set up and saving of user entered/selected data from the text
-    // box as well as the drop down menu, also called a spinner
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
-        // Save the user input and MAKE the spinner wait for the user to hit the create button
-        mCreateCategoryBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                // Save the category title
-                String CategoryTitle = mCategoryTitleEntry.getText().toString();
-                setCategoryTitle(CategoryTitle);
 
-                // This code below (if statements) has been added to save the spinner selection.
-                // If the text box is empty, it will not allow for the creation of a category.
-                // If it isn't empty, then we can save both the text entry and the drop down menu selection
-                // to the database.
-                if (TextUtils.isEmpty(CategoryTitle))
-                {
-                    // If it is the category text box is empty, tell the user to add a title
-                    Toast.makeText(PrioritiesActivity.this, "Please add a category title.", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    switch (position)
-                    {
-                        case 0: // If High is selected on the drop down menu
-                            BudgetCategory budgetCategory = new BudgetCategory(uid, CategoryTitle, "High", 1);
-                            FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Budget Category").push().setValue(budgetCategory);
-                            mCategoryTitleEntry.getText().clear();
-                            Toast.makeText(PrioritiesActivity.this, "Category " + CategoryTitle + " created successfully!", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 1: // If Medium is selected on the drop down menu
-                            BudgetCategory budgetCategory2 = new BudgetCategory(uid, CategoryTitle, "Medium", 2);
-                            FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Budget Category").push().setValue(budgetCategory2);
-                            mCategoryTitleEntry.getText().clear();
-                            Toast.makeText(PrioritiesActivity.this, "Category " + CategoryTitle + " created successfully!", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 2: // If Low is selected on the drop down menu
-                            BudgetCategory budgetCategory3 = new BudgetCategory(uid, CategoryTitle, "Low", 3);
-                            FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Budget Category").push().setValue(budgetCategory3);
-                            mCategoryTitleEntry.getText().clear();
-                            Toast.makeText(PrioritiesActivity.this, "Category " + CategoryTitle + " created successfully!", Toast.LENGTH_SHORT).show();
-                            break;
-                    }
-                }
-            }
-        });
+        switch (position)
+        {
+            case 0:
+                categoryLevel = "High";
+                priorityLevel = 1;
+                break;
+            case 1:
+                categoryLevel = "Med";
+                priorityLevel = 2;
+                break;
+            case 2:
+                categoryLevel = "Low";
+                priorityLevel = 3;
+                break;
+        }
     }
     @Override
     public void onNothingSelected(AdapterView<?> parent)
     {
-
-    }
-
-    public void setCategoryTitle(String CategoryTitle)
-    {
-        this.CategoryTitle = CategoryTitle;
+        categoryLevel = "High";
+        priorityLevel = 1;
     }
 }

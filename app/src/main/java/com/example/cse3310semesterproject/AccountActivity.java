@@ -3,12 +3,16 @@ package com.example.cse3310semesterproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,9 +24,11 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 {
     EditText mNewCurrentPasswordEntry;
     Button mReturnHomeBtn, mSignOutFromAccountBtn, mChangePasswordBtn, mAvatarButton;
+    ImageView profileImage;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
@@ -36,7 +42,9 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         mSignOutFromAccountBtn.setOnClickListener(this);
         mReturnHomeBtn.setOnClickListener(this);
     }
-    public void onClick(View v) {
+
+    public void onClick(View v)
+    {
         switch (v.getId()) {
             case R.id.ReturnHomeBtn:
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));//jump to homepage
@@ -50,14 +58,17 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 changePassword();
                 break;
             case R.id.AvatarButton://temporary, not yet implemented
+                changeProfile();
                 Toast.makeText(AccountActivity.this, "Please somebody make me work :(", Toast.LENGTH_LONG).show();
                 break;
         }
     }
 
-    public void changePassword(){
+    public void changePassword()
+    {
         String passwordValue = mNewCurrentPasswordEntry.getText().toString().trim();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
         // If the password text entry is empty tell the user that the password is required
         if(TextUtils.isEmpty(passwordValue))
         {
@@ -72,17 +83,50 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             mNewCurrentPasswordEntry.setError("Password should be more than 6 characters");
             return;
         }
-        user.updatePassword(passwordValue).addOnCompleteListener(new OnCompleteListener<Void>() {//very very basic, not making user reauthenticate
+
+        //very very basic, not making user reauthenticate
+        user.updatePassword(passwordValue).addOnCompleteListener(new OnCompleteListener<Void>()
+        {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
+            public void onComplete(@NonNull Task<Void> task)
+            {
+                if(task.isSuccessful())
+                {
                     Toast.makeText(AccountActivity.this, "Password changed successfully!", Toast.LENGTH_LONG).show();
-                }else{
+                }else
+                {
                     Toast.makeText(AccountActivity.this, "Password change failed!", Toast.LENGTH_LONG).show();
                 }
             }
         });
-
     }
+    //neither of these functions are doing anything at the moment, just experimenting
+    //@Override
+   /* public void changeProfile()
+    {
+        Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(openGalleryIntent, 1000);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1000)
+        {
+            if(resultCode == Activity.RESULT_OK)
+            {
+                Uri imageUri = data.getData();
+                profileImage.setImageURI(imageUri);
 
+
+            }
+        }
+    }*/
+    public void changeProfile()
+    {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        //startActivityForResult(Intent.createChooser(intent, "Select Picture"), Common.SELECT_PICTURE);
+    }
 }

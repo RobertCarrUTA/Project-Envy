@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class CreateAccountActivity extends AppCompatActivity implements View.OnClickListener//implements required for setOnClickListener's(this)
+public class CreateAccountActivity extends AppCompatActivity implements View.OnClickListener //implements required for setOnClickListener's(this)
 {
 
     Button mReturnToLoginBtn, mCreateAccount;
@@ -29,7 +29,8 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
 
@@ -43,9 +44,12 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         mCreateAccount.setOnClickListener(this);
     }
 
+            //onClick now checks which id is matched
             @Override
-            public void onClick(View v) {//onClick now checks which id is matched
-                switch (v.getId()) {
+            public void onClick(View v)
+            {
+                switch (v.getId())
+                {
                     case R.id.registerUser://user clicked register account
                         userCreate();
                         break;
@@ -54,21 +58,25 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                         break;
                 }
             }
-            public void userCreate(){
+            public void userCreate()
+            {
                 String email = mEmail.getText().toString().trim(); //storage
                 String password = mPassword.getText().toString().trim();
-                if (TextUtils.isEmpty(email)) {
+                if (TextUtils.isEmpty(email))
+                {
                     mEmail.setError("E-mail is required");
                     mEmail.requestFocus();//request focus pings the specified location
                     return;
                 }
                 // If the password text entry is empty tell the user that the password is required
-                if (TextUtils.isEmpty(password)) {
+                if (TextUtils.isEmpty(password))
+                {
                     mPassword.setError("Password is required");
                     mPassword.requestFocus();
                     return;
                 }
-                if(password.length() < 6){//can adjust if we want additional characteristics in password
+                if(password.length() < 6) //can adjust if we want additional characteristics in password
+                {
                     mPassword.setError("Min. of 6 characters!");
                     mPassword.requestFocus();
                     return;
@@ -78,25 +86,30 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {//given by Firebase->authentication
                             @Override
 
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
+                            public void onComplete(@NonNull Task<AuthResult> task)
+                            {
+                                if (task.isSuccessful())
+                                {
                                     // Sign in success, update UI with the signed-in user's information
                                     User user = new User(email); //will use User.java constructor to fill email into string
                                     FirebaseDatabase.getInstance().getReference("Users")
                                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                            .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>()
+                                    {
                                         @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isSuccessful()){
+                                        public void onComplete(@NonNull Task<Void> task)
+                                        {
+                                            if(task.isSuccessful())
+                                            {
                                                 Toast.makeText(CreateAccountActivity.this, "User Registration Successful!", Toast.LENGTH_LONG).show();
                                                 updateUI();
                                                 return;
-                                            }else{
+                                            }else
+                                            {
                                                 Toast.makeText(CreateAccountActivity.this, "User Registration has Failed!", Toast.LENGTH_LONG).show();
                                             }
                                         }
                                     });
-
                                     FirebaseDatabase.getInstance().getReference("Users").child("Email").setValue(user);
                                 }
                             }
@@ -105,11 +118,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                 // the login was successful then takes them to the homepage (MainActivity)
                 Toast.makeText(CreateAccountActivity.this, "Successfully Created Account!", Toast.LENGTH_SHORT).show();
             }
-
-
             public void updateUI(){//used in task.isSuccessful() condition, jump to login page
                 startActivity(new Intent(getApplicationContext(), Login.class));
             }
-
-
     }
