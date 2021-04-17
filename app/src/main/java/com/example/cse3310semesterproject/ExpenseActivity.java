@@ -47,6 +47,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     DatabaseReference reff = database.getReference().child("Users").child(uid).child("Budget Category");
     final List<BudgetCategory> categoryList = new ArrayList<BudgetCategory>();
     final List<String> categoryTitle = new ArrayList<String>();
+
     //ArrayList<String> expenseString = new ArrayList<String>();
 
 
