@@ -139,7 +139,8 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         {
             mExpensesEntryBox.setError("Please enter an expense");
             return;
-        }else{
+        }else
+        {
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             Expenses expenses = new Expenses(uid, priorityInt, Expense, createDate); //need to add spinner to select priority
@@ -147,6 +148,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
             //database.getReference().
             FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Income").push().setValue(income);
             FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Expenses").push().setValue(expenses);
+
             //----------------------------------------------------------------------------------
             // Let the user know the user input has been successfully saved.
             Toast.makeText(ExpenseActivity.this, "Input and Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();
