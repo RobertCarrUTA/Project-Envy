@@ -28,6 +28,7 @@ public class BudgetActivity extends AppCompatActivity
 
         mSignOutFromBudgetBtn = findViewById(R.id.signOutFromBudgetBtn2);
 
+
         // Let the user go to the priorities page to do anything priority related with their
         // budget
         mPrioritiesBtn.setOnClickListener(new View.OnClickListener()
@@ -38,6 +39,7 @@ public class BudgetActivity extends AppCompatActivity
                 startActivity(new Intent(getApplicationContext(), PrioritiesActivity.class));
             }
         });
+
 
         // Let the user go to the expenses page to do anything expense/income related with their
         // budget
@@ -50,8 +52,8 @@ public class BudgetActivity extends AppCompatActivity
             }
         });
 
+
         // Let the user go to the loan page to do anything loan related
-        // ***** Causing issues for some reason *****
         mLoanInformationBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override

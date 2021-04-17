@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;//required to call FirebaseAuth commands
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity
 {
     // This sets us up to use our buttons that we have on our homepage
     Button mUserAccountBtn, mFinancialReportBtn, mBudgetingBtn, mSignOutBtn;
+    ImageView profileImage;
 
     // If we have time, I might try to add the drawer menu back in, but for now, just to have the very basics of the app running
     // this will do
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity
         mFinancialReportBtn = findViewById(R.id.FinancialReportBtn);
         mBudgetingBtn = findViewById(R.id.BudgetingBtn);
         mSignOutBtn = findViewById(R.id.SignOutBtn);
+
+        profileImage = findViewById(R.id.profileImage);
 
 
         mUserAccountBtn.setOnClickListener(new View.OnClickListener()

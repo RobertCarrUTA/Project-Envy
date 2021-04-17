@@ -2,7 +2,8 @@ package com.example.cse3310semesterproject;
 
 import java.util.Date;
 
-public class subBudget {
+public class subBudget
+{
     public int userID;
     public int priority;
     public double budgetPiece;

@@ -17,7 +17,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class PrioritiesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener
-{   static String categoryLevel;
+{
+    static String categoryLevel;
     static int priorityLevel;
     EditText mCategoryTitleEntry;
     Button mCreateCategoryBtn, mReturnHomeFromPrioritiesBtn, mSignOutFromPrioritiesBtn;
@@ -26,8 +27,7 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
 
-    public PrioritiesActivity() {
-    }
+    public PrioritiesActivity() {}
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -70,7 +70,7 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
                 String CategoryTitle = mCategoryTitleEntry.getText().toString();
                 uid = user.getUid();
                 BudgetCategory budgetCategory  = new BudgetCategory(uid, CategoryTitle, categoryLevel, priorityLevel);
-                FirebaseDatabase.getInstance().getReference("Users").child(uid).push().child("Budget Category").setValue(budgetCategory);
+                FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Budget Category").push().setValue(budgetCategory);
 
                 // Code needs to be added to save the spinner selection
 
@@ -105,9 +105,11 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
         });
     }
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+    {
 
-        switch (position) {
+        switch (position)
+        {
             case 0:
                 categoryLevel = "High";
                 priorityLevel = 1;
@@ -120,11 +122,11 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
                 categoryLevel = "Low";
                 priorityLevel = 3;
                 break;
-
         }
     }
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onNothingSelected(AdapterView<?> parent)
+    {
         categoryLevel = "High";
         priorityLevel = 1;
     }

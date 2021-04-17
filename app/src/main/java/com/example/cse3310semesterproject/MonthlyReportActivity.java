@@ -14,7 +14,8 @@ import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-public class MonthlyReportActivity extends AppCompatActivity {
+public class MonthlyReportActivity extends AppCompatActivity
+{
 
     Button mReturnHomeFromMonthlyReportBtn, signOutFromMonthlyReportBtn;
 
@@ -22,7 +23,8 @@ public class MonthlyReportActivity extends AppCompatActivity {
     private LineGraphSeries<DataPoint> monthly_series;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monthly_report);
 
