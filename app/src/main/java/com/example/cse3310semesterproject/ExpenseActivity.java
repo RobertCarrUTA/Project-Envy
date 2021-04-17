@@ -45,8 +45,9 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     public static int priorityInt;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reff = database.getReference().child("Users").child(uid).child("Budget Category");
-    final List<BudgetCategory> categoryList = new ArrayList<BudgetCategory>();
-    final List<String> categoryTitle = new ArrayList<String>();
+    List<BudgetCategory> categoryList = new ArrayList<BudgetCategory>();
+    List<String> categoryTitle = new ArrayList<String>();
+    //String[] str;
     //ArrayList<String> expenseString = new ArrayList<String>();
 
 
@@ -64,7 +65,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
                     categoryList.add(singleCategory);
                     categoryTitle.add(singleCategory.categoryTitle);
                 }
-
+                //str = getStringArray(categoryTitle);
             }
 
             @Override
@@ -81,6 +82,10 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         Spinner spinner = (Spinner) findViewById(R.id.priority_spinner2);
         ArrayAdapter<String>adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, categoryTitle);
+        /*ArrayAdapter<String>adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, str);*/
+
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
@@ -204,6 +209,8 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String item = parent.getItemAtPosition(position).toString();
+        Toast.makeText(parent.getContext(), "Selected: "+item ,Toast.LENGTH_SHORT).show();
         switch (position)
         {
             case 0: // If High is selected on the drop down menu
@@ -216,11 +223,23 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
                 priorityInt = 3;
                 break;
         }
+        //Toast.makeText(parent.getContext(), "Selected: "+item ,Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+    /*public static String[] getStringArray(List<String> arr)
+    {
+        String str[] = new String[arr.size()];
+
+        for(int j = 0; j < arr.size(); j++)
+        {
+            str[j] = arr.get(j);
+        }
+        return str;
+    }*/
 
 }
