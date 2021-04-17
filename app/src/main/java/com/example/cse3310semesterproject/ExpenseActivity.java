@@ -47,7 +47,6 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     DatabaseReference reff = database.getReference().child("Users").child(uid).child("Budget Category");
     final List<BudgetCategory> categoryList = new ArrayList<BudgetCategory>();
     final List<String> categoryTitle = new ArrayList<String>();
-
     //ArrayList<String> expenseString = new ArrayList<String>();
 
 
@@ -79,12 +78,12 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
         //ArrayAdapter<BudgetCategory> categoryArrayAdapter = new ArrayAdapter<BudgetCategory>(this, android.R.layout.simple_list_item_1, categoryList);
         //categoryArrayAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
-        //Spinner spinner = (Spinner) findViewById(R.id.priority_spinner2);
+        Spinner spinner = (Spinner) findViewById(R.id.priority_spinner2);
         ArrayAdapter<String>adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, categoryTitle);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //spinner.setAdapter(adapter);
-       //spinner.setOnItemSelectedListener(this);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
 
         //------------------------------------------------------------------------------------------
         // This represents the text entry box where the user inputs their income
@@ -106,10 +105,8 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
     };
 
-    public void onClick(View v)
-    {
-        switch(v.getId())
-        {
+    public void onClick(View v){
+        switch(v.getId()){
             case R.id.returnHomeFromExpenseBtn:
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));//jump to homepage
                 break;
@@ -122,10 +119,10 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
                 inputInfo();
                 break;
         }
-    }
 
-    public void inputInfo()
-    {
+
+    }
+    public void inputInfo(){
         Income = Double.valueOf(mIncomeEntryBox.getText().toString());
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -142,9 +139,8 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         {
             mExpensesEntryBox.setError("Please enter an expense");
             return;
-        }
-        else
-        {
+        }else{
+
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             Expenses expenses = new Expenses(uid, priorityInt, Expense, createDate); //need to add spinner to select priority
             Income income  = new Income(uid, createDate, Income);
