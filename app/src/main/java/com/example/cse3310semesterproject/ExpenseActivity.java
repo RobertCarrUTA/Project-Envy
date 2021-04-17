@@ -1,5 +1,7 @@
 package com.example.cse3310semesterproject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -25,9 +27,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.lang.reflect.Array;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Currency;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 
 
@@ -40,14 +46,17 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     Double Income, Expense;
     Date createDate = new Date(System.currentTimeMillis());
     Button mSaveExpensesBtn, mReturnHomeFromExpenseBtn, mSignOutFromExpenseBtn;
-    private static final String[] paths = {"High", "Medium", "Low"};
+    String[] paths = {"High", "Medium", "Low"};
     private Spinner spinner2;
     public static int priorityInt;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reff = database.getReference().child("Users").child(uid).child("Budget Category");
-    final List<BudgetCategory> categoryList = new ArrayList<BudgetCategory>();
-    final List<String> categoryTitle = new ArrayList<String>();
-    //ArrayList<String> expenseString = new ArrayList<String>();
+    ArrayList<BudgetCategory> categoryList = new ArrayList<BudgetCategory>();
+    List<String> categoryTitles = new ArrayList<String>();
+    String[] categoryString = {"One", "Two", "Three", "Four"};
+
+
+
 
 
     @Override
@@ -58,11 +67,14 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         reff.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                int i = 0;
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 for(DataSnapshot child : children){
                     BudgetCategory singleCategory = child.getValue(BudgetCategory.class);
                     categoryList.add(singleCategory);
-                    categoryTitle.add(singleCategory.categoryTitle);
+                    categoryTitles.add(singleCategory.categoryTitle);
+                    categoryString[i] = singleCategory.categoryTitle.trim();
+                    i++;
                 }
 
             }
@@ -76,11 +88,14 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
         //------------------------------------------------------------------------------------------
 
+
+
+
         //ArrayAdapter<BudgetCategory> categoryArrayAdapter = new ArrayAdapter<BudgetCategory>(this, android.R.layout.simple_list_item_1, categoryList);
         //categoryArrayAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
         Spinner spinner = (Spinner) findViewById(R.id.priority_spinner2);
         ArrayAdapter<String>adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, categoryTitle);
+                android.R.layout.simple_spinner_item, categoryString);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
@@ -123,12 +138,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
     }
     public void inputInfo(){
-        Income = Double.valueOf(mIncomeEntryBox.getText().toString());
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //----------------------------------------------------------------------------------
-        // This is where we save the expense amount the user entered into a value we can use
-        Expense = Double.valueOf(mExpensesEntryBox.getText().toString());
 
         if(TextUtils.isEmpty(mIncomeEntryBox.getText()))
         {
@@ -140,11 +150,16 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
             mExpensesEntryBox.setError("Please enter an expense");
             return;
         }else{
+            Income = Double.valueOf(mIncomeEntryBox.getText().toString());
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            //----------------------------------------------------------------------------------
+            // This is where we save the expense amount the user entered into a value we can use
+            Expense = Double.valueOf(mExpensesEntryBox.getText().toString());
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             Expenses expenses = new Expenses(uid, priorityInt, Expense, createDate); //need to add spinner to select priority
             Income income  = new Income(uid, createDate, Income);
-            //database.getReference().
             FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Income").push().setValue(income);
             FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Expenses").push().setValue(expenses);
             //----------------------------------------------------------------------------------
@@ -178,12 +193,21 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
             case 2: // If Low is selected on the drop down menu
                 priorityInt = 3;
                 break;
+            case 4: // If High is selected on the drop down menu
+                priorityInt = 4;
+                break;
+            case 5: // If Medium is selected on the drop down menu
+                priorityInt = 2;
+                break;
+            case 6: // If Low is selected on the drop down menu
+                priorityInt = 3;
+                break;
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
+        Toast.makeText(ExpenseActivity.this, "Please Select A Category", Toast.LENGTH_SHORT).show();
     }
 
 }
