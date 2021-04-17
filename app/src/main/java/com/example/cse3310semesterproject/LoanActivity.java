@@ -43,7 +43,6 @@ public class LoanActivity extends AppCompatActivity
         mReturnHomeFromLoanBtn = findViewById(R.id.returnHomeFromLoanBtn);
         signOutFromLoanBtn = findViewById(R.id.signOutFromLoanBtn);
 
-
         //------------------------------------------------------------------------------------------
         // When the user clicks the calculate cost button, we calculate the loan and show them
         // the cost
@@ -109,7 +108,6 @@ public class LoanActivity extends AppCompatActivity
             }
         });
 
-
         //------------------------------------------------------------------------------------------
         // Let the user go back to the homepage
         mReturnHomeFromLoanBtn.setOnClickListener(new View.OnClickListener()
@@ -120,7 +118,6 @@ public class LoanActivity extends AppCompatActivity
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
-
 
         //------------------------------------------------------------------------------------------
         // Let the user sign out

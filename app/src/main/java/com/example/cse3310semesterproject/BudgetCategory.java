@@ -1,7 +1,6 @@
 package com.example.cse3310semesterproject;
 
-public class BudgetCategory
-{
+public class BudgetCategory {
     public String userID;
     public String categoryTitle;
     public String priorityString;

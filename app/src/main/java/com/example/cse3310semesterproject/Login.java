@@ -36,8 +36,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
 
 
         super.onCreate(savedInstanceState);
@@ -53,13 +52,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener
         // We can replace this with a lambda
     }
 
-
-            //now checks which button is pressed by id
             @Override
-            public void onClick(View v)
-            {
-                switch (v.getId())
-                {
+            public void onClick(View v) {//now checks which button is pressed by id
+                switch (v.getId()) {
                     case R.id.RegisterBtn://jump to CreateAccountActivity
                         startActivity(new Intent(getApplicationContext(), CreateAccountActivity.class));
                         break;
@@ -70,36 +65,28 @@ public class Login extends AppCompatActivity implements View.OnClickListener
             }
 
 
-    public void userLogin()
-    {
+    public void userLogin(){
         String email = mEmail.getText().toString(); //storage
         String password = mPassword.getText().toString();
-        if (TextUtils.isEmpty(email))
-        {
+        if (TextUtils.isEmpty(email)) {
             mEmail.setError("E-mail is required");
             return;
         }
         // If the password text entry is empty tell the user that the password is required
-        if (TextUtils.isEmpty(password))
-        {
+        if (TextUtils.isEmpty(password)) {
             mPassword.setError("Password is required");
             return;
         }
         mAuth.signInWithEmailAndPassword(email, password)//function provided by Firebase->authentication->email and password
-                .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>()
-                {
+                .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task)
-                    {
-                        if (task.isSuccessful())
-                        {
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                        }
-                        else
-                        {
+                        } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(Login.this, "Authentication failed.",
@@ -110,20 +97,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener
                 });
     }
 
-    public void updateUI(FirebaseUser currentUser)
-    {
+    public void updateUI(FirebaseUser currentUser) {
         startActivity(new Intent(getApplicationContext(), MainActivity.class)); //jump to MainActivity if login successful
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser(); //grabbing account from database
-        if(currentUser != null)
-        {
+        if(currentUser != null){
             updateUI(currentUser); //go to Mainpage with pulled user
         }
     }
+
 }

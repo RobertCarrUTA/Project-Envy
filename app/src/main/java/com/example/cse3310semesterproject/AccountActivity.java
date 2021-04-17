@@ -22,8 +22,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     Button mReturnHomeBtn, mSignOutFromAccountBtn, mChangePasswordBtn, mAvatarButton;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
@@ -37,9 +36,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         mSignOutFromAccountBtn.setOnClickListener(this);
         mReturnHomeBtn.setOnClickListener(this);
     }
-
-    public void onClick(View v)
-    {
+    public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ReturnHomeBtn:
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));//jump to homepage
@@ -58,11 +55,9 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public void changePassword()
-    {
+    public void changePassword(){
         String passwordValue = mNewCurrentPasswordEntry.getText().toString().trim();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
         // If the password text entry is empty tell the user that the password is required
         if(TextUtils.isEmpty(passwordValue))
         {
@@ -77,21 +72,17 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             mNewCurrentPasswordEntry.setError("Password should be more than 6 characters");
             return;
         }
-
-        //very very basic, not making user reauthenticate
-        user.updatePassword(passwordValue).addOnCompleteListener(new OnCompleteListener<Void>()
-        {
+        user.updatePassword(passwordValue).addOnCompleteListener(new OnCompleteListener<Void>() {//very very basic, not making user reauthenticate
             @Override
-            public void onComplete(@NonNull Task<Void> task)
-            {
-                if(task.isSuccessful())
-                {
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
                     Toast.makeText(AccountActivity.this, "Password changed successfully!", Toast.LENGTH_LONG).show();
-                }else
-                {
+                }else{
                     Toast.makeText(AccountActivity.this, "Password change failed!", Toast.LENGTH_LONG).show();
                 }
             }
         });
+
     }
+
 }

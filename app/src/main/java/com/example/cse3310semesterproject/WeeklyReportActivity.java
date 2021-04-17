@@ -13,8 +13,7 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-public class WeeklyReportActivity extends AppCompatActivity
-{
+public class WeeklyReportActivity extends AppCompatActivity {
 
     Button mReturnHomeFromWeeklyReportBtn, signOutFromWeeklyReportBtn;
 
@@ -22,8 +21,7 @@ public class WeeklyReportActivity extends AppCompatActivity
     private LineGraphSeries<DataPoint> weekly_series;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weekly_report);
 
@@ -96,5 +94,6 @@ public class WeeklyReportActivity extends AppCompatActivity
                 startActivity(new Intent(getApplicationContext(), Login.class)); //back to login screen
             }
         });
+
     }
 }
