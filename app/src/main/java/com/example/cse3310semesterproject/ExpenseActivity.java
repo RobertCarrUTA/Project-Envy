@@ -79,12 +79,12 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
         //ArrayAdapter<BudgetCategory> categoryArrayAdapter = new ArrayAdapter<BudgetCategory>(this, android.R.layout.simple_list_item_1, categoryList);
         //categoryArrayAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
-        Spinner spinner = (Spinner) findViewById(R.id.priority_spinner2);
+        //Spinner spinner = (Spinner) findViewById(R.id.priority_spinner2);
         ArrayAdapter<String>adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, categoryTitle);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+        //spinner.setAdapter(adapter);
+       //spinner.setOnItemSelectedListener(this);
 
         //------------------------------------------------------------------------------------------
         // This represents the text entry box where the user inputs their income

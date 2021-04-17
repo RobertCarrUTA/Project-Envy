@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class FinanceActivity extends AppCompatActivity
 {
 
-    Button mReturnHomeFromFinanceBtn, mSignOutFromFinanceBtn,  mFinanceActivityBtn;
+    Button mReturnHomeFromFinanceBtn, mSignOutFromFinanceBtn,  mFinanceActivityBtn, mWeeklyReportBtn, mMonthlyReportBtn, mBudgetAnalysisBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
