@@ -18,9 +18,11 @@
         app:layout_constraintVertical_bias="0.286" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/profileImage"
+        android:layout_width="131dp"
+        android:layout_height="101dp"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.102"
-        tools:srcCompat="@tools:sample/avatars"
+        android:src= "@drawable/ic_user_default"
         tools:visibility="visible" />
 
     <Button
