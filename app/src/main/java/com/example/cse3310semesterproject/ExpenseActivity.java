@@ -47,15 +47,16 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     Date createDate = new Date(System.currentTimeMillis());
     Button mSaveExpensesBtn, mReturnHomeFromExpenseBtn, mSignOutFromExpenseBtn;
     String[] paths = {"High", "Medium", "Low"};
-    private Spinner spinner2;
+    private Spinner spinner;
     public static int priorityInt;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reff = database.getReference().child("Users").child(uid).child("Budget Category");
-    ArrayList<BudgetCategory> categoryList = new ArrayList<BudgetCategory>();
-    List<String> categoryTitles = new ArrayList<String>();
-    String[] categoryString = {"One", "Two", "Three", "Four"};
-
-
+    final ArrayList<BudgetCategory> categoryList = new ArrayList<BudgetCategory>();
+    final List<String> categoryTitles = new ArrayList<String>();
+    //String[] categoryString = {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"};
+    String[] categoryString = {"", "", "", "", "", "", "", "", "", ""};
+    //String[] str;
+    Object[] arr;
 
 
 
@@ -69,14 +70,20 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int i = 0;
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                //String str[] = new String[categoryTitles.size()];
                 for(DataSnapshot child : children){
+
                     BudgetCategory singleCategory = child.getValue(BudgetCategory.class);
                     categoryList.add(singleCategory);
-                    categoryTitles.add(singleCategory.categoryTitle);
+                    String store = singleCategory.categoryTitle.toString();
+                    //categoryTitles.add(singleCategory.categoryTitle);
+                    categoryTitles.add(store);
                     categoryString[i] = singleCategory.categoryTitle.trim();
                     i++;
                 }
 
+                //str = getStringArray(categoryTitles);
+                //str = categoryTitles.toArray(new String[0]);
             }
 
             @Override
@@ -94,12 +101,29 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         //ArrayAdapter<BudgetCategory> categoryArrayAdapter = new ArrayAdapter<BudgetCategory>(this, android.R.layout.simple_list_item_1, categoryList);
         //categoryArrayAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
         Spinner spinner = (Spinner) findViewById(R.id.priority_spinner2);
+        if(spinner == null){Log.w("", "Spinner is null");}
         ArrayAdapter<String>adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, categoryString);
+        //str = categoryTitles.toArray(new String[0]);
+        String[] str = getStringArray(categoryTitles);
+        /*ArrayAdapter<String>adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, str);*/
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+        /*spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                Toast.makeText(parent.getContext(), "Selected: " + selectedItem, Toast.LENGTH_LONG).show();
+                this.onItemSelected(parent, view, position, id);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(ExpenseActivity.this, "Make a Selection " , Toast.LENGTH_LONG).show();
+            }
+        });*/
         //------------------------------------------------------------------------------------------
         // This represents the text entry box where the user inputs their income
         mIncomeEntryBox = findViewById(R.id.incomeEntryBox);
@@ -116,7 +140,6 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         mSaveExpensesBtn.setOnClickListener(this);
         mReturnHomeFromExpenseBtn.setOnClickListener(this);
         mSignOutFromExpenseBtn.setOnClickListener(this);
-
 
     };
 
@@ -185,10 +208,11 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         mExpensesEntryBox.getText().clear();
     }
 
+
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (position)
-        {
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
+
+        switch (position) {
             case 0: // If High is selected on the drop down menu
                 priorityInt = 1;
                 break;
@@ -210,9 +234,25 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         Toast.makeText(ExpenseActivity.this, "Please Select A Category", Toast.LENGTH_SHORT).show();
     }
 
+    public static String[] getStringArray(List<String> arr)
+    {
+        String str[] = new String[arr.size()];
+        //String str1[] = arr.toArray();
+        // ArrayList to Array Conversion
+        for (int j = 0; j < arr.size(); j++) {
+
+            // Assign each value to String array
+            str[j] = arr.get(j);
+
+        }
+
+        //Toast.makeText(ExpenseActivity.this, "" + str[0], Toast.LENGTH_SHORT).show();
+        return str;
+    }
 }
