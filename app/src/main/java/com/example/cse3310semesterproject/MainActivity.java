@@ -5,12 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;//required to call FirebaseAuth commands
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 
 public class MainActivity extends AppCompatActivity
@@ -18,6 +24,8 @@ public class MainActivity extends AppCompatActivity
     // This sets us up to use our buttons that we have on our homepage
     Button mUserAccountBtn, mFinancialReportBtn, mBudgetingBtn, mSignOutBtn;
     ImageView profileImage;
+    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+    StorageReference pathRef;
 
     // If we have time, I might try to add the drawer menu back in, but for now, just to have the very basics of the app running
     // this will do
@@ -32,8 +40,17 @@ public class MainActivity extends AppCompatActivity
         mFinancialReportBtn = findViewById(R.id.FinancialReportBtn);
         mBudgetingBtn = findViewById(R.id.BudgetingBtn);
         mSignOutBtn = findViewById(R.id.SignOutBtn);
-
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
         profileImage = findViewById(R.id.profileImage);
+        pathRef = storageRef.child(uid + ".jpeg");
+
+        //this should be downloading the image from Storage into profileImage, not working right now
+        //may need to use a bitmap implementation, will look into further later
+            if(pathRef != null)
+            {
+                Glide.with(this).load(pathRef).into(profileImage);
+            }
 
 
         mUserAccountBtn.setOnClickListener(new View.OnClickListener()

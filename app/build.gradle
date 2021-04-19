@@ -42,7 +42,9 @@ dependencies
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.firebase:firebase-auth:20.0.3'
-    implementation 'com.google.firebase:firebase-database:19.2.1'//in Save and retrieve data, add realtime database to app
+    implementation 'com.google.firebase:firebase-database:19.2.1'
+    implementation 'com.google.firebase:firebase-storage:19.2.2'
+//in Save and retrieve data, add realtime database to app
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -52,6 +54,10 @@ dependencies
     // The below is for graphing
     // Find documentation here: https://github.com/jjoe64/GraphView/wiki/Download-and-Getting-Started
     implementation 'com.jjoe64:graphview:4.2.2'
+
+    //used for pulling data from Storage in Firebase
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
     //adding this because activities were not recognizing FirebaseAuth
     //implementation 'com.google.firebase:firebase-core:20.0.3'
