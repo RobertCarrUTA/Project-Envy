@@ -3,6 +3,8 @@ package com.example.cse3310semesterproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -44,13 +46,20 @@ public class MainActivity extends AppCompatActivity
         String uid = user.getUid();
         profileImage = findViewById(R.id.profileImage);
         pathRef = storageRef.child(uid + ".jpeg");
+        pathRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);//convert bytes into bitmap
+                profileImage.setImageBitmap(bitmap);
+            }
+        });
 
         //this should be downloading the image from Storage into profileImage, not working right now
         //may need to use a bitmap implementation, will look into further later
-            if(pathRef != null)
+            /*if(pathRef != null)
             {
                 Glide.with(this).load(pathRef).into(profileImage);
-            }
+            }*/
 
 
         mUserAccountBtn.setOnClickListener(new View.OnClickListener()
