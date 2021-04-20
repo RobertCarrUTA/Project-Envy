@@ -23,7 +23,7 @@ public class PrioritiesActivity extends AppCompatActivity implements AdapterView
     EditText mCategoryTitleEntry;
     Button mCreateCategoryBtn, mReturnHomeFromPrioritiesBtn, mSignOutFromPrioritiesBtn;
     private Spinner spinner2;
-    private static final String[] paths = {"High", "Med", "Low"};
+    private static final String[] paths = {"High", "Medium", "Low"};
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
 
