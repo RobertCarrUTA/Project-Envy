@@ -51,9 +51,10 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     public static int priorityInt;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reff = database.getReference().child("Users").child(uid).child("Budget Category");
-    ArrayList<BudgetCategory> categoryList = new ArrayList<BudgetCategory>();
-    List<String> categoryTitles = new ArrayList<String>();
-    String[] categoryString = {"One", "Two", "Three", "Four"};
+    ArrayList<BudgetCategory> categoryList = new ArrayList<>();
+    List<String> categoryTitles = new ArrayList<>();
+    final String[] categoryString = {"Select Category", "", "", "","","","","","","","","","","","",""};
+    final String[] categoryString2 = {};
 
 
 
@@ -69,14 +70,12 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int i = 0;
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for(DataSnapshot child : children){
+                for (DataSnapshot child : children) {
                     BudgetCategory singleCategory = child.getValue(BudgetCategory.class);
                     categoryList.add(singleCategory);
-                    categoryTitles.add(singleCategory.categoryTitle);
-                    categoryString[i] = singleCategory.categoryTitle.trim();
+                    categoryString[i] = singleCategory.categoryTitle;
                     i++;
                 }
-
             }
 
             @Override
@@ -88,14 +87,11 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
         //------------------------------------------------------------------------------------------
 
-
-
-
         //ArrayAdapter<BudgetCategory> categoryArrayAdapter = new ArrayAdapter<BudgetCategory>(this, android.R.layout.simple_list_item_1, categoryList);
         //categoryArrayAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
         Spinner spinner = (Spinner) findViewById(R.id.priority_spinner2);
         ArrayAdapter<String>adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, categoryString);
+                android.R.layout.simple_spinner_item, categoryString2);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
