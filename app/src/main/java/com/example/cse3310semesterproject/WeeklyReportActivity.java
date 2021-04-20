@@ -36,9 +36,8 @@ public class WeeklyReportActivity extends AppCompatActivity
     // Initializing the graph to be a line graph
     private LineGraphSeries<DataPoint> weekly_series;
 
-    double spending2[] = {1.0, 1.0, 1.0};
-    double spending1[] = {0.0, 0.0, 0.0};
-    String array[] = {"","",""};
+    double spending2[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+
     // Expenses
     double x, y;
 
@@ -58,9 +57,6 @@ public class WeeklyReportActivity extends AppCompatActivity
         //
         // Graph documentation here: https://github.com/jjoe64/GraphView/wiki/Download-and-Getting-Started
 
-        //GraphView weeklyGraph = (GraphView)findViewById(R.id.WeeklyReportGraph);
-       // weekly_series = new LineGraphSeries<>();
-
         // Possibly look at this for date axis: https://github.com/jjoe64/GraphView/wiki/Dates-as-labels
         //Calendar calendar = Calendar.getInstance();
         //Date d1 = calendar.getTime();
@@ -70,17 +66,8 @@ public class WeeklyReportActivity extends AppCompatActivity
         //Date d3 = calendar.getTime();
 
 
-
-        // I guess we need to discuss how we wish to go about graphing these graphs, weekly as in
-        // the weeks of any given month, or just the days of that week? Monthly as in the weeks in
-        // a single month or monthly as in every month in a year?
-        int weekDays = 7;
-
-        System.out.println("Spending 1:");
-        System.out.println(spending1[1]);
-        System.out.println("This is before the loop");
-        System.out.println(spending2[1]);
-
+        // We had to add the graph into this scope below or it would not save the values
+        // correctly into the array to be graphed
         reff.addValueEventListener(new ValueEventListener()
         {
             @Override
@@ -88,29 +75,30 @@ public class WeeklyReportActivity extends AppCompatActivity
             {
                 GraphView weeklyGraph = (GraphView)findViewById(R.id.WeeklyReportGraph);
                 weekly_series = new LineGraphSeries<>();
+
+                // Setting the axis titles:
+                // Possibly look at this for date axis: https://github.com/jjoe64/GraphView/wiki/Dates-as-labels
                 // Also this: https://github.com/jjoe64/GraphView/wiki/Style-options
                 weeklyGraph.getGridLabelRenderer().setHorizontalAxisTitle("Date");
                 weeklyGraph.getGridLabelRenderer().setVerticalAxisTitle("Expenses ($)");
-                weeklyGraph.getGridLabelRenderer().setNumHorizontalLabels(3);
-
+                // Setting how many values are on the x axis:
+                weeklyGraph.getGridLabelRenderer().setNumHorizontalLabels(7);
                 // Setting graph title:
                 weeklyGraph.setTitle("Weekly Expenses");
+
                 int i = 0;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
                     Expenses expenses = snapshot.getValue(Expenses.class);
                     spending2[i] = expenses.spending;
-
-                    // This for loop added in filler data for now. We need to be able to put user expenses with
-                    // their dates into this graph
-                        x = 1.00 * i;
-
-                        y = spending2[i];
-                        System.out.println("This is in the for loop");
-                        System.out.println(y);
-                        weekly_series.appendData(new DataPoint(x,y), true, 10);
-                    System.out.println(expenses.spending);
                     i++;
+                }
+                // Populating the graph
+                for(i=1; i < 8; i++)
+                {
+                    x = i * 1.00; // We need to change this to dates
+                    y = spending2[i-1];
+                    weekly_series.appendData(new DataPoint(x,y), true, 10);
                 }
                 weeklyGraph.addSeries(weekly_series);
             }
@@ -123,9 +111,6 @@ public class WeeklyReportActivity extends AppCompatActivity
                 Log.v("TestRead", "Failed to read value.", databaseError.toException());
             }
         });
-
-
-        //weeklyGraph.addSeries(weekly_series);
 
 
         //------------------------------------------------------------------------------------------
