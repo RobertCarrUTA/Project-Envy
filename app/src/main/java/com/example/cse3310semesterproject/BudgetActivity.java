@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class BudgetActivity extends AppCompatActivity
 {
 
-    Button mReturnHomeFromBudgetBtn, mPrioritiesBtn, mExpensesBtn, mLoanInformationBtn, mSignOutFromBudgetBtn;
+    Button mManageBudgetBtn, mReturnHomeFromBudgetBtn, mPrioritiesBtn, mExpensesBtn, mLoanInformationBtn, mSignOutFromBudgetBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -21,12 +21,22 @@ public class BudgetActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget);
 
+        mManageBudgetBtn = findViewById(R.id.manageBudgetBtn);
         mReturnHomeFromBudgetBtn = findViewById(R.id.returnHomeFromBudgetBtn);
         mPrioritiesBtn = findViewById(R.id.prioritiesBtn);
         mExpensesBtn = findViewById(R.id.expensesBtn);
         mLoanInformationBtn = findViewById(R.id.loanInformationBtn);
-
         mSignOutFromBudgetBtn = findViewById(R.id.signOutFromBudgetBtn2);
+
+
+        mManageBudgetBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(getApplicationContext(), BudgetManagementActivity.class));
+            }
+        });
 
 
         // Let the user go to the priorities page to do anything priority related with their
@@ -63,6 +73,7 @@ public class BudgetActivity extends AppCompatActivity
             }
         });
 
+
         // Let the user go back to the homepage
         mReturnHomeFromBudgetBtn.setOnClickListener(new View.OnClickListener()
         {
@@ -72,6 +83,7 @@ public class BudgetActivity extends AppCompatActivity
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
+
 
         // Let the user sign out
         mSignOutFromBudgetBtn.setOnClickListener(new View.OnClickListener()
