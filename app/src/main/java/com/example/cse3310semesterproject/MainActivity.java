@@ -39,6 +39,9 @@ public class MainActivity extends AppCompatActivity
     // If we have time, I might try to add the drawer menu back in, but for now, just to have the very basics of the app running
     // this will do
 
+    // Documentation to add push notifications within the app:
+    // https://developer.android.com/training/notify-user/build-notification#java
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -49,21 +52,15 @@ public class MainActivity extends AppCompatActivity
         mFinancialReportBtn = findViewById(R.id.FinancialReportBtn);
         mBudgetingBtn = findViewById(R.id.BudgetingBtn);
         mRemainingBudgetTextBox = findViewById(R.id.remainingBudgetTextBox);
-
         mSignOutBtn = findViewById(R.id.SignOutBtn);
-
         profileImage = findViewById(R.id.profileImage);
 
-
-        //----------------------------------------------------------------------------------
         // The below code allows for the remaining budget value to be represented in US currency
         Locale usa = new Locale("en", "US");
         Currency dollars = Currency.getInstance(usa);
         NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
-
-        //----------------------------------------------------------------------------------
-        // To set the text in the entry box
-        // The documentation for setText is here: https://developer.android.com/reference/android/widget/EditText#setText(java.lang.CharSequence,%20android.widget.TextView.BufferType)
+        // remaining budget need to be (weekly budget - sum of all expenses in the week)
+        // for now it is hardcoded
         remainingBudget = 130.00;
         mRemainingBudgetTextBox.setText(dollarFormat.format(remainingBudget));
 
