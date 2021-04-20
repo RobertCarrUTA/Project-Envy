@@ -24,6 +24,14 @@ public class BudgetAnalysisActivity extends AppCompatActivity
         mReturnHomeFromBudgetAnalysisBtn = findViewById(R.id.returnHomeFromBudgetAnalysisBtn);
         mSignOutFromBudgetAnalysisBtn = findViewById(R.id.signOutFromBudgetAnalysisBtn);
 
+        /*
+            Maybe have some text boxes that show how much they have spent on what, like adding up the
+            totals to all their priority levels and display them in text boxes, then show them whether
+            or not they are above or below budget based on the sum of their expenses for the week or
+            month. Probably a garbage way of doing it but we only got 7 days left so we probably can't
+            be getting too fancy.
+         */
+
         //------------------------------------------------------------------------------------------
         // Let the user go back to the homepage
         mReturnHomeFromBudgetAnalysisBtn.setOnClickListener(new View.OnClickListener()
