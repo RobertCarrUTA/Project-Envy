@@ -84,8 +84,6 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
                     categoryString[i] = singleCategory.categoryTitle.trim();
                     i++;
                 }
-                //str = getStringArray(categoryTitles);
-                //str = categoryTitles.toArray(new String[0]);
             }
 
             @Override

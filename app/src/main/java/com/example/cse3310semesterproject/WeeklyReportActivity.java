@@ -36,7 +36,9 @@ public class WeeklyReportActivity extends AppCompatActivity
     // Initializing the graph to be a line graph
     private LineGraphSeries<DataPoint> weekly_series;
 
-    double[] spending;
+    double spending2[] = {0.0, 0.0, 0.0};
+    double spending1[] = {0.0, 0.0, 0.0};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,7 +48,6 @@ public class WeeklyReportActivity extends AppCompatActivity
 
         mReturnHomeFromWeeklyReportBtn = findViewById(R.id.returnHomeFromWeeklyReportBtn);
         signOutFromWeeklyReportBtn = findViewById(R.id.signOutFromWeeklyReportBtn);
-
 
         //------------------------------------------------------------------------------------------
         // Graphing Section
@@ -74,44 +75,54 @@ public class WeeklyReportActivity extends AppCompatActivity
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
                     Expenses expenses = snapshot.getValue(Expenses.class);
-                    spending[i] = expenses.spending;
+                    spending2[i] = expenses.spending;
+                    spending1[i] = expenses.spending;
+                    System.out.println(expenses.spending);
                     i++;
                 }
             }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError)
-                {
-
-                }
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                // Failed to read value
+                Log.v("TestRead", "Failed to read value.", databaseError.toException());
+            }
         });
 
         // Also this: https://github.com/jjoe64/GraphView/wiki/Style-options
         weeklyGraph.getGridLabelRenderer().setHorizontalAxisTitle("Date");
         weeklyGraph.getGridLabelRenderer().setVerticalAxisTitle("Expenses ($)");
-        weeklyGraph.getGridLabelRenderer().setNumHorizontalLabels(7);
+        weeklyGraph.getGridLabelRenderer().setNumHorizontalLabels(3);
 
         // Setting graph title:
         weeklyGraph.setTitle("Weekly Expenses");
 
         // Expenses
-        double x, y = 0;
+        double x, y;
 
         // I guess we need to discuss how we wish to go about graphing these graphs, weekly as in
         // the weeks of any given month, or just the days of that week? Monthly as in the weeks in
         // a single month or monthly as in every month in a year?
         int weekDays = 7;
 
+        System.out.println("Spending 1:");
+        System.out.println(spending1[1]);
+        System.out.println("This is before the loop");
+        System.out.println(spending2[1]);
+
         // This for loop added in filler data for now. We need to be able to put user expenses with
         // their dates into this graph
-        for(int i = 0; i < weekDays; i++)
+        for(int i = 0; i < 2; i++)
         {
             x = 1.00 * i;
             //if(i % 2 == 0)
             //{
             //    y = (y - 85);
             //}
-            y = spending[i];
+            y = spending2[i];
+            System.out.println("This is in the for loop");
+            System.out.println(y);
             weekly_series.appendData(new DataPoint(x,y), true, 10);
         }
 
