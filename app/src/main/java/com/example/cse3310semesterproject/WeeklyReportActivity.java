@@ -1,8 +1,10 @@
 package com.example.cse3310semesterproject;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,11 +22,20 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
-//test
+
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class WeeklyReportActivity extends AppCompatActivity
 {
+    //LocalDate currDate = LocalDate.now();
+    //LocalDate weekAgoDate = currDate.minusDays(7);
+    //LocalDate monthAgoDate = currDate.minusDays(30);
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+    //Date myDate = dateFormat.parse();
+
 
     Button mReturnHomeFromWeeklyReportBtn, signOutFromWeeklyReportBtn;
 
@@ -51,6 +62,10 @@ public class WeeklyReportActivity extends AppCompatActivity
 
         mReturnHomeFromWeeklyReportBtn = findViewById(R.id.returnHomeFromWeeklyReportBtn);
         signOutFromWeeklyReportBtn = findViewById(R.id.signOutFromWeeklyReportBtn);
+        Calendar calendar = Calendar.getInstance();
+        Date currDate = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_YEAR, -7);
+        Date weekAgoDate = calendar.getTime();
 
         //------------------------------------------------------------------------------------------
         // Graphing Section
@@ -94,15 +109,21 @@ public class WeeklyReportActivity extends AppCompatActivity
                 {
                     Expenses expenses = snapshot.getValue(Expenses.class);
                     spending2[i] = expenses.spending;
+                    System.out.println(spending2[i]);
                     i++;
                 }
-
+                Date dateCount = weekAgoDate;
                 // Populating the graph
                 for(i=1; i < 8; i++)
                 {
-                    x = i * 1.00; // We need to change this to dates
+
+                    // We need to change this to dates
                     y = spending2[i-1];
-                    weekly_series.appendData(new DataPoint(x,y), true, 10);
+                    weekly_series.appendData(new DataPoint(dateCount,y), true, 10);
+                    calendar.add(Calendar.DAY_OF_YEAR, 1);
+                    dateCount = calendar.getTime();
+                    System.out.println(dateCount);
+
                 }
                 weeklyGraph.addSeries(weekly_series);
             }

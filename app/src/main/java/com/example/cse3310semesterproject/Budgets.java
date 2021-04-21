@@ -4,13 +4,13 @@ import java.util.Date;
 
 public class Budgets
 {
-    public int userID;
+    public String userID;
     public Date creationDate;
     public double budget;
 
     public Budgets(){}
 
-    public Budgets(int userID, Date creationDate, double budget)
+    public Budgets(String userID, Date creationDate, double budget)
     {
         this.userID = userID;
         this.creationDate = creationDate;
