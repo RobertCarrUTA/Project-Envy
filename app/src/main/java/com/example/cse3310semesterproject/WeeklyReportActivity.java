@@ -36,6 +36,7 @@ public class WeeklyReportActivity extends AppCompatActivity
     // Initializing the graph to be a line graph
     private LineGraphSeries<DataPoint> weekly_series;
 
+    // 7 slots for 7 days out of the week
     double spending2[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     // Expenses
@@ -66,6 +67,7 @@ public class WeeklyReportActivity extends AppCompatActivity
         //Date d3 = calendar.getTime();
 
 
+        //------------------------------------------------------------------------------------------
         // We had to add the graph into this scope below or it would not save the values
         // correctly into the array to be graphed
         reff.addValueEventListener(new ValueEventListener()
@@ -87,12 +89,14 @@ public class WeeklyReportActivity extends AppCompatActivity
                 weeklyGraph.setTitle("Weekly Expenses");
 
                 int i = 0;
+                // Iterating through the database for the Expenses
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
                     Expenses expenses = snapshot.getValue(Expenses.class);
                     spending2[i] = expenses.spending;
                     i++;
                 }
+
                 // Populating the graph
                 for(i=1; i < 8; i++)
                 {
@@ -102,7 +106,6 @@ public class WeeklyReportActivity extends AppCompatActivity
                 }
                 weeklyGraph.addSeries(weekly_series);
             }
-
 
             @Override
             public void onCancelled(DatabaseError databaseError)
