@@ -16,15 +16,21 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class AccountActivity extends AppCompatActivity implements View.OnClickListener
 {
     EditText mNewCurrentPasswordEntry;
     Button mReturnHomeBtn, mSignOutFromAccountBtn, mChangePasswordBtn, mAvatarButton;
-    ImageView profileImage;
+    //ImageView profileImage;
+    StorageReference storageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,10 +43,21 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         mChangePasswordBtn = findViewById(R.id.changePasswordBtn); //change current password
         mNewCurrentPasswordEntry = findViewById(R.id.newCurrentPasswordEntry); //user input of password
         mAvatarButton = findViewById(R.id.AvatarButton);//change user avatar
+        storageRef = FirebaseStorage.getInstance().getReference();
         mAvatarButton.setOnClickListener(this);
+        /*mAvatarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Open gallery
+                Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(openGalleryIntent, 1000);
+            }
+        });*/
         mChangePasswordBtn.setOnClickListener(this);
         mSignOutFromAccountBtn.setOnClickListener(this);
         mReturnHomeBtn.setOnClickListener(this);
+
+
     }
 
     public void onClick(View v)
@@ -59,7 +76,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.AvatarButton://temporary, not yet implemented
                 changeProfile();
-                Toast.makeText(AccountActivity.this, "Please somebody make me work :(", Toast.LENGTH_LONG).show();
+                //Toast.makeText(AccountActivity.this, "Please somebody make me work :(", Toast.LENGTH_LONG).show();
                 break;
         }
     }
@@ -100,10 +117,10 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
-    //neither of these functions are doing anything at the moment, just experimenting
+
     //@Override
-   /* public void changeProfile()
-    {
+    public void changeProfile()
+    {//open gallery
         Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(openGalleryIntent, 1000);
     }
@@ -111,22 +128,34 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1000)
+        if(requestCode == 1000) //from startActivityForResult
         {
             if(resultCode == Activity.RESULT_OK)
             {
                 Uri imageUri = data.getData();
-                profileImage.setImageURI(imageUri);
-
-
+                uploadImageToFirebase(imageUri);
             }
         }
-    }*/
-    public void changeProfile()
-    {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        //startActivityForResult(Intent.createChooser(intent, "Select Picture"), Common.SELECT_PICTURE);
     }
+
+    public void uploadImageToFirebase(Uri imageUri)
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();//user user id to store image
+        StorageReference fileRef = storageRef.child(uid + ".jpeg");//attaching .jpeg to title
+        fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(AccountActivity.this, "Image has been uploaded.", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(AccountActivity.this, "Upload has failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        }
+
 }

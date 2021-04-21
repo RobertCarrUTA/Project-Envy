@@ -4,22 +4,43 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class WeeklyReportActivity extends AppCompatActivity
 {
 
     Button mReturnHomeFromWeeklyReportBtn, signOutFromWeeklyReportBtn;
 
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String uid = user.getUid();
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference reff = database.getReference().child("Users").child(uid).child("Expenses");
+
     // Initializing the graph to be a line graph
     private LineGraphSeries<DataPoint> weekly_series;
+
+    double spending2[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+
+    // Expenses
+    double x, y;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,45 +51,66 @@ public class WeeklyReportActivity extends AppCompatActivity
         mReturnHomeFromWeeklyReportBtn = findViewById(R.id.returnHomeFromWeeklyReportBtn);
         signOutFromWeeklyReportBtn = findViewById(R.id.signOutFromWeeklyReportBtn);
 
-
         //------------------------------------------------------------------------------------------
         // Graphing Section
         //
         //
         // Graph documentation here: https://github.com/jjoe64/GraphView/wiki/Download-and-Getting-Started
 
-        GraphView weeklyGraph = (GraphView)findViewById(R.id.WeeklyReportGraph);
-        weekly_series = new LineGraphSeries<>();
-
         // Possibly look at this for date axis: https://github.com/jjoe64/GraphView/wiki/Dates-as-labels
-        // Also this: https://github.com/jjoe64/GraphView/wiki/Style-options
-        weeklyGraph.getGridLabelRenderer().setHorizontalAxisTitle("Date");
-        weeklyGraph.getGridLabelRenderer().setVerticalAxisTitle("Expenses ($)");
+        //Calendar calendar = Calendar.getInstance();
+        //Date d1 = calendar.getTime();
+        //calendar.add(Calendar.DATE, 1);
+        //Date d2 = calendar.getTime();
+        //calendar.add(Calendar.DATE, 1);
+        //Date d3 = calendar.getTime();
 
-        // Setting graph title:
-        weeklyGraph.setTitle("Weekly Expenses");
 
-        double x = 0, y = 0;
-
-        // I guess we need to discuss how we wish to go about graphing these graphs, weekly as in
-        // the weeks of any given month, or just the days of that week? Monthly as in the weeks in
-        // a single month or monthly as in every month in a year?
-        int weekDays = 7;
-
-        // This for loop added in filler data for now. We need to be able to put user expenses with
-        // their dates into this graph
-        for(int i = 0; i < weekDays; i++)
+        // We had to add the graph into this scope below or it would not save the values
+        // correctly into the array to be graphed
+        reff.addValueEventListener(new ValueEventListener()
         {
-            x = i + 1;
-            if(i % 2 == 0)
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
             {
-                y = (y - 85);
-            }
-            y = y + 100;
-            weekly_series.appendData(new DataPoint(x,y), true, 10);
-        }
+                GraphView weeklyGraph = (GraphView)findViewById(R.id.WeeklyReportGraph);
+                weekly_series = new LineGraphSeries<>();
 
-        weeklyGraph.addSeries(weekly_series);
+                // Setting the axis titles:
+                // Possibly look at this for date axis: https://github.com/jjoe64/GraphView/wiki/Dates-as-labels
+                // Also this: https://github.com/jjoe64/GraphView/wiki/Style-options
+                weeklyGraph.getGridLabelRenderer().setHorizontalAxisTitle("Date");
+                weeklyGraph.getGridLabelRenderer().setVerticalAxisTitle("Expenses ($)");
+                // Setting how many values are on the x axis:
+                weeklyGraph.getGridLabelRenderer().setNumHorizontalLabels(7);
+                // Setting graph title:
+                weeklyGraph.setTitle("Weekly Expenses");
+
+                int i = 0;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                {
+                    Expenses expenses = snapshot.getValue(Expenses.class);
+                    spending2[i] = expenses.spending;
+                    i++;
+                }
+                // Populating the graph
+                for(i=1; i < 8; i++)
+                {
+                    x = i * 1.00; // We need to change this to dates
+                    y = spending2[i-1];
+                    weekly_series.appendData(new DataPoint(x,y), true, 10);
+                }
+                weeklyGraph.addSeries(weekly_series);
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                // Failed to read value
+                Log.v("TestRead", "Failed to read value.", databaseError.toException());
+            }
+        });
 
 
         //------------------------------------------------------------------------------------------
