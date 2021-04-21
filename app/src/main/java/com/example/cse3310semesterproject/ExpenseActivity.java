@@ -61,18 +61,21 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense);
 
-        reff.addValueEventListener(new ValueEventListener() {
+        reff.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
                 int i = 0;
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 //String str[] = new String[categoryTitles.size()];
-                for(DataSnapshot child : children){
-
+                for(DataSnapshot child : children)
+                {
                     BudgetCategory singleCategory = child.getValue(BudgetCategory.class);
                     categoryList.add(singleCategory);
                     String store = singleCategory.categoryTitle.toString();
@@ -81,9 +84,6 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
                     categoryString[i] = singleCategory.categoryTitle.trim();
                     i++;
                 }
-
-                //str = getStringArray(categoryTitles);
-                //str = categoryTitles.toArray(new String[0]);
             }
 
             @Override
@@ -143,8 +143,10 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
     };
 
-    public void onClick(View v){
-        switch(v.getId()){
+    public void onClick(View v)
+    {
+        switch(v.getId())
+        {
             case R.id.returnHomeFromExpenseBtn:
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));//jump to homepage
                 break;
@@ -160,17 +162,16 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
 
     }
-    public void inputInfo(){
-
-
+    public void inputInfo()
+    {
         if(TextUtils.isEmpty(mIncomeEntryBox.getText()) && TextUtils.isEmpty(mExpensesEntryBox.getText()))
         {
             mIncomeEntryBox.setError("Please enter an income or expense");
+            Toast.makeText(ExpenseActivity.this, "Please enter an Income or an Expense.", Toast.LENGTH_SHORT).show();
             return;
         }
         else
-            {
-
+        {
             if(!(TextUtils.isEmpty(mIncomeEntryBox.getText())))
             {
                 Income = Double.valueOf(mIncomeEntryBox.getText().toString());
@@ -179,7 +180,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
                 Income income  = new Income(uid, createDate, Income);
                 FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Income").push().setValue(income);
-                Toast.makeText(ExpenseActivity.this, "Input Saved Successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ExpenseActivity.this, "Income Saved Successfully!", Toast.LENGTH_SHORT).show();
             }
             if(!(TextUtils.isEmpty(mExpensesEntryBox.getText())))
             {
@@ -187,21 +188,9 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
                 Expenses expenses = new Expenses(uid, priorityInt, Expense, createDate); //need to add spinner to select priority
                 FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Expenses").push().setValue(expenses);
-                Toast.makeText(ExpenseActivity.this, "Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ExpenseActivity.this, "Expense Saved Successfully!", Toast.LENGTH_SHORT).show();
             }
-
-            //----------------------------------------------------------------------------------
-            // Let the user know the user input has been successfully saved.
-
         }
-
-
-        //----------------------------------------------------------------------------------
-        // The below code allows for the entry boxes to be represented in US currency
-        Locale usa = new Locale("en", "US");
-        Currency dollars = Currency.getInstance(usa);
-        NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
-
         //----------------------------------------------------------------------------------
         // To reset the text in the entry box we reset the values to empty
         mIncomeEntryBox.getText().clear();
@@ -210,9 +199,10 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
-
-        switch (position) {
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+    {
+        switch (position)
+        {
             case 0: // If High is selected on the drop down menu
                 priorityInt = 1;
                 break;
@@ -236,7 +226,8 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onNothingSelected(AdapterView<?> parent)
+    {
         Toast.makeText(ExpenseActivity.this, "Please Select A Category", Toast.LENGTH_SHORT).show();
     }
 
@@ -245,13 +236,13 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         String str[] = new String[arr.size()];
         //String str1[] = arr.toArray();
         // ArrayList to Array Conversion
-        for (int j = 0; j < arr.size(); j++) {
+        for (int j = 0; j < arr.size(); j++)
+        {
 
             // Assign each value to String array
             str[j] = arr.get(j);
 
         }
-
         //Toast.makeText(ExpenseActivity.this, "" + str[0], Toast.LENGTH_SHORT).show();
         return str;
     }

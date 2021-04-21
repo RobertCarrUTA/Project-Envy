@@ -28,6 +28,9 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     EditText mEmail, mPassword;
 
 
+    // Documentation for added a verification email:
+    // https://firebase.google.com/docs/auth/android/email-link-auth
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
