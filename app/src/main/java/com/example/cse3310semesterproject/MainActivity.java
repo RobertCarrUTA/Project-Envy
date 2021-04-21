@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity
         String uid = user.getUid();
         profileImage = findViewById(R.id.profileImage);
         pathRef = storageRef.child(uid + ".jpeg");
+
         pathRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
@@ -53,13 +54,6 @@ public class MainActivity extends AppCompatActivity
                 profileImage.setImageBitmap(bitmap);
             }
         });
-
-        //this should be downloading the image from Storage into profileImage, not working right now
-        //may need to use a bitmap implementation, will look into further later
-            /*if(pathRef != null)
-            {
-                Glide.with(this).load(pathRef).into(profileImage);
-            }*/
 
 
         mUserAccountBtn.setOnClickListener(new View.OnClickListener()
