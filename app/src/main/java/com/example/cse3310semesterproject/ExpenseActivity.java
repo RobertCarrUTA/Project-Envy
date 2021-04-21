@@ -47,33 +47,41 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     Date createDate = new Date(System.currentTimeMillis());
     Button mSaveExpensesBtn, mReturnHomeFromExpenseBtn, mSignOutFromExpenseBtn;
     String[] paths = {"High", "Medium", "Low"};
-    private Spinner spinner2;
+    private Spinner spinner;
     public static int priorityInt;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reff = database.getReference().child("Users").child(uid).child("Budget Category");
-    ArrayList<BudgetCategory> categoryList = new ArrayList<>();
-    List<String> categoryTitles = new ArrayList<>();
-    final String[] categoryString = {"Select Category", "", "", "","","","","","","","","","","","",""};
-    final String[] categoryString2 = {};
-
-
+    final ArrayList<BudgetCategory> categoryList = new ArrayList<BudgetCategory>();
+    final List<String> categoryTitles = new ArrayList<String>();
+    //String[] categoryString = {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"};
+    String[] categoryString = {"", "", "", "", "", "", "", "", "", ""};
+    //String[] str;
+    Object[] arr;
 
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense);
 
-        reff.addValueEventListener(new ValueEventListener() {
+        reff.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
                 int i = 0;
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for (DataSnapshot child : children) {
+                //String str[] = new String[categoryTitles.size()];
+                for(DataSnapshot child : children)
+                {
                     BudgetCategory singleCategory = child.getValue(BudgetCategory.class);
                     categoryList.add(singleCategory);
-                    categoryString[i] = singleCategory.categoryTitle;
+                    String store = singleCategory.categoryTitle.toString();
+                    //categoryTitles.add(singleCategory.categoryTitle);
+                    categoryTitles.add(store);
+                    categoryString[i] = singleCategory.categoryTitle.trim();
                     i++;
                 }
             }
@@ -87,15 +95,35 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
         //------------------------------------------------------------------------------------------
 
+
+
+
         //ArrayAdapter<BudgetCategory> categoryArrayAdapter = new ArrayAdapter<BudgetCategory>(this, android.R.layout.simple_list_item_1, categoryList);
         //categoryArrayAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
         Spinner spinner = (Spinner) findViewById(R.id.priority_spinner2);
+        if(spinner == null){Log.w("", "Spinner is null");}
         ArrayAdapter<String>adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, categoryString2);
+                android.R.layout.simple_spinner_item, categoryString);
+        //str = categoryTitles.toArray(new String[0]);
+        String[] str = getStringArray(categoryTitles);
+        /*ArrayAdapter<String>adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, str);*/
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+        /*spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                Toast.makeText(parent.getContext(), "Selected: " + selectedItem, Toast.LENGTH_LONG).show();
+                this.onItemSelected(parent, view, position, id);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(ExpenseActivity.this, "Make a Selection " , Toast.LENGTH_LONG).show();
+            }
+        });*/
         //------------------------------------------------------------------------------------------
         // This represents the text entry box where the user inputs their income
         mIncomeEntryBox = findViewById(R.id.incomeEntryBox);
@@ -113,11 +141,12 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         mReturnHomeFromExpenseBtn.setOnClickListener(this);
         mSignOutFromExpenseBtn.setOnClickListener(this);
 
-
     };
 
-    public void onClick(View v){
-        switch(v.getId()){
+    public void onClick(View v)
+    {
+        switch(v.getId())
+        {
             case R.id.returnHomeFromExpenseBtn:
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));//jump to homepage
                 break;
@@ -133,17 +162,16 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
 
     }
-    public void inputInfo(){
-
-
+    public void inputInfo()
+    {
         if(TextUtils.isEmpty(mIncomeEntryBox.getText()) && TextUtils.isEmpty(mExpensesEntryBox.getText()))
         {
             mIncomeEntryBox.setError("Please enter an income or expense");
+            Toast.makeText(ExpenseActivity.this, "Please enter an Income or an Expense.", Toast.LENGTH_SHORT).show();
             return;
         }
         else
-            {
-
+        {
             if(!(TextUtils.isEmpty(mIncomeEntryBox.getText())))
             {
                 Income = Double.valueOf(mIncomeEntryBox.getText().toString());
@@ -152,7 +180,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
                 Income income  = new Income(uid, createDate, Income);
                 FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Income").push().setValue(income);
-                Toast.makeText(ExpenseActivity.this, "Input Saved Successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ExpenseActivity.this, "Income Saved Successfully!", Toast.LENGTH_SHORT).show();
             }
             if(!(TextUtils.isEmpty(mExpensesEntryBox.getText())))
             {
@@ -160,29 +188,19 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
 
                 Expenses expenses = new Expenses(uid, priorityInt, Expense, createDate); //need to add spinner to select priority
                 FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Expenses").push().setValue(expenses);
-                Toast.makeText(ExpenseActivity.this, "Expenses Saved Successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ExpenseActivity.this, "Expense Saved Successfully!", Toast.LENGTH_SHORT).show();
             }
-
-            //----------------------------------------------------------------------------------
-            // Let the user know the user input has been successfully saved.
-
         }
-
-
-        //----------------------------------------------------------------------------------
-        // The below code allows for the entry boxes to be represented in US currency
-        Locale usa = new Locale("en", "US");
-        Currency dollars = Currency.getInstance(usa);
-        NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
-
         //----------------------------------------------------------------------------------
         // To reset the text in the entry box we reset the values to empty
         mIncomeEntryBox.getText().clear();
         mExpensesEntryBox.getText().clear();
     }
 
+
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+    {
         switch (position)
         {
             case 0: // If High is selected on the drop down menu
@@ -206,9 +224,26 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onNothingSelected(AdapterView<?> parent)
+    {
         Toast.makeText(ExpenseActivity.this, "Please Select A Category", Toast.LENGTH_SHORT).show();
     }
 
+    public static String[] getStringArray(List<String> arr)
+    {
+        String str[] = new String[arr.size()];
+        //String str1[] = arr.toArray();
+        // ArrayList to Array Conversion
+        for (int j = 0; j < arr.size(); j++)
+        {
+
+            // Assign each value to String array
+            str[j] = arr.get(j);
+
+        }
+        //Toast.makeText(ExpenseActivity.this, "" + str[0], Toast.LENGTH_SHORT).show();
+        return str;
+    }
 }
