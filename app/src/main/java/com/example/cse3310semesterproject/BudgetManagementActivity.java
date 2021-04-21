@@ -10,6 +10,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class BudgetManagementActivity extends AppCompatActivity
 {
@@ -17,6 +22,9 @@ public class BudgetManagementActivity extends AppCompatActivity
     EditText mWeeklyBudgetEntry;
     Button mSaveWeeklyBudgetBtn, mClearWeeklyBudgetBtn, mReturnHomeFromManageBudgetBtn, mSignOutFromManageBudgetBtn;
     Double weeklyBudget;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String uid = user.getUid();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,8 +50,12 @@ public class BudgetManagementActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 // This needs to be saved to Firebase
+                Calendar calendar = Calendar.getInstance();
+                Date currDate = calendar.getTime();
                 weeklyBudget = Double.valueOf(mWeeklyBudgetEntry.getText().toString());
-                Toast.makeText(BudgetManagementActivity.this, "Weekly Budget Saved! (but not added to firebase yet)", Toast.LENGTH_SHORT).show();
+                Budgets budget  = new Budgets(uid, currDate, weeklyBudget);
+                FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Budgets").setValue(budget);
+                Toast.makeText(BudgetManagementActivity.this, "Weekly Budget Saved!", Toast.LENGTH_SHORT).show();
             }
         });
 
