@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity
         NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
         // remaining budget need to be (weekly budget - sum of all expenses in the week)
         // for now it is hardcoded
+
         remainingBudget = 130.00;
         mRemainingBudgetTextBox.setText(dollarFormat.format(remainingBudget));
 
