@@ -22,7 +22,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.text.NumberFormat;
+import java.util.Calendar;
 import java.util.Currency;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -54,6 +56,12 @@ public class MainActivity extends AppCompatActivity
         mRemainingBudgetTextBox = findViewById(R.id.remainingBudgetTextBox);
         mSignOutBtn = findViewById(R.id.SignOutBtn);
         profileImage = findViewById(R.id.profileImage);
+
+        Calendar calendar = Calendar.getInstance();
+        Date currDate = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_YEAR, -7);
+        Date weekAgoDate = calendar.getTime();
+
 
         // The below code allows for the remaining budget value to be represented in US currency
         Locale usa = new Locale("en", "US");
