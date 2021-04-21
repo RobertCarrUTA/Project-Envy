@@ -22,6 +22,7 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -103,7 +104,11 @@ public class WeeklyReportActivity extends AppCompatActivity
                 // Setting graph title:
                 weeklyGraph.setTitle("Weekly Expenses");
 
+                DateFormat format = new SimpleDateFormat("M-dd");
+                String[] days = new String[7];
+
                 int i = 0;
+
                 // Iterating through the database for the Expenses
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
@@ -116,14 +121,13 @@ public class WeeklyReportActivity extends AppCompatActivity
                 // Populating the graph
                 for(i = 1; i < 8; i++)
                 {
-
                     // We need to change this to dates
                     y = spending2[i-1];
-                    weekly_series.appendData(new DataPoint(dateCount,y), true, 10);
+                    //weekly_series.appendData(new DataPoint(dateCount,y), true, 10);
                     calendar.add(Calendar.DAY_OF_YEAR, 1);
                     dateCount = calendar.getTime();
+                    weekly_series.appendData(new DataPoint(dateCount,y), true, 10);
                     System.out.println(dateCount);
-
                 }
                 weeklyGraph.addSeries(weekly_series);
             }
