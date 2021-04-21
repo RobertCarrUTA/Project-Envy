@@ -98,7 +98,7 @@ public class WeeklyReportActivity extends AppCompatActivity
                 }
 
                 // Populating the graph
-                for(i=1; i < 8; i++)
+                for(i = 1; i < 8; i++)
                 {
                     x = i * 1.00; // We need to change this to dates
                     y = spending2[i-1];
