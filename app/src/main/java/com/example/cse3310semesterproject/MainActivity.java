@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity
     static double lowTot = 0, medTot = 0, highTot = 0, budget = 0;
     static double budgetTot = 0;
 
+    // This is to store the budget somewhere so that we can use it outside of the listener
     public static final String PREFS_NAME = "MyPrefsFile";
     String budgetString;
 
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity
         calendar.add(Calendar.DAY_OF_WEEK, 7);
         Date nextMonDate = calendar.getTime();
 
+        // Part of storing the budget somewhere so we can always have access to it
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 
 
@@ -93,6 +95,8 @@ public class MainActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Budgets budgetObj = dataSnapshot.getValue(Budgets.class);
                 budget = budgetObj.budget;
+
+                // This is storing the value off to some place we can use it again whenever we want
                 budgetString = String.valueOf(budget);
                 System.out.println("BudgetString inside budget loop:");
                 System.out.println(budgetString);
@@ -115,14 +119,11 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-
                 highTot = 0;
                 medTot = 0;
                 lowTot = 0;
-
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
-
                     Expenses expenses = snapshot.getValue(Expenses.class);
                     if(expenses.creationDate.compareTo(nextMonDate) <= 0 && expenses.creationDate.compareTo(monDate) >= 0)
                     {
@@ -131,6 +132,8 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
 
+                // This little block of code is us getting the value of the user budget
+                // from where we stored it and converting it back to a double
                 budgetString = settings.getString("budget", budgetString);
                 //budgetString = String.format("%.2f", budgetString);
                 System.out.println("BudgetString inside oncreate:");
