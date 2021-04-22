@@ -122,7 +122,6 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
                             lowTot = lowTot + expenses.spending;
                         }
                     }
-
                 }
             }
 

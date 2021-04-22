@@ -119,11 +119,11 @@ public class WeeklyReportActivity extends AppCompatActivity
                     Expenses expenses = snapshot.getValue(Expenses.class);
                     if(expenses.creationDate.compareTo(currDate) <= 0 && expenses.creationDate.compareTo(weekAgoDate) >= 0)
                     {
-                            expensesList.add(expenses);
-                            spending2[i] = expenses.spending;
-                            System.out.println(spending2[i]);
-                            i++;
-                            System.out.println(expenses.creationDate);
+                        expensesList.add(expenses);
+                        spending2[i] = expenses.spending;
+                        System.out.println(spending2[i]);
+                        i++;
+                        System.out.println(expenses.creationDate);
                         System.out.println(expenses.creationDate.compareTo(currDate));
                         System.out.println(expenses.creationDate.compareTo(weekAgoDate));
                     }

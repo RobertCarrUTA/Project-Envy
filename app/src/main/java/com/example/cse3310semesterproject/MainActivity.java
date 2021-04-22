@@ -1,14 +1,17 @@
 package com.example.cse3310semesterproject;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,6 +21,11 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;//required to call FirebaseAuth commands
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -38,47 +46,123 @@ public class MainActivity extends AppCompatActivity
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     StorageReference pathRef;
 
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String uid = user.getUid();
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference reff = database.getReference().child("Users").child(uid).child("Expenses");
+    DatabaseReference totReff = database.getReference().child("Users").child(uid).child("Budgets");
+
+    static double lowTot = 0, medTot = 0, highTot = 0, budget = 0;
+    static double budgetTot = 0;
+
+    public static final String PREFS_NAME = "MyPrefsFile";
+    String budgetString;
+
     // If we have time, I might try to add the drawer menu back in, but for now, just to have the very basics of the app running
     // this will do
 
     // Documentation to add push notifications within the app:
     // https://developer.android.com/training/notify-user/build-notification#java
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mUserAccountBtn = findViewById(R.id.UserAccountBtn);
         mFinancialReportBtn = findViewById(R.id.FinancialReportBtn);
         mBudgetingBtn = findViewById(R.id.BudgetingBtn);
-        mRemainingBudgetTextBox = findViewById(R.id.remainingBudgetTextBox);
         mSignOutBtn = findViewById(R.id.SignOutBtn);
         profileImage = findViewById(R.id.profileImage);
 
         Calendar calendar = Calendar.getInstance();
-        Date currDate = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_YEAR, -7);
-        Date weekAgoDate = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_WEEK, -(calendar.get(Calendar.DAY_OF_WEEK)-2));
+        Date monDate = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_WEEK, 7);
+        Date nextMonDate = calendar.getTime();
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 
 
-        // The below code allows for the remaining budget value to be represented in US currency
-        Locale usa = new Locale("en", "US");
-        Currency dollars = Currency.getInstance(usa);
-        NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
-        // remaining budget need to be (weekly budget - sum of all expenses in the week)
-        // for now it is hardcoded
 
-        remainingBudget = 130.00;
-        mRemainingBudgetTextBox.setText(dollarFormat.format(remainingBudget));
+        totReff.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Budgets budgetObj = dataSnapshot.getValue(Budgets.class);
+                budget = budgetObj.budget;
+                budgetString = String.valueOf(budget);
+                System.out.println("BudgetString inside budget loop:");
+                System.out.println(budgetString);
+                // Storing the budget string
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("budget", budgetString);
+                editor.commit();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String uid = user.getUid();
+        reff.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+
+                highTot = 0;
+                medTot = 0;
+                lowTot = 0;
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                {
+
+                    Expenses expenses = snapshot.getValue(Expenses.class);
+                    if(expenses.creationDate.compareTo(nextMonDate) <= 0 && expenses.creationDate.compareTo(monDate) >= 0)
+                    {
+                        highTot = highTot + expenses.spending;
+
+                    }
+                }
+
+                budgetString = settings.getString("budget", budgetString);
+                //budgetString = String.format("%.2f", budgetString);
+                System.out.println("BudgetString inside oncreate:");
+                System.out.println(budgetString);
+                budget = Double.valueOf(budgetString);
+
+                mRemainingBudgetTextBox = findViewById(R.id.remainingBudgetTextBox);
+                // The below code allows for the remaining budget value to be represented in US currency
+                Locale usa = new Locale("en", "US");
+                Currency dollars = Currency.getInstance(usa);
+                NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
+
+
+                budgetTot = budget - highTot;
+                System.out.println(highTot);
+                System.out.println(budget);
+                mRemainingBudgetTextBox.setText(dollarFormat.format(budgetTot));
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String uid = user.getUid();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                // Failed to read value
+                Log.v("TestRead", "Failed to read value.", databaseError.toException());
+            }
+        });
+
         profileImage = findViewById(R.id.profileImage);
         pathRef = storageRef.child(uid + ".jpeg");
-
         pathRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
@@ -86,6 +170,13 @@ public class MainActivity extends AppCompatActivity
                 profileImage.setImageBitmap(bitmap);
             }
         });
+
+        //this should be downloading the image from Storage into profileImage, not working right now
+        //may need to use a bitmap implementation, will look into further later
+            /*if(pathRef != null)
+            {
+                Glide.with(this).load(pathRef).into(profileImage);
+            }*/
 
 
         mUserAccountBtn.setOnClickListener(new View.OnClickListener()
