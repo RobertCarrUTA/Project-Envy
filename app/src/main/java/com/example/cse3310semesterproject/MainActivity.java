@@ -52,7 +52,11 @@ public class MainActivity extends AppCompatActivity
     DatabaseReference reff = database.getReference().child("Users").child(uid).child("Expenses");
     DatabaseReference totReff = database.getReference().child("Users").child(uid).child("Budgets");
 
-    private static double lowTot = 0, medTot = 0, highTot = 0, budget = 0;
+    static double lowTot = 0, medTot = 0, highTot = 0, budget = 0;
+    static double budgetTot = 0;
+
+    public static final String PREFS_NAME = "MyPrefsFile";
+    String budgetString;
 
     // If we have time, I might try to add the drawer menu back in, but for now, just to have the very basics of the app running
     // this will do
@@ -60,12 +64,6 @@ public class MainActivity extends AppCompatActivity
     // Documentation to add push notifications within the app:
     // https://developer.android.com/training/notify-user/build-notification#java
 
-    // Using this to store the budget value and pull from it later when we need it
-    public static final String PREFS_NAME = "MyPrefsFile";
-    public static final String PREFS_NAME2 = "MyPrefsFile2";
-    public static final String PREFS_NAME3 = "MyPrefsFile3";
-    public static final String PREFS_NAME4 = "MyPrefsFile4";
-    String budgetString, highTotString, medTotString, lowTotString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -73,57 +71,6 @@ public class MainActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        SharedPreferences settings2 = getSharedPreferences(PREFS_NAME2, 0);
-        SharedPreferences settings3 = getSharedPreferences(PREFS_NAME3, 0);
-        SharedPreferences settings4 = getSharedPreferences(PREFS_NAME4, 0);
-
-
-        budgetString = settings.getString("budget", budgetString);
-        //budgetString = String.format("%.2f", budgetString);
-        System.out.println("BudgetString inside oncreate:");
-        System.out.println(budgetString);
-        budget = Double.valueOf(budgetString);
-
-        highTotString = settings2.getString("highTot", highTotString);
-        //highTotString = String.format("%.2f", highTotString);
-        System.out.println("highTotString inside oncreate:");
-        System.out.println(highTotString);
-        highTot = Double.valueOf(highTotString);
-
-        medTotString = settings3.getString("medTot", medTotString);
-        //medTotString = String.format("%.2f", medTotString);
-        System.out.println("medTotString inside oncreate:");
-        System.out.println(medTotString);
-        medTot = Double.valueOf(medTotString);
-
-        lowTotString = settings4.getString("lowTot", lowTotString);
-        //lowTotString = String.format("%.2f", lowTotString);
-        System.out.println("lowTotString inside oncreate:");
-        System.out.println(lowTotString);
-        lowTot = Double.valueOf(lowTotString);
-
-        //highTotString = settings2.getString("highTot", highTotString);
-        //System.out.println("highTotString inside oncreate:");
-       // System.out.println(highTotString);
-        //highTot = Double.valueOf(highTotString);
-
-
-        remainingBudget = budget - (highTot + medTot + lowTot);
-        System.out.println("Values for the equation:");
-        System.out.println(remainingBudget);
-        System.out.println(budget);
-        System.out.println(highTot);
-        System.out.println(medTot);
-        System.out.println(lowTot);
-
-        mRemainingBudgetTextBox = findViewById(R.id.remainingBudgetTextBox);
-        // The below code allows for the remaining budget value to be represented in US currency
-        Locale usa = new Locale("en", "US");
-        Currency dollars = Currency.getInstance(usa);
-        NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
-        mRemainingBudgetTextBox.setText(dollarFormat.format(remainingBudget));
 
         mUserAccountBtn = findViewById(R.id.UserAccountBtn);
         mFinancialReportBtn = findViewById(R.id.FinancialReportBtn);
@@ -136,6 +83,9 @@ public class MainActivity extends AppCompatActivity
         Date monDate = calendar.getTime();
         calendar.add(Calendar.DAY_OF_WEEK, 7);
         Date nextMonDate = calendar.getTime();
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
 
 
         totReff.addValueEventListener(new ValueEventListener() {
@@ -162,77 +112,45 @@ public class MainActivity extends AppCompatActivity
 
         reff.addValueEventListener(new ValueEventListener()
         {
-
-
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-                if(settings2.contains("highTot"))
-                {
-                    SharedPreferences.Editor editor2 = settings2.edit();
-                    editor2.remove("highTot");
-                    editor2.commit();
-                }
-                if(settings3.contains("medTot"))
-                {
-                    SharedPreferences.Editor editor3 = settings3.edit();
-                    editor3.remove("medTot");
-                    editor3.commit();
-                }
-                if(settings4.contains("lowTot"))
-                {
-                    SharedPreferences.Editor editor4 = settings4.edit();
-                    editor4.remove("lowTot");
-                    editor4.commit();
-                }
 
+                highTot = 0;
+                medTot = 0;
+                lowTot = 0;
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
+
                     Expenses expenses = snapshot.getValue(Expenses.class);
                     if(expenses.creationDate.compareTo(nextMonDate) <= 0 && expenses.creationDate.compareTo(monDate) >= 0)
                     {
-                        if(expenses.priority == 1)
-                        {
-                            highTot = highTot + expenses.spending;
-                        }
-                        else if(expenses.priority == 2)
-                        {
-                            medTot = medTot + expenses.spending;
-                        }
-                        else if(expenses.priority == 3)
-                        {
-                            lowTot = lowTot + expenses.spending;
-                        }
+                        highTot = highTot + expenses.spending;
+
                     }
                 }
-                //////////////////////////////// The code below needs to access the budget value, then this should work ////////////////////////////////
-                highTotString = String.valueOf(highTot);
-                System.out.println("highTotString inside budget loop:");
-                System.out.println(highTotString);
-                // Storing the budget string
-                SharedPreferences settings2 = getSharedPreferences(PREFS_NAME2, 0);
-                SharedPreferences.Editor editor2 = settings2.edit();
-                editor2.putString("highTot", highTotString);
-                editor2.commit();
 
-                medTotString = String.valueOf(medTot);
-                System.out.println("medTotString inside budget loop:");
-                System.out.println(medTotString);
-                // Storing the budget string
-                SharedPreferences settings3 = getSharedPreferences(PREFS_NAME3, 0);
-                SharedPreferences.Editor editor3 = settings3.edit();
-                editor3.putString("medTot", medTotString);
-                editor3.commit();
+                budgetString = settings.getString("budget", budgetString);
+                //budgetString = String.format("%.2f", budgetString);
+                System.out.println("BudgetString inside oncreate:");
+                System.out.println(budgetString);
+                budget = Double.valueOf(budgetString);
 
-                lowTotString = String.valueOf(lowTot);
-                System.out.println("lowTotString inside budget loop:");
-                System.out.println(lowTotString);
-                // Storing the budget string
-                SharedPreferences settings4 = getSharedPreferences(PREFS_NAME4, 0);
-                SharedPreferences.Editor editor4 = settings4.edit();
-                editor4.putString("lowTot", lowTotString);
-                editor4.commit();
+                mRemainingBudgetTextBox = findViewById(R.id.remainingBudgetTextBox);
+                // The below code allows for the remaining budget value to be represented in US currency
+                Locale usa = new Locale("en", "US");
+                Currency dollars = Currency.getInstance(usa);
+                NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
+
+
+                budgetTot = budget - highTot;
+                System.out.println(highTot);
+                System.out.println(budget);
+                mRemainingBudgetTextBox.setText(dollarFormat.format(budgetTot));
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String uid = user.getUid();
+
             }
 
             @Override
@@ -243,9 +161,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String uid = user.getUid();
         profileImage = findViewById(R.id.profileImage);
         pathRef = storageRef.child(uid + ".jpeg");
         pathRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
