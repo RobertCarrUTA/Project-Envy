@@ -25,8 +25,10 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class WeeklyReportActivity extends AppCompatActivity
@@ -63,10 +65,12 @@ public class WeeklyReportActivity extends AppCompatActivity
 
         mReturnHomeFromWeeklyReportBtn = findViewById(R.id.returnHomeFromWeeklyReportBtn);
         signOutFromWeeklyReportBtn = findViewById(R.id.signOutFromWeeklyReportBtn);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         Calendar calendar = Calendar.getInstance();
         Date currDate = calendar.getTime();
         calendar.add(Calendar.DAY_OF_YEAR, -7);
         Date weekAgoDate = calendar.getTime();
+        List<Expenses> expensesList = new ArrayList<Expenses>();
 
         //------------------------------------------------------------------------------------------
         // Graphing Section
@@ -113,21 +117,31 @@ public class WeeklyReportActivity extends AppCompatActivity
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
                     Expenses expenses = snapshot.getValue(Expenses.class);
-                    spending2[i] = expenses.spending;
-                    System.out.println(spending2[i]);
-                    i++;
+                    if(expenses.creationDate.compareTo(currDate) <= 0 && expenses.creationDate.compareTo(weekAgoDate) >= 0)
+                    {
+                        expensesList.add(expenses);
+                        spending2[i] = expenses.spending;
+                        System.out.println(spending2[i]);
+                        i++;
+                        System.out.println(expenses.creationDate);
+                        System.out.println(expenses.creationDate.compareTo(currDate));
+                        System.out.println(expenses.creationDate.compareTo(weekAgoDate));
+                    }
+
                 }
+
                 Date dateCount = weekAgoDate;
+                int test = calendar.get(Calendar.DAY_OF_MONTH);
                 // Populating the graph
                 for(i = 1; i < 8; i++)
                 {
                     // We need to change this to dates
                     y = spending2[i-1];
                     //weekly_series.appendData(new DataPoint(dateCount,y), true, 10);
+                    weekly_series.appendData(new DataPoint(test,y), true, 10);
                     calendar.add(Calendar.DAY_OF_YEAR, 1);
-                    dateCount = calendar.getTime();
-                    weekly_series.appendData(new DataPoint(dateCount,y), true, 10);
-                    System.out.println(dateCount);
+                    test = calendar.get(Calendar.DAY_OF_MONTH);
+                    System.out.println(test);
                 }
                 weeklyGraph.addSeries(weekly_series);
             }
