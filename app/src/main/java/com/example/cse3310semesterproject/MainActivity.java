@@ -54,6 +54,11 @@ public class MainActivity extends AppCompatActivity
 
     static double lowTot = 0, medTot = 0, highTot = 0, budget = 0;
     static double budgetTot = 0;
+
+    // This is to store the budget somewhere so that we can use it outside of the listener
+    public static final String PREFS_NAME = "MyPrefsFile";
+    String budgetString;
+
     // If we have time, I might try to add the drawer menu back in, but for now, just to have the very basics of the app running
     // this will do
 
@@ -68,7 +73,11 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        mUserAccountBtn = findViewById(R.id.UserAccountBtn);
+        mFinancialReportBtn = findViewById(R.id.FinancialReportBtn);
+        mBudgetingBtn = findViewById(R.id.BudgetingBtn);
+        mSignOutBtn = findViewById(R.id.SignOutBtn);
+        profileImage = findViewById(R.id.profileImage);
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_WEEK, -(calendar.get(Calendar.DAY_OF_WEEK)-2));
@@ -76,12 +85,26 @@ public class MainActivity extends AppCompatActivity
         calendar.add(Calendar.DAY_OF_WEEK, 7);
         Date nextMonDate = calendar.getTime();
 
+        // Part of storing the budget somewhere so we can always have access to it
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+
 
         totReff.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Budgets budgetObj = dataSnapshot.getValue(Budgets.class);
                 budget = budgetObj.budget;
+
+                // This is storing the value off to some place we can use it again whenever we want
+                budgetString = String.valueOf(budget);
+                System.out.println("BudgetString inside budget loop:");
+                System.out.println(budgetString);
+                // Storing the budget string
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("budget", budgetString);
+                editor.commit();
             }
 
             @Override
@@ -96,14 +119,11 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-
                 highTot = 0;
                 medTot = 0;
                 lowTot = 0;
-
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
-
                     Expenses expenses = snapshot.getValue(Expenses.class);
                     if(expenses.creationDate.compareTo(nextMonDate) <= 0 && expenses.creationDate.compareTo(monDate) >= 0)
                     {
@@ -111,7 +131,28 @@ public class MainActivity extends AppCompatActivity
 
                     }
                 }
-                //////////////////////////////// The code below needs to access the budget value, then this should work ////////////////////////////////
+
+                // This little block of code is us getting the value of the user budget
+                // from where we stored it and converting it back to a double
+                budgetString = settings.getString("budget", budgetString);
+                //budgetString = String.format("%.2f", budgetString);
+                System.out.println("BudgetString inside oncreate:");
+                System.out.println(budgetString);
+                budget = Double.valueOf(budgetString);
+
+                mRemainingBudgetTextBox = findViewById(R.id.remainingBudgetTextBox);
+                // The below code allows for the remaining budget value to be represented in US currency
+                Locale usa = new Locale("en", "US");
+                Currency dollars = Currency.getInstance(usa);
+                NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
+
+
+                budgetTot = budget - highTot;
+                System.out.println(highTot);
+                System.out.println(budget);
+                mRemainingBudgetTextBox.setText(dollarFormat.format(budgetTot));
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String uid = user.getUid();
 
             }
 
@@ -123,24 +164,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        mRemainingBudgetTextBox = findViewById(R.id.remainingBudgetTextBox);
-        // The below code allows for the remaining budget value to be represented in US currency
-        Locale usa = new Locale("en", "US");
-        Currency dollars = Currency.getInstance(usa);
-        NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
-
-
-        mUserAccountBtn = findViewById(R.id.UserAccountBtn);
-        mFinancialReportBtn = findViewById(R.id.FinancialReportBtn);
-        mBudgetingBtn = findViewById(R.id.BudgetingBtn);
-        mSignOutBtn = findViewById(R.id.SignOutBtn);
-        profileImage = findViewById(R.id.profileImage);
-        budgetTot = budget - highTot;
-        System.out.println(highTot);
-        System.out.println(budget);
-        mRemainingBudgetTextBox.setText(dollarFormat.format(budgetTot));
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String uid = user.getUid();
         profileImage = findViewById(R.id.profileImage);
         pathRef = storageRef.child(uid + ".jpeg");
         pathRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
