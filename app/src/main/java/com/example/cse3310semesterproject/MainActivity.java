@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity
     static double lowTot = 0, medTot = 0, highTot = 0, budget = 0;
     static double budgetTot = 0;
 
+    // This is to store the budget somewhere so that we can use it outside of the listener
     public static final String PREFS_NAME = "MyPrefsFile";
     String budgetString;
 
@@ -84,34 +85,26 @@ public class MainActivity extends AppCompatActivity
         calendar.add(Calendar.DAY_OF_WEEK, 7);
         Date nextMonDate = calendar.getTime();
 
+        // Part of storing the budget somewhere so we can always have access to it
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 
 
 
         totReff.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 Budgets budgetObj = dataSnapshot.getValue(Budgets.class);
-                //budget = budgetObj.budget;
-                if(budgetObj.budget != 0) {
-                    budget = budgetObj.budget;
-                    budgetString = String.valueOf(budget);
-                    System.out.println("BudgetString inside budget loop:");
-                    System.out.println(budgetString);
-                    // Storing the budget string
-                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString("budget", budgetString);
-                    editor.commit();
-                }
-                /*budgetString = String.valueOf(budget);
+                budget = budgetObj.budget;
+
+                // This is storing the value off to some place we can use it again whenever we want
+                budgetString = String.valueOf(budget);
                 System.out.println("BudgetString inside budget loop:");
                 System.out.println(budgetString);
                 // Storing the budget string
                 SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("budget", budgetString);
-                editor.commit();*/
+                editor.commit();
             }
 
             @Override
@@ -124,16 +117,13 @@ public class MainActivity extends AppCompatActivity
         reff.addValueEventListener(new ValueEventListener()
         {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            public void onDataChange(DataSnapshot dataSnapshot)
             {
-
                 highTot = 0;
                 medTot = 0;
                 lowTot = 0;
-
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
-
                     Expenses expenses = snapshot.getValue(Expenses.class);
                     if(expenses.creationDate.compareTo(nextMonDate) <= 0 && expenses.creationDate.compareTo(monDate) >= 0)
                     {
@@ -142,6 +132,8 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
 
+                // This little block of code is us getting the value of the user budget
+                // from where we stored it and converting it back to a double
                 budgetString = settings.getString("budget", budgetString);
                 //budgetString = String.format("%.2f", budgetString);
                 System.out.println("BudgetString inside oncreate:");
@@ -165,7 +157,7 @@ public class MainActivity extends AppCompatActivity
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError)
+            public void onCancelled(DatabaseError databaseError)
             {
                 // Failed to read value
                 Log.v("TestRead", "Failed to read value.", databaseError.toException());
@@ -174,15 +166,13 @@ public class MainActivity extends AppCompatActivity
 
         profileImage = findViewById(R.id.profileImage);
         pathRef = storageRef.child(uid + ".jpeg");
-        if(pathRef != null) {
-            pathRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);//convert bytes into bitmap
-                    profileImage.setImageBitmap(bitmap);
-                }
-            });
-        }
+        pathRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);//convert bytes into bitmap
+                profileImage.setImageBitmap(bitmap);
+            }
+        });
 
         //this should be downloading the image from Storage into profileImage, not working right now
         //may need to use a bitmap implementation, will look into further later
@@ -192,29 +182,43 @@ public class MainActivity extends AppCompatActivity
             }*/
 
 
-        mUserAccountBtn.setOnClickListener((View v) ->
+        mUserAccountBtn.setOnClickListener(new View.OnClickListener()
         {
+            @Override
+            public void onClick(View v)
+            {
                 startActivity(new Intent(getApplicationContext(), AccountActivity.class));
+            }
         });
 
-        mFinancialReportBtn.setOnClickListener((View v) ->
+        mFinancialReportBtn.setOnClickListener(new View.OnClickListener()
         {
+            @Override
+            public void onClick(View v)
+            {
                 startActivity(new Intent(getApplicationContext(), FinanceActivity.class));
+            }
         });
 
-        mBudgetingBtn.setOnClickListener((View v) ->
+        mBudgetingBtn.setOnClickListener(new View.OnClickListener()
         {
+            @Override
+            public void onClick(View v)
+            {
                 startActivity(new Intent(getApplicationContext(), BudgetActivity.class));
-
+            }
         });
 
-        mSignOutBtn.setOnClickListener((View v) ->
+        mSignOutBtn.setOnClickListener(new View.OnClickListener()
         {
+            @Override
+            public void onClick(View v)
+            {
                 // The toast is what makes the message pop up when the user signs out
                 Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
                 FirebaseAuth.getInstance().signOut(); //firebase command to delete token created for account locally
                 startActivity(new Intent(getApplicationContext(), Login.class)); //back to login screen
-
+            }
         });
     }
 }
