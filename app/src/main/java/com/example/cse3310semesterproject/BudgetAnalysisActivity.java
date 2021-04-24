@@ -81,7 +81,6 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
             be getting too fancy.
          */
 
-        mBelowOrAboveBudgetTextBox.setText("You are still within your budget!");
         //------------------------------------------------------------------------------------------
 
         totReff.addValueEventListener(new ValueEventListener()
@@ -174,6 +173,15 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
+        if(budget > (highTot + medTot + lowTot))
+        {
+            mBelowOrAboveBudgetTextBox.setText("You are still within your budget!");
+        }
+        else if(budget < (highTot + medTot + lowTot))
+        {
+            mBelowOrAboveBudgetTextBox.setText("You are not within your budget!");
+        }
+
         // The below code allows for the remaining budget value to be represented in US currency
         Locale usa = new Locale("en", "US");
         Currency dollars = Currency.getInstance(usa);
