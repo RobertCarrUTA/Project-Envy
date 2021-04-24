@@ -90,9 +90,11 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        totReff.addValueEventListener(new ValueEventListener() {
+        totReff.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
                 if(dataSnapshot.exists()) {
                     Budgets budgetObj = dataSnapshot.getValue(Budgets.class);
                     budget = budgetObj.budget;
@@ -106,15 +108,26 @@ public class MainActivity extends AppCompatActivity
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putString("budget", budgetString);
                     editor.commit();
-                }else{
-                    Locale usa = new Locale("en", "US");
-                    NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
-                    mRemainingBudgetTextBox.setText(dollarFormat.format(0));
+                }
+                else
+                {
+                    budget = 0.00;
+
+                    // This is storing the value off to some place we can use it again whenever we want
+                    budgetString = String.valueOf(budget);
+                    System.out.println("BudgetString inside budget loop:");
+                    System.out.println(budgetString);
+                    // Storing the budget string
+                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("budget", budgetString);
+                    editor.commit();
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error)
+            {
 
             }
         });
@@ -134,7 +147,6 @@ public class MainActivity extends AppCompatActivity
                     if(expenses.creationDate.compareTo(nextMonDate) <= 0 && expenses.creationDate.compareTo(monDate) >= 0)
                     {
                         highTot = highTot + expenses.spending;
-
                     }
                 }
 
@@ -172,10 +184,12 @@ public class MainActivity extends AppCompatActivity
 
         profileImage = findViewById(R.id.profileImage);
         pathRef = storageRef.child(uid + ".jpeg");
-        if(pathRef != null) {
+        if(pathRef != null)
+        {
             pathRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
-                public void onSuccess(byte[] bytes) {
+                public void onSuccess(byte[] bytes)
+                {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);//convert bytes into bitmap
                     profileImage.setImageBitmap(bitmap);
                 }
