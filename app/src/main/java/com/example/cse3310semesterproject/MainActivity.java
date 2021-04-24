@@ -95,7 +95,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-                if(dataSnapshot.exists()) {
+                if(dataSnapshot.exists())  // If budget does exist for the user
+                {
                     Budgets budgetObj = dataSnapshot.getValue(Budgets.class);
                     budget = budgetObj.budget;
 
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity
                     editor.putString("budget", budgetString);
                     editor.commit();
                 }
-                else
+                else // If budget does not exist for the user
                 {
                     budget = 0.00;
 
@@ -149,7 +150,6 @@ public class MainActivity extends AppCompatActivity
                         highTot = highTot + expenses.spending;
                     }
                 }
-
                 // This little block of code is us getting the value of the user budget
                 // from where we stored it and converting it back to a double
                 budgetString = settings.getString("budget", budgetString);
@@ -159,19 +159,25 @@ public class MainActivity extends AppCompatActivity
                 budget = Double.valueOf(budgetString);
 
                 mRemainingBudgetTextBox = findViewById(R.id.remainingBudgetTextBox);
-                // The below code allows for the remaining budget value to be represented in US currency
-                Locale usa = new Locale("en", "US");
-                Currency dollars = Currency.getInstance(usa);
-                NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
 
+                if(budget == 0.00)
+                {
+                    mRemainingBudgetTextBox.setText("No existing budget");
+                }
+                else
+                {
+                    // The below code allows for the remaining budget value to be represented in US currency
+                    Locale usa = new Locale("en", "US");
+                    Currency dollars = Currency.getInstance(usa);
+                    NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
 
-                budgetTot = budget - highTot;
-                System.out.println(highTot);
-                System.out.println(budget);
-                mRemainingBudgetTextBox.setText(dollarFormat.format(budgetTot));
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                String uid = user.getUid();
-
+                    budgetTot = budget - highTot;
+                    System.out.println(highTot);
+                    System.out.println(budget);
+                    mRemainingBudgetTextBox.setText(dollarFormat.format(budgetTot));
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    String uid = user.getUid();
+                }
             }
 
             @Override
