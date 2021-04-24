@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -195,13 +198,24 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
         }
         else // If the info needed does exist for the user
         {
+            // Setting up our TextViews to be edited
+            TextView tv1 = (TextView)findViewById(R.id.textView22);
+            TextView tv2 = (TextView)findViewById(R.id.textView27);
+
+            // If the user is within their budget
             if (budget > (highTot + medTot + lowTot))
             {
                 mBelowOrAboveBudgetTextBox.setText("You are still within your budget!");
+                mBelowOrAboveBudgetTextBox.setTypeface(null, Typeface.BOLD);
+                // Set the text to a custom dark green color, it is a lot easier to read than the default Color.GREEN
+                mBelowOrAboveBudgetTextBox.setTextColor(Color.parseColor("#049660"));
             }
+            // If the user isn't within their budget
             else if (budget < (highTot + medTot + lowTot))
             {
                 mBelowOrAboveBudgetTextBox.setText("You are not within your budget!");
+                mBelowOrAboveBudgetTextBox.setTypeface(null, Typeface.BOLD);
+                mBelowOrAboveBudgetTextBox.setTextColor(Color.RED);
             }
 
             // The below code allows for the remaining budget value to be represented in US currency
@@ -212,9 +226,16 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
             switch (position)
             {
                 case 0:
+                    // Text view editors
+                    tv1.setText("How much you spent:");
+                    tv2.setText("Percentage of spending regarding weekly budget:");
+                    mHowMuchSpentTextBox.getText().clear();
+                    mPercentageTextBox.getText().clear();
                     break;
                 case 1: // High
                     // need to be set to the total expenses for high priority for the current week
+                    tv1.setText("How much you spent on high priority spending:");
+                    tv2.setText("Percentage of high priority spending compared to your budget:");
                     mHowMuchSpentTextBox.setText(dollarFormat.format(highTot));
                     percentage = (highTot / budget) * 100.0;
                     PercentageString = String.format("%.2f", percentage);
@@ -223,6 +244,8 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
                     break;
                 case 2: // Medium
                     // need to be set to the total expenses for medium priority for the current week
+                    tv1.setText("How much you spent on medium priority spending:");
+                    tv2.setText("Percentage of medium priority spending compared to your budget:");
                     mHowMuchSpentTextBox.setText(dollarFormat.format(medTot));
                     percentage = (medTot / budget) * 100.0;
                     PercentageString = String.format("%.2f", percentage);
@@ -231,6 +254,8 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
                     break;
                 case 3: // Low
                     // need to be set to the total expenses for low priority for the current week
+                    tv1.setText("How much you spent on low priority spending:");
+                    tv2.setText("Percentage of low priority spending compared to your budget:");
                     mHowMuchSpentTextBox.setText(dollarFormat.format(lowTot));
                     percentage = (lowTot / budget) * 100.0;
                     PercentageString = String.format("%.2f", percentage);
