@@ -73,23 +73,22 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
         mReturnHomeFromBudgetAnalysisBtn = findViewById(R.id.returnHomeFromBudgetAnalysisBtn);
         mSignOutFromBudgetAnalysisBtn = findViewById(R.id.signOutFromBudgetAnalysisBtn);
 
-        /*
-            Maybe have some text boxes that show how much they have spent on what, like adding up the
-            totals to all their priority levels and display them in text boxes, then show them whether
-            or not they are above or below budget based on the sum of their expenses for the week or
-            month. Probably a garbage way of doing it but we only got 7 days left so we probably can't
-            be getting too fancy.
-         */
 
         //------------------------------------------------------------------------------------------
-
         totReff.addValueEventListener(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-                Budgets budgetObj = dataSnapshot.getValue(Budgets.class);
-                budget = budgetObj.budget;
+                if(dataSnapshot.exists())  // If budget exist for the user
+                {
+                    Budgets budgetObj = dataSnapshot.getValue(Budgets.class);
+                    budget = budgetObj.budget;
+                }
+                else // If budget does not exist for the user
+                {
+                    budget = 0.00;
+                }
             }
 
             @Override
@@ -98,29 +97,39 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
             }
         });
 
+
         reff.addValueEventListener(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren())
+                if(dataSnapshot.exists())  // If these expenses exist for the user
                 {
-                    Expenses expenses = snapshot.getValue(Expenses.class);
-                    if(expenses.creationDate.compareTo(nextMonDate) <= 0 && expenses.creationDate.compareTo(monDate) >= 0)
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren())
                     {
-                        if(expenses.priority == 1)
+                        Expenses expenses = snapshot.getValue(Expenses.class);
+                        if (expenses.creationDate.compareTo(nextMonDate) <= 0 && expenses.creationDate.compareTo(monDate) >= 0)
                         {
-                            highTot = highTot + expenses.spending;
-                        }
-                        else if(expenses.priority == 2)
-                        {
-                            medTot = medTot + expenses.spending;
-                        }
-                        else if(expenses.priority == 3)
-                        {
-                            lowTot = lowTot + expenses.spending;
+                            if (expenses.priority == 1)
+                            {
+                                highTot = highTot + expenses.spending;
+                            }
+                            else if (expenses.priority == 2)
+                            {
+                                medTot = medTot + expenses.spending;
+                            }
+                            else if (expenses.priority == 3)
+                            {
+                                lowTot = lowTot + expenses.spending;
+                            }
                         }
                     }
+                }
+                else // If these expenses do not exist for the user
+                {
+                    highTot = 0.00;
+                    medTot = 0.00;
+                    lowTot = 0.00;
                 }
             }
 
@@ -149,9 +158,11 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
 
         //------------------------------------------------------------------------------------------
         // Let the user go back to the homepage
-        mReturnHomeFromBudgetAnalysisBtn.setOnClickListener(new View.OnClickListener() {
+        mReturnHomeFromBudgetAnalysisBtn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
@@ -159,9 +170,11 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
 
         //------------------------------------------------------------------------------------------
         // Let the user sign out
-        mSignOutFromBudgetAnalysisBtn.setOnClickListener(new View.OnClickListener() {
+        mSignOutFromBudgetAnalysisBtn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 // The toast is what makes the message pop up when the user signs out
                 Toast.makeText(BudgetAnalysisActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
                 FirebaseAuth.getInstance().signOut(); //firebase command to delete token created for account locally
@@ -170,51 +183,61 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
         });
     }
 
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
-        if(budget > (highTot + medTot + lowTot))
+        if ((budget == 0.00) && (highTot == 0.00) && (medTot == 0.00) && (lowTot == 0.00)) // If the info needed doesn't exist for the user
         {
-            mBelowOrAboveBudgetTextBox.setText("You are still within your budget!");
+            mHowMuchSpentTextBox.setText("No existing expenses");
+            mPercentageTextBox.setText("No existing expenses");
+            mBelowOrAboveBudgetTextBox.setText("No existing budget");
         }
-        else if(budget < (highTot + medTot + lowTot))
+        else // If the info needed does exist for the user
         {
-            mBelowOrAboveBudgetTextBox.setText("You are not within your budget!");
-        }
+            if (budget > (highTot + medTot + lowTot))
+            {
+                mBelowOrAboveBudgetTextBox.setText("You are still within your budget!");
+            }
+            else if (budget < (highTot + medTot + lowTot))
+            {
+                mBelowOrAboveBudgetTextBox.setText("You are not within your budget!");
+            }
 
-        // The below code allows for the remaining budget value to be represented in US currency
-        Locale usa = new Locale("en", "US");
-        Currency dollars = Currency.getInstance(usa);
-        NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
+            // The below code allows for the remaining budget value to be represented in US currency
+            Locale usa = new Locale("en", "US");
+            Currency dollars = Currency.getInstance(usa);
+            NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
 
-        switch (position)
-        {
-            case 0:
-                break;
-            case 1: // High
-                // need to be set to the total expenses for high priority for the current week
-                mHowMuchSpentTextBox.setText(dollarFormat.format(highTot));
-                percentage = (highTot / budget) * 100.0;
-                PercentageString = String.format("%.2f", percentage);
-                percentage = Double.valueOf(PercentageString);
-                mPercentageTextBox.setText("%" + percentage);
-                break;
-            case 2: // Medium
-                // need to be set to the total expenses for medium priority for the current week
-                mHowMuchSpentTextBox.setText(dollarFormat.format(medTot));
-                percentage = (medTot / budget) * 100.0;
-                PercentageString = String.format("%.2f", percentage);
-                percentage = Double.valueOf(PercentageString);
-                mPercentageTextBox.setText("%" + percentage);
-                break;
-            case 3: // Low
-                // need to be set to the total expenses for low priority for the current week
-                mHowMuchSpentTextBox.setText(dollarFormat.format(lowTot));
-                percentage = (lowTot / budget) * 100.0;
-                PercentageString = String.format("%.2f", percentage);
-                percentage = Double.valueOf(PercentageString);
-                mPercentageTextBox.setText("%" + percentage);
-                break;
+            switch (position)
+            {
+                case 0:
+                    break;
+                case 1: // High
+                    // need to be set to the total expenses for high priority for the current week
+                    mHowMuchSpentTextBox.setText(dollarFormat.format(highTot));
+                    percentage = (highTot / budget) * 100.0;
+                    PercentageString = String.format("%.2f", percentage);
+                    percentage = Double.valueOf(PercentageString);
+                    mPercentageTextBox.setText("%" + percentage);
+                    break;
+                case 2: // Medium
+                    // need to be set to the total expenses for medium priority for the current week
+                    mHowMuchSpentTextBox.setText(dollarFormat.format(medTot));
+                    percentage = (medTot / budget) * 100.0;
+                    PercentageString = String.format("%.2f", percentage);
+                    percentage = Double.valueOf(PercentageString);
+                    mPercentageTextBox.setText("%" + percentage);
+                    break;
+                case 3: // Low
+                    // need to be set to the total expenses for low priority for the current week
+                    mHowMuchSpentTextBox.setText(dollarFormat.format(lowTot));
+                    percentage = (lowTot / budget) * 100.0;
+                    PercentageString = String.format("%.2f", percentage);
+                    percentage = Double.valueOf(PercentageString);
+                    mPercentageTextBox.setText("%" + percentage);
+                    break;
+            }
         }
     }
 
