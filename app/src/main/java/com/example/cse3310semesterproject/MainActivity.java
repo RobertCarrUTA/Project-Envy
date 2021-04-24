@@ -93,18 +93,38 @@ public class MainActivity extends AppCompatActivity
         totReff.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Budgets budgetObj = dataSnapshot.getValue(Budgets.class);
-                budget = budgetObj.budget;
+                if(dataSnapshot.exists()) {
+                    Budgets budgetObj = dataSnapshot.getValue(Budgets.class);
+                    budget = budgetObj.budget;
 
-                // This is storing the value off to some place we can use it again whenever we want
-                budgetString = String.valueOf(budget);
-                System.out.println("BudgetString inside budget loop:");
-                System.out.println(budgetString);
-                // Storing the budget string
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString("budget", budgetString);
-                editor.commit();
+                    // This is storing the value off to some place we can use it again whenever we want
+                    budgetString = String.valueOf(budget);
+                    System.out.println("BudgetString inside budget loop:");
+                    System.out.println(budgetString);
+                    // Storing the budget string
+                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("budget", budgetString);
+                    editor.commit();
+                }else{
+                    Locale usa = new Locale("en", "US");
+                    budget = 0.00;
+
+                    // This is storing the value off to some place we can use it again whenever we want
+                    budgetString = String.valueOf(budget);
+                    System.out.println("BudgetString inside budget loop:");
+                    System.out.println(budgetString);
+                    // Storing the budget string
+                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("budget", budgetString);
+                    editor.commit();
+
+                    //mRemainingBudgetTextBox = findViewById(R.id.remainingBudgetTextBox);
+
+                    //NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
+                    //mRemainingBudgetTextBox.setText("No budget has been set.");
+                }
             }
 
             @Override
@@ -166,20 +186,15 @@ public class MainActivity extends AppCompatActivity
 
         profileImage = findViewById(R.id.profileImage);
         pathRef = storageRef.child(uid + ".jpeg");
-        pathRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);//convert bytes into bitmap
-                profileImage.setImageBitmap(bitmap);
-            }
-        });
-
-        //this should be downloading the image from Storage into profileImage, not working right now
-        //may need to use a bitmap implementation, will look into further later
-            /*if(pathRef != null)
-            {
-                Glide.with(this).load(pathRef).into(profileImage);
-            }*/
+        if(pathRef != null) {
+            pathRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);//convert bytes into bitmap
+                    profileImage.setImageBitmap(bitmap);
+                }
+            });
+        }
 
 
         mUserAccountBtn.setOnClickListener(new View.OnClickListener()
