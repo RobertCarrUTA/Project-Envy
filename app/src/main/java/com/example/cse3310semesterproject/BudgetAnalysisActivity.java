@@ -73,16 +73,8 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
         mReturnHomeFromBudgetAnalysisBtn = findViewById(R.id.returnHomeFromBudgetAnalysisBtn);
         mSignOutFromBudgetAnalysisBtn = findViewById(R.id.signOutFromBudgetAnalysisBtn);
 
-        /*
-            Maybe have some text boxes that show how much they have spent on what, like adding up the
-            totals to all their priority levels and display them in text boxes, then show them whether
-            or not they are above or below budget based on the sum of their expenses for the week or
-            month. Probably a garbage way of doing it but we only got 7 days left so we probably can't
-            be getting too fancy.
-         */
 
         //------------------------------------------------------------------------------------------
-
         totReff.addValueEventListener(new ValueEventListener()
         {
             @Override
@@ -104,6 +96,7 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
 
             }
         });
+
 
         reff.addValueEventListener(new ValueEventListener()
         {
@@ -190,14 +183,15 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
         });
     }
 
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
         if ((budget == 0.00) && (highTot == 0.00) && (medTot == 0.00) && (lowTot == 0.00)) // If the info needed doesn't exist for the user
         {
-            mHowMuchSpentTextBox.setText("No information to use");
-            mPercentageTextBox.setText("No information to use");
-            mBelowOrAboveBudgetTextBox.setText("No information to use");
+            mHowMuchSpentTextBox.setText("No existing expenses");
+            mPercentageTextBox.setText("No existing expenses");
+            mBelowOrAboveBudgetTextBox.setText("No existing budget");
         }
         else // If the info needed does exist for the user
         {
