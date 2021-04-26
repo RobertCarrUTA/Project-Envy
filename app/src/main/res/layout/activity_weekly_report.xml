@@ -31,14 +31,14 @@
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/WeeklyReportGraph"
-        android:layout_width="329dp"
-        android:layout_height="288dp"
+        android:layout_width="377dp"
+        android:layout_height="303dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.619"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.294" />
+        app:layout_constraintVertical_bias="0.299" />
 
     <TextView
         android:id="@+id/textView21"
