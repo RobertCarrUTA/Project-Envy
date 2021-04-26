@@ -58,7 +58,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     final List<String> categoryTitles = new ArrayList<String>();
     //String[] categoryString = {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"};
     String[] categoryString = {"", "", "", "", "", "", "", "", "", ""};
-    String strThatDay = "01/21/2021";
+    String strThatDay = "04/20/2021";
     SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
     Date d = formatter.parse(strThatDay);
 
@@ -196,7 +196,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
             {
                 Expense = Double.valueOf(mExpensesEntryBox.getText().toString());
 
-                Expenses expenses = new Expenses(uid, priorityInt, Expense, createDate); //need to add spinner to select priority
+                Expenses expenses = new Expenses(uid, priorityInt, Expense, d); //need to add spinner to select priority
                 FirebaseDatabase.getInstance().getReference("Users").child(uid).child("Expenses").push().setValue(expenses);
                 Toast.makeText(ExpenseActivity.this, "Expense Saved Successfully!", Toast.LENGTH_SHORT).show();
             }

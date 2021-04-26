@@ -31,7 +31,7 @@
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/WeeklyReportGraph"
-        android:layout_width="365dp"
+        android:layout_width="325dp"
         android:layout_height="386dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,27 +1,69 @@
 package com.example.cse3310semesterproject;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+@RequiresApi(api = Build.VERSION_CODES.O)
 
 public class MonthlyReportActivity extends AppCompatActivity
 {
 
     Button mReturnHomeFromMonthlyReportBtn, signOutFromMonthlyReportBtn;
 
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String uid = user.getUid();
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference reff = database.getReference().child("Users").child(uid).child("Expenses");
     // Initializing the graph to be a line graph
     private LineGraphSeries<DataPoint> monthly_series;
 
+    Calendar calendar = Calendar.getInstance();
+    Calendar calendar2 = Calendar.getInstance();
+    Calendar calender3 = Calendar.getInstance();
+
+
+    static Date tempDate = new Date();
+    static Date tempDate2 = new Date();
+    static Date tempDate3 = new Date();
+    static Date tempDate4 = new Date();
+    static Date tempDate5 = new Date();
+    static Date tempDate6 = new Date();
+    static Date tempDate7 = new Date();
+
+
+    // 7 slots for 7 days out of the week
+    double spending2[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    Date dateArr[] = new Date[7];
+    // Expenses
+    double x, y;
+    String monthAxis = new String();
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
