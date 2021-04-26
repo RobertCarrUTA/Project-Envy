@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity
                     budgetTot = budget - highTot;
                     WidgetActivity.postData = budgetTot;
                     FirebaseDatabase.getInstance().getReference("Users").child(uid).child("WeeklyBudget").setValue(budgetTot);
-                    Intent intent = new Intent(this, WidgetActivity.class)
+                    //Intent intent = new Intent(this, WidgetActivity.class)
                     System.out.println(highTot);
                     System.out.println(budget);
 

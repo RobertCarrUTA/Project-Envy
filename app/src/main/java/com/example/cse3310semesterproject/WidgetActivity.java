@@ -24,19 +24,17 @@ public class WidgetActivity extends AppWidgetProvider {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference reff = database.getReference().child("Users").child(uid).child("WeeklyBudget");
+    DatabaseReference reff = database.getReference().child("Users").child(uid).child("WeeklyBudget");//reference to location of stored value
     String prePost;
     static double postData;
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
 
-        CharSequence text = ("Remaining Weekly Balance: $"  + postData);
+        CharSequence text = ("Remaining Weekly Balance: $"  + postData);//text being pushed to EditText of widget
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_activity);//won't change
-        //views.setTextViewText(R.id.appwidget_text, widgetText);
-        views.setTextViewText(R.id.appwidget_text, text);
+        views.setTextViewText(R.id.appwidget_text, text);//set's text
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);//won't change
 
@@ -48,14 +46,11 @@ public class WidgetActivity extends AppWidgetProvider {
         reff.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //Iterable<DataSnapshot> children = snapshot.getChildren();
 
-                //for(DataSnapshot child : children)
-                //{
                     WidgetActivity post = snapshot.getValue(WidgetActivity.class);
                     prePost = post.toString();
                     postData = Double.parseDouble(prePost);
-                //}
+
             }
 
             @Override
