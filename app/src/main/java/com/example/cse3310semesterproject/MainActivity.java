@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity
                 {
                     mRemainingBudgetTextBox.setText("No existing budget");
                     mRemainingBudgetTextBox.setTypeface(null, Typeface.BOLD);
-                    mRemainingBudgetTextBox.setTextColor(Color.parseColor("#6a6a6a"));
+                    mRemainingBudgetTextBox.setTextColor(Color.parseColor("#ff9999"));
                 }
                 else
                 {
