@@ -3,6 +3,7 @@ package com.example.cse3310semesterproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.appwidget.AppWidgetProvider;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -180,9 +181,7 @@ public class MainActivity extends AppCompatActivity
                     budgetTot = budget - highTot;
                     WidgetActivity.postData = budgetTot;
                     FirebaseDatabase.getInstance().getReference("Users").child(uid).child("WeeklyBudget").setValue(budgetTot);
-                    //Intent i = new Intent(this, WidgetActivity.class);
-
-                    //testTot = budgetTot;
+                    Intent intent = new Intent(this, WidgetActivity.class)
                     System.out.println(highTot);
                     System.out.println(budget);
 
