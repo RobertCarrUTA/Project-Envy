@@ -2,14 +2,20 @@ package com.example.cse3310semesterproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import android.appwidget.AppWidgetProvider;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -169,7 +175,7 @@ public class MainActivity extends AppCompatActivity
                 {
                     mRemainingBudgetTextBox.setText("No existing budget");
                     mRemainingBudgetTextBox.setTypeface(null, Typeface.BOLD);
-                    mRemainingBudgetTextBox.setTextColor(Color.parseColor("#6a6a6a"));
+                    mRemainingBudgetTextBox.setTextColor(Color.parseColor("#ff9999"));
                 }
                 else
                 {
@@ -200,6 +206,9 @@ public class MainActivity extends AppCompatActivity
                         mRemainingBudgetTextBox.setTypeface(null, Typeface.BOLD);
                         mRemainingBudgetTextBox.setTextColor(Color.RED);
                     }
+
+                    pushNotification();
+
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     String uid = user.getUid();
                 }
@@ -270,5 +279,20 @@ public class MainActivity extends AppCompatActivity
 
     public static double getTotal(){
         return testTot;
+    }
+
+    private void pushNotification()
+    {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            NotificationChannel channel = new NotificationChannel("n", "n", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "n").setContentText("CodeSphere").setSmallIcon(R.drawable.ic_notification).setAutoCancel(true).setContentText("Remaining funds for this week: $" + budgetTot);
+
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+        managerCompat.notify(999, builder.build());
     }
 }
