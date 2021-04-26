@@ -3,6 +3,8 @@ buildscript {
     repositories {
         google()
         jcenter()
+        // The below is used for push notifications
+        maven { url "https://jitpack.io" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.3'
