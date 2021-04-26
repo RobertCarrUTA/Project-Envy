@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
 
     static double lowTot = 0, medTot = 0, highTot = 0, budget = 0;
     static double budgetTot = 0;
-
+    static double testTot;
     // This is to store the budget somewhere so that we can use it outside of the listener
     public static final String PREFS_NAME = "MyPrefsFile";
     String budgetString;
@@ -176,6 +176,11 @@ public class MainActivity extends AppCompatActivity
                     NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
 
                     budgetTot = budget - highTot;
+                    WidgetActivity.postData = budgetTot;
+                    FirebaseDatabase.getInstance().getReference("Users").child(uid).child("WeeklyBudget").setValue(budgetTot);
+                    //Intent i = new Intent(this, WidgetActivity.class);
+
+                    //testTot = budgetTot;
                     System.out.println(highTot);
                     System.out.println(budget);
 
@@ -260,5 +265,9 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(getApplicationContext(), Login.class)); //back to login screen
             }
         });
+    }
+
+    public static double getTotal(){
+        return testTot;
     }
 }
