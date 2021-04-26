@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -90,25 +92,45 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        totReff.addValueEventListener(new ValueEventListener() {
+        totReff.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Budgets budgetObj = dataSnapshot.getValue(Budgets.class);
-                budget = budgetObj.budget;
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.exists())  // If budget does exist for the user
+                {
+                    Budgets budgetObj = dataSnapshot.getValue(Budgets.class);
+                    budget = budgetObj.budget;
 
-                // This is storing the value off to some place we can use it again whenever we want
-                budgetString = String.valueOf(budget);
-                System.out.println("BudgetString inside budget loop:");
-                System.out.println(budgetString);
-                // Storing the budget string
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString("budget", budgetString);
-                editor.commit();
+                    // This is storing the value off to some place we can use it again whenever we want
+                    budgetString = String.valueOf(budget);
+                    System.out.println("BudgetString inside budget loop:");
+                    System.out.println(budgetString);
+                    // Storing the budget string
+                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("budget", budgetString);
+                    editor.commit();
+                }
+                else // If budget does not exist for the user
+                {
+                    budget = 0.00;
+
+                    // This is storing the value off to some place we can use it again whenever we want
+                    budgetString = String.valueOf(budget);
+                    System.out.println("BudgetString inside budget loop:");
+                    System.out.println(budgetString);
+                    // Storing the budget string
+                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("budget", budgetString);
+                    editor.commit();
+                }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error)
+            {
 
             }
         });
@@ -128,10 +150,8 @@ public class MainActivity extends AppCompatActivity
                     if(expenses.creationDate.compareTo(nextMonDate) <= 0 && expenses.creationDate.compareTo(monDate) >= 0)
                     {
                         highTot = highTot + expenses.spending;
-
                     }
                 }
-
                 // This little block of code is us getting the value of the user budget
                 // from where we stored it and converting it back to a double
                 budgetString = settings.getString("budget", budgetString);
@@ -141,19 +161,42 @@ public class MainActivity extends AppCompatActivity
                 budget = Double.valueOf(budgetString);
 
                 mRemainingBudgetTextBox = findViewById(R.id.remainingBudgetTextBox);
-                // The below code allows for the remaining budget value to be represented in US currency
-                Locale usa = new Locale("en", "US");
-                Currency dollars = Currency.getInstance(usa);
-                NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
 
+                if(budget == 0.00)
+                {
+                    mRemainingBudgetTextBox.setText("No existing budget");
+                    mRemainingBudgetTextBox.setTypeface(null, Typeface.BOLD);
+                    mRemainingBudgetTextBox.setTextColor(Color.parseColor("#6a6a6a"));
+                }
+                else
+                {
+                    // The below code allows for the remaining budget value to be represented in US currency
+                    Locale usa = new Locale("en", "US");
+                    Currency dollars = Currency.getInstance(usa);
+                    NumberFormat dollarFormat = NumberFormat.getCurrencyInstance(usa);
 
-                budgetTot = budget - highTot;
-                System.out.println(highTot);
-                System.out.println(budget);
-                mRemainingBudgetTextBox.setText(dollarFormat.format(budgetTot));
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                String uid = user.getUid();
+                    budgetTot = budget - highTot;
+                    System.out.println(highTot);
+                    System.out.println(budget);
 
+                    // If the weekly budget is higher than the total weekly expenses
+                    if(budget > highTot)
+                    {
+                        mRemainingBudgetTextBox.setText(dollarFormat.format(budgetTot));
+                        mRemainingBudgetTextBox.setTypeface(null, Typeface.BOLD);
+                        // Set the text to a custom dark green color, it is a lot easier to read than the default Color.GREEN
+                        mRemainingBudgetTextBox.setTextColor(Color.parseColor("#049660"));
+                    }
+                    // If the weekly budget isn't higher than the total weekly expenses
+                    else if(budget < highTot)
+                    {
+                        mRemainingBudgetTextBox.setText(dollarFormat.format(budgetTot));
+                        mRemainingBudgetTextBox.setTypeface(null, Typeface.BOLD);
+                        mRemainingBudgetTextBox.setTextColor(Color.RED);
+                    }
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    String uid = user.getUid();
+                }
             }
 
             @Override
@@ -166,20 +209,17 @@ public class MainActivity extends AppCompatActivity
 
         profileImage = findViewById(R.id.profileImage);
         pathRef = storageRef.child(uid + ".jpeg");
-        pathRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);//convert bytes into bitmap
-                profileImage.setImageBitmap(bitmap);
-            }
-        });
-
-        //this should be downloading the image from Storage into profileImage, not working right now
-        //may need to use a bitmap implementation, will look into further later
-            /*if(pathRef != null)
-            {
-                Glide.with(this).load(pathRef).into(profileImage);
-            }*/
+        if(pathRef != null)
+        {
+            pathRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes)
+                {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);//convert bytes into bitmap
+                    profileImage.setImageBitmap(bitmap);
+                }
+            });
+        }
 
 
         mUserAccountBtn.setOnClickListener(new View.OnClickListener()
