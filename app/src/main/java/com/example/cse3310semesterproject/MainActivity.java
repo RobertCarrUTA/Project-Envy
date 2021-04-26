@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -163,6 +165,8 @@ public class MainActivity extends AppCompatActivity
                 if(budget == 0.00)
                 {
                     mRemainingBudgetTextBox.setText("No existing budget");
+                    mRemainingBudgetTextBox.setTypeface(null, Typeface.BOLD);
+                    mRemainingBudgetTextBox.setTextColor(Color.parseColor("#6a6a6a"));
                 }
                 else
                 {
@@ -174,7 +178,22 @@ public class MainActivity extends AppCompatActivity
                     budgetTot = budget - highTot;
                     System.out.println(highTot);
                     System.out.println(budget);
-                    mRemainingBudgetTextBox.setText(dollarFormat.format(budgetTot));
+
+                    // If the weekly budget is higher than the total weekly expenses
+                    if(budget > highTot)
+                    {
+                        mRemainingBudgetTextBox.setText(dollarFormat.format(budgetTot));
+                        mRemainingBudgetTextBox.setTypeface(null, Typeface.BOLD);
+                        // Set the text to a custom dark green color, it is a lot easier to read than the default Color.GREEN
+                        mRemainingBudgetTextBox.setTextColor(Color.parseColor("#049660"));
+                    }
+                    // If the weekly budget isn't higher than the total weekly expenses
+                    else if(budget < highTot)
+                    {
+                        mRemainingBudgetTextBox.setText(dollarFormat.format(budgetTot));
+                        mRemainingBudgetTextBox.setTypeface(null, Typeface.BOLD);
+                        mRemainingBudgetTextBox.setTextColor(Color.RED);
+                    }
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     String uid = user.getUid();
                 }
