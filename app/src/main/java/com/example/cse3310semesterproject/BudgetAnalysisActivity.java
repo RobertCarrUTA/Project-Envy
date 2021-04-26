@@ -63,7 +63,9 @@ public class BudgetAnalysisActivity extends AppCompatActivity implements Adapter
         setContentView(R.layout.activity_budget_analysis);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_WEEK, -(calendar.get(Calendar.DAY_OF_WEEK)-2));
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        calendar.add(Calendar.DAY_OF_WEEK, -7);
         Date monDate = calendar.getTime();
         calendar.add(Calendar.DAY_OF_WEEK, 7);
         Date nextMonDate = calendar.getTime();

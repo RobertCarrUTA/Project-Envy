@@ -50,6 +50,9 @@ public class WeeklyReportActivity extends AppCompatActivity
     // Initializing the graph to be a line graph
     private LineGraphSeries<DataPoint> weekly_series;
 
+    Calendar calendar = Calendar.getInstance();
+    Calendar calendar2 = Calendar.getInstance();
+
     // 7 slots for 7 days out of the week
     double spending2[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
@@ -66,10 +69,17 @@ public class WeeklyReportActivity extends AppCompatActivity
         mReturnHomeFromWeeklyReportBtn = findViewById(R.id.returnHomeFromWeeklyReportBtn);
         signOutFromWeeklyReportBtn = findViewById(R.id.signOutFromWeeklyReportBtn);
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-        Calendar calendar = Calendar.getInstance();
-        Date currDate = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_YEAR, -7);
-        Date weekAgoDate = calendar.getTime();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        calendar2.setFirstDayOfWeek(Calendar.MONDAY);
+        calendar2.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        calendar2.add(Calendar.DAY_OF_WEEK, -7);
+        Date nextMon = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_WEEK, -7);
+        Date lastMon = calendar.getTime();
+        System.out.println(lastMon);
+        System.out.println(nextMon);
+
         List<Expenses> expensesList = new ArrayList<Expenses>();
 
         //------------------------------------------------------------------------------------------
@@ -117,21 +127,20 @@ public class WeeklyReportActivity extends AppCompatActivity
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
                     Expenses expenses = snapshot.getValue(Expenses.class);
-                    if(expenses.creationDate.compareTo(currDate) <= 0 && expenses.creationDate.compareTo(weekAgoDate) >= 0)
+                    if(expenses.creationDate.compareTo(nextMon) <= 0 && expenses.creationDate.compareTo(lastMon) >= 0)
                     {
                         expensesList.add(expenses);
                         spending2[i] = expenses.spending;
                         System.out.println(spending2[i]);
                         i++;
                         System.out.println(expenses.creationDate);
-                        System.out.println(expenses.creationDate.compareTo(currDate));
-                        System.out.println(expenses.creationDate.compareTo(weekAgoDate));
+                        System.out.println(expenses.creationDate.compareTo(lastMon));
+                        System.out.println(expenses.creationDate.compareTo(nextMon));
                     }
 
                 }
 
-                Date dateCount = weekAgoDate;
-                int test = calendar.get(Calendar.DAY_OF_MONTH);
+                int test = calendar2.get(Calendar.DAY_OF_MONTH);
                 // Populating the graph
                 for(i = 1; i < 8; i++)
                 {
@@ -139,9 +148,10 @@ public class WeeklyReportActivity extends AppCompatActivity
                     y = spending2[i-1];
                     //weekly_series.appendData(new DataPoint(dateCount,y), true, 10);
                     weekly_series.appendData(new DataPoint(test,y), true, 10);
-                    calendar.add(Calendar.DAY_OF_YEAR, 1);
-                    test = calendar.get(Calendar.DAY_OF_MONTH);
+                    calendar2.add(Calendar.DAY_OF_YEAR, 1);
                     System.out.println(test);
+                    test = calendar2.get(Calendar.DAY_OF_MONTH);
+
                 }
                 weeklyGraph.addSeries(weekly_series);
             }
