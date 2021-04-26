@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CSE3310SemesterProject">
-        <activity android:name=".BudgetManagementActivity"></activity>
+        <activity android:name=".WidgetActivity"></activity>
+        <activity android:name=".BudgetManagementActivity" />
         <activity android:name=".BudgetAnalysisActivity" />
         <activity android:name=".MonthlyReportActivity" />
         <activity android:name=".WeeklyReportActivity" />
