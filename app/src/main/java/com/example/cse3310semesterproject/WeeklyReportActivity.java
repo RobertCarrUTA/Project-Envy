@@ -52,13 +52,23 @@ public class WeeklyReportActivity extends AppCompatActivity
 
     Calendar calendar = Calendar.getInstance();
     Calendar calendar2 = Calendar.getInstance();
+    Calendar calender3 = Calendar.getInstance();
+
+
+    static Date tempDate = new Date();
+    static Date tempDate2 = new Date();
+    static Date tempDate3 = new Date();
+    static Date tempDate4 = new Date();
+    static Date tempDate5 = new Date();
+    static Date tempDate6 = new Date();
+    static Date tempDate7 = new Date();
 
     // 7 slots for 7 days out of the week
     double spending2[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-
+    Date dateArr[] = new Date[7];
     // Expenses
     double x, y;
-
+    String monthAxis = new String();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -74,12 +84,37 @@ public class WeeklyReportActivity extends AppCompatActivity
         calendar2.setFirstDayOfWeek(Calendar.MONDAY);
         calendar2.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         calendar2.add(Calendar.DAY_OF_WEEK, -7);
+        calender3.setFirstDayOfWeek(Calendar.MONDAY);
+        calender3.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        calender3.add(Calendar.DAY_OF_WEEK, -7);
         Date nextMon = calendar.getTime();
         calendar.add(Calendar.DAY_OF_WEEK, -7);
         Date lastMon = calendar.getTime();
-        System.out.println(lastMon);
-        System.out.println(nextMon);
+        //System.out.println(lastMon);
+        //System.out.println(nextMon);
+        tempDate = calender3.getTime();
+        calender3.add(Calendar.DAY_OF_WEEK, 1);
+        tempDate2 = calender3.getTime();
+        calender3.add(Calendar.DAY_OF_WEEK, 1);
+        tempDate3 = calender3.getTime();
+        calender3.add(Calendar.DAY_OF_WEEK, 1);
+        tempDate4 = calender3.getTime();
+        calender3.add(Calendar.DAY_OF_WEEK, 1);
+        tempDate5 = calender3.getTime();
+        calender3.add(Calendar.DAY_OF_WEEK, 1);
+        tempDate6 = calender3.getTime();
+        calender3.add(Calendar.DAY_OF_WEEK, 1);
+        tempDate7 = calender3.getTime();
+        calender3.add(Calendar.DAY_OF_WEEK, 1);
+        dateArr[0] = tempDate;
+        dateArr[1] = tempDate2;
+        dateArr[2] = tempDate3;
+        dateArr[3] = tempDate4;
+        dateArr[4] = tempDate5;
+        dateArr[5] = tempDate6;
+        dateArr[6] = tempDate7;
 
+        //calendar2.add(Calendar.DAY_OF_WEEK, -7);
         List<Expenses> expensesList = new ArrayList<Expenses>();
 
         //------------------------------------------------------------------------------------------
@@ -97,6 +132,57 @@ public class WeeklyReportActivity extends AppCompatActivity
         //Date d3 = calendar.getTime();
 
 
+        int monthTitle = Calendar.getInstance().get(Calendar.MONTH);
+        if(monthTitle == 0)
+        {
+            monthAxis = "Date (Week starting in January)";
+        }
+        if(monthTitle == 1)
+        {
+            monthAxis = "Date (Week starting in February)";
+        }
+        if(monthTitle == 2)
+        {
+            monthAxis = "Date (Week starting in March)";
+        }
+        if(monthTitle == 3)
+        {
+            monthAxis = "Date (Week starting in April)";
+        }
+        if(monthTitle == 4)
+        {
+            monthAxis = "Date (Week starting in May)";
+        }
+        if(monthTitle == 5)
+        {
+            monthAxis = "Date (Week starting in June)";
+        }
+        if(monthTitle == 6)
+        {
+            monthAxis = "Date (Week starting in July)";
+        }
+        if(monthTitle == 7)
+        {
+            monthAxis = "Date (Week starting in August)";
+        }
+        if(monthTitle == 8)
+        {
+            monthAxis = "Date (Week starting in September)";
+        }
+        if(monthTitle == 9)
+        {
+            monthAxis = "Date (Week starting in October)";
+        }
+        if(monthTitle == 10)
+        {
+            monthAxis = "Date (Week starting in November)";
+        }
+        if(monthTitle == 11)
+        {
+            monthAxis = "Date (Week starting in December)";
+        }
+
+
         //------------------------------------------------------------------------------------------
         // We had to add the graph into this scope below or it would not save the values
         // correctly into the array to be graphed
@@ -111,7 +197,7 @@ public class WeeklyReportActivity extends AppCompatActivity
                 // Setting the axis titles:
                 // Possibly look at this for date axis: https://github.com/jjoe64/GraphView/wiki/Dates-as-labels
                 // Also this: https://github.com/jjoe64/GraphView/wiki/Style-options
-                weeklyGraph.getGridLabelRenderer().setHorizontalAxisTitle("Date");
+                weeklyGraph.getGridLabelRenderer().setHorizontalAxisTitle(monthAxis);
                 weeklyGraph.getGridLabelRenderer().setVerticalAxisTitle("Expenses ($)");
                 // Setting how many values are on the x axis:
                 weeklyGraph.getGridLabelRenderer().setNumHorizontalLabels(7);
@@ -130,15 +216,48 @@ public class WeeklyReportActivity extends AppCompatActivity
                     if(expenses.creationDate.compareTo(nextMon) <= 0 && expenses.creationDate.compareTo(lastMon) >= 0)
                     {
                         expensesList.add(expenses);
-                        spending2[i] = expenses.spending;
-                        System.out.println(spending2[i]);
-                        i++;
+                        if(expenses.creationDate.compareTo(dateArr[i]) == 0)
+                        {
+                            spending2[i] = spending2[i]+expenses.spending;
+                            System.out.println(spending2[i]);
+                        }
+                        else if(expenses.creationDate.compareTo(dateArr[i+1]) == 0)
+                        {
+                            spending2[i+1] = spending2[i+1]+expenses.spending;
+                            System.out.println(spending2[i+1]);
+                        }
+                        else if(expenses.creationDate.compareTo(dateArr[i+2]) == 0)
+                        {
+                            spending2[i+2] = spending2[i+2]+expenses.spending;
+                            System.out.println(spending2[i+2]);
+                        }
+                        else if(expenses.creationDate.compareTo(dateArr[i+3]) == 0)
+                        {
+                            spending2[i+3] = spending2[i+3]+expenses.spending;
+                            System.out.println(spending2[i+3]);
+                        }
+                        else if(expenses.creationDate.compareTo(dateArr[i+4]) == 0)
+                        {
+                            spending2[i+4] = spending2[i+4]+expenses.spending;
+                            System.out.println(spending2[i+4]);
+                        }
+                        else if(expenses.creationDate.compareTo(dateArr[i+5]) == 0)
+                        {
+                            spending2[i+5] = spending2[i+5]+expenses.spending;
+                            System.out.println(spending2[i+5]);
+                        }
+                        else
+                        {
+                            spending2[i+6] = spending2[i+6]+expenses.spending;
+                            System.out.println(spending2[i+6]);
+                        }
+                        //System.out.println(spending2[i]);
                         System.out.println(expenses.creationDate);
                         System.out.println(expenses.creationDate.compareTo(lastMon));
                         System.out.println(expenses.creationDate.compareTo(nextMon));
                     }
-
                 }
+
 
                 int test = calendar2.get(Calendar.DAY_OF_MONTH);
                 // Populating the graph
@@ -151,7 +270,6 @@ public class WeeklyReportActivity extends AppCompatActivity
                     calendar2.add(Calendar.DAY_OF_YEAR, 1);
                     System.out.println(test);
                     test = calendar2.get(Calendar.DAY_OF_MONTH);
-
                 }
                 weeklyGraph.addSeries(weekly_series);
             }
