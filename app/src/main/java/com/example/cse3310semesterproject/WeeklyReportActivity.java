@@ -62,10 +62,11 @@ public class WeeklyReportActivity extends AppCompatActivity
     static Date tempDate5 = new Date();
     static Date tempDate6 = new Date();
     static Date tempDate7 = new Date();
+    static Date tempDate8 = new Date();
 
     // 7 slots for 7 days out of the week
     double spending2[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    Date dateArr[] = new Date[7];
+    Date dateArr[] = new Date[8];
     // Expenses
     double x, y;
     String monthAxis = new String();
@@ -106,6 +107,7 @@ public class WeeklyReportActivity extends AppCompatActivity
         calender3.add(Calendar.DAY_OF_WEEK, 1);
         tempDate7 = calender3.getTime();
         calender3.add(Calendar.DAY_OF_WEEK, 1);
+        tempDate8 = calender3.getTime();
         dateArr[0] = tempDate;
         dateArr[1] = tempDate2;
         dateArr[2] = tempDate3;
@@ -113,6 +115,7 @@ public class WeeklyReportActivity extends AppCompatActivity
         dateArr[4] = tempDate5;
         dateArr[5] = tempDate6;
         dateArr[6] = tempDate7;
+        dateArr[7] = tempDate8;
 
         //calendar2.add(Calendar.DAY_OF_WEEK, -7);
         List<Expenses> expensesList = new ArrayList<Expenses>();
@@ -201,52 +204,57 @@ public class WeeklyReportActivity extends AppCompatActivity
                 weeklyGraph.getGridLabelRenderer().setVerticalAxisTitle("Expenses ($)");
                 // Setting how many values are on the x axis:
                 weeklyGraph.getGridLabelRenderer().setNumHorizontalLabels(7);
+
+
+
+                weeklyGraph.getGridLabelRenderer().setPadding(40);
                 // Setting graph title:
                 weeklyGraph.setTitle("Weekly Expenses");
 
-                DateFormat format = new SimpleDateFormat("M-dd");
+                DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
                 String[] days = new String[7];
 
-                int i = 0;
 
+                int i = 0;
                 // Iterating through the database for the Expenses
                 for (DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
                     Expenses expenses = snapshot.getValue(Expenses.class);
+
                     if(expenses.creationDate.compareTo(nextMon) <= 0 && expenses.creationDate.compareTo(lastMon) >= 0)
                     {
                         expensesList.add(expenses);
-                        if(expenses.creationDate.compareTo(dateArr[i]) == 0)
+                        if(expenses.creationDate.compareTo(dateArr[i+1]) < 0)
                         {
                             spending2[i] = spending2[i]+expenses.spending;
                             System.out.println(spending2[i]);
                         }
-                        else if(expenses.creationDate.compareTo(dateArr[i+1]) == 0)
+                        else if(expenses.creationDate.compareTo(dateArr[i+2]) < 0 && expenses.creationDate.compareTo(dateArr[i]) > 0)
                         {
                             spending2[i+1] = spending2[i+1]+expenses.spending;
                             System.out.println(spending2[i+1]);
                         }
-                        else if(expenses.creationDate.compareTo(dateArr[i+2]) == 0)
+                        else if(expenses.creationDate.compareTo(dateArr[i+3]) < 0 && expenses.creationDate.compareTo(dateArr[i+1]) > 0)
                         {
                             spending2[i+2] = spending2[i+2]+expenses.spending;
                             System.out.println(spending2[i+2]);
                         }
-                        else if(expenses.creationDate.compareTo(dateArr[i+3]) == 0)
+                        else if(expenses.creationDate.compareTo(dateArr[i+4]) < 0 && expenses.creationDate.compareTo(dateArr[i+2]) > 0)
                         {
                             spending2[i+3] = spending2[i+3]+expenses.spending;
                             System.out.println(spending2[i+3]);
                         }
-                        else if(expenses.creationDate.compareTo(dateArr[i+4]) == 0)
+                        else if(expenses.creationDate.compareTo(dateArr[i+5]) < 0 && expenses.creationDate.compareTo(dateArr[i+3]) > 0)
                         {
                             spending2[i+4] = spending2[i+4]+expenses.spending;
                             System.out.println(spending2[i+4]);
                         }
-                        else if(expenses.creationDate.compareTo(dateArr[i+5]) == 0)
+                        else if(expenses.creationDate.compareTo(dateArr[i+6]) < 0 && expenses.creationDate.compareTo(dateArr[i+4]) > 0)
                         {
                             spending2[i+5] = spending2[i+5]+expenses.spending;
                             System.out.println(spending2[i+5]);
                         }
-                        else
+                        else if (expenses.creationDate.compareTo(dateArr[i+7]) < 0 && expenses.creationDate.compareTo(dateArr[i+5]) > 0)
                         {
                             spending2[i+6] = spending2[i+6]+expenses.spending;
                             System.out.println(spending2[i+6]);
@@ -256,8 +264,8 @@ public class WeeklyReportActivity extends AppCompatActivity
                         System.out.println(expenses.creationDate.compareTo(lastMon));
                         System.out.println(expenses.creationDate.compareTo(nextMon));
                     }
-                }
 
+                }
 
                 int test = calendar2.get(Calendar.DAY_OF_MONTH);
                 // Populating the graph
@@ -270,6 +278,7 @@ public class WeeklyReportActivity extends AppCompatActivity
                     calendar2.add(Calendar.DAY_OF_YEAR, 1);
                     System.out.println(test);
                     test = calendar2.get(Calendar.DAY_OF_MONTH);
+
                 }
                 weeklyGraph.addSeries(weekly_series);
             }
