@@ -128,7 +128,6 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
                 Toast.makeText(parent.getContext(), "Selected: " + selectedItem, Toast.LENGTH_LONG).show();
                 this.onItemSelected(parent, view, position, id);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 Toast.makeText(ExpenseActivity.this, "Make a Selection " , Toast.LENGTH_LONG).show();

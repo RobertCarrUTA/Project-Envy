@@ -204,6 +204,10 @@ public class WeeklyReportActivity extends AppCompatActivity
                 weeklyGraph.getGridLabelRenderer().setVerticalAxisTitle("Expenses ($)");
                 // Setting how many values are on the x axis:
                 weeklyGraph.getGridLabelRenderer().setNumHorizontalLabels(7);
+
+
+
+                weeklyGraph.getGridLabelRenderer().setPadding(40);
                 // Setting graph title:
                 weeklyGraph.setTitle("Weekly Expenses");
 
