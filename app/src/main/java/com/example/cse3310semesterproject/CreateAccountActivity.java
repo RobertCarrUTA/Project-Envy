@@ -113,7 +113,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                                             }
                                         }
                                     });
-                                    FirebaseDatabase.getInstance().getReference("Users").child("Email").setValue(user);
                                 }
                             }
                         });
