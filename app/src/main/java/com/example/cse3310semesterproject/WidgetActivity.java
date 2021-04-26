@@ -19,16 +19,17 @@ import com.google.firebase.database.ValueEventListener;
 /**
  * Implementation of App Widget functionality.
  */
-public class WidgetActivity extends AppWidgetProvider {
-
+public class WidgetActivity extends AppWidgetProvider
+{
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference reff = database.getReference().child("Users").child(uid).child("WeeklyBudget");//reference to location of stored value
     String prePost;
     static double postData;
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId)
+    {
 
 
         CharSequence text = ("Remaining Weekly Balance: $"  + postData);//text being pushed to EditText of widget
@@ -41,11 +42,13 @@ public class WidgetActivity extends AppWidgetProvider {
     }
     //public void
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
+    {
         // There may be multiple widgets active, so update all of them
         reff.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot)
+            {
 
                     WidgetActivity post = snapshot.getValue(WidgetActivity.class);
                     prePost = post.toString();
@@ -54,23 +57,27 @@ public class WidgetActivity extends AppWidgetProvider {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error)
+            {
 
             }
         });
-        for (int appWidgetId : appWidgetIds) {
+
+        for (int appWidgetId : appWidgetIds)
+        {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
 
     @Override
-    public void onEnabled(Context context) {
+    public void onEnabled(Context context)
+    {
         // Enter relevant functionality for when the first widget is created
     }
 
     @Override
-    public void onDisabled(Context context) {
+    public void onDisabled(Context context)
+    {
         // Enter relevant functionality for when the last widget is disabled
     }
-
 }
