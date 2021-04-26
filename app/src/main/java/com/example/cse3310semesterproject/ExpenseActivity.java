@@ -26,8 +26,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Currency;
 import java.util.Date;
@@ -39,12 +42,12 @@ import java.util.Locale;
 
 public class ExpenseActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener
 {
-
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid = user.getUid();
     EditText mIncomeEntryBox, mExpensesEntryBox;
     Double Income, Expense;
-    Date createDate = new Date(System.currentTimeMillis());
+    Calendar calendar = Calendar.getInstance();
+    Date createDate = new Date();
     Button mSaveExpensesBtn, mReturnHomeFromExpenseBtn, mSignOutFromExpenseBtn;
     String[] paths = {"High", "Medium", "Low"};
     private Spinner spinner;
@@ -55,9 +58,13 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     final List<String> categoryTitles = new ArrayList<String>();
     //String[] categoryString = {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"};
     String[] categoryString = {"", "", "", "", "", "", "", "", "", ""};
-    //String[] str;
-    Object[] arr;
+    String strThatDay = "01/21/2021";
+    SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+    Date d = formatter.parse(strThatDay);
 
+
+    public ExpenseActivity() throws ParseException {
+    }
 
 
     @Override
@@ -65,6 +72,9 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense);
+        System.out.println(d);
+
+        createDate = calendar.getTime();
 
         reff.addValueEventListener(new ValueEventListener()
         {
