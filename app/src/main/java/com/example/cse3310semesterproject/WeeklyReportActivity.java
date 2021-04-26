@@ -203,6 +203,7 @@ public class WeeklyReportActivity extends AppCompatActivity
                 weeklyGraph.getGridLabelRenderer().setNumHorizontalLabels(7);
                 // Setting graph title:
                 weeklyGraph.setTitle("Weekly Expenses");
+                weeklyGraph.getGridLabelRenderer().setPadding(40);
 
                 DateFormat format = new SimpleDateFormat("M-dd");
                 String[] days = new String[7];
