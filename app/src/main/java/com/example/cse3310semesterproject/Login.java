@@ -104,7 +104,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(Login.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
+
                         }
                     }
                 });

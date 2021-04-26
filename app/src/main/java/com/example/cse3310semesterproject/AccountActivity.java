@@ -29,7 +29,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 {
     EditText mNewCurrentPasswordEntry;
     Button mReturnHomeBtn, mSignOutFromAccountBtn, mChangePasswordBtn, mAvatarButton;
-    //ImageView profileImage;
     StorageReference storageRef;
 
     @Override
@@ -45,14 +44,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         mAvatarButton = findViewById(R.id.AvatarButton);//change user avatar
         storageRef = FirebaseStorage.getInstance().getReference();
         mAvatarButton.setOnClickListener(this);
-        /*mAvatarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Open gallery
-                Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(openGalleryIntent, 1000);
-            }
-        });*/
         mChangePasswordBtn.setOnClickListener(this);
         mSignOutFromAccountBtn.setOnClickListener(this);
         mReturnHomeBtn.setOnClickListener(this);
@@ -74,9 +65,9 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.changePasswordBtn:
                 changePassword();
                 break;
-            case R.id.AvatarButton://temporary, not yet implemented
+            case R.id.AvatarButton:
                 changeProfile();
-                //Toast.makeText(AccountActivity.this, "Please somebody make me work :(", Toast.LENGTH_LONG).show();
+
                 break;
         }
     }
@@ -122,7 +113,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     public void changeProfile()
     {//open gallery
         Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(openGalleryIntent, 1000);
+        startActivityForResult(openGalleryIntent, 1000); //setting a code to be caught onActivityResult
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data)
