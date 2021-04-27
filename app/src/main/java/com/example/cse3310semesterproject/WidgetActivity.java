@@ -30,16 +30,14 @@ public class WidgetActivity extends AppWidgetProvider
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId)
     {
-
-
         CharSequence text = ("Remaining Weekly Balance: $"  + postData);//text being pushed to EditText of widget
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_activity);//won't change
-        views.setTextViewText(R.id.appwidget_text, text);//set's text
+        views.setTextViewText(R.id.appwidget_text, text); //set's text
         // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);//won't change
-
+        appWidgetManager.updateAppWidget(appWidgetId, views); //won't change
     }
+
     //public void
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
