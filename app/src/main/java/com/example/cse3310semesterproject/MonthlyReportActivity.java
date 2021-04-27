@@ -81,8 +81,8 @@ public class MonthlyReportActivity extends AppCompatActivity
     static Date tempDate29 = new Date();
 
     // 7 slots for 7 days out of the week
-    double spending2[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    Date dateArr[] = new Date[29];
+    double spending2[] = {0.0, 0.0, 0.0, 0.0};
+    Date dateArr[] = new Date[5];
     // Expenses
     double x, y;
     String monthAxis = new String();
@@ -109,15 +109,20 @@ public class MonthlyReportActivity extends AppCompatActivity
         //System.out.println(lastMon);
         //System.out.println(nextMon);
         tempDate = calender3.getTime();
-        calender3.add(Calendar.DAY_OF_WEEK, 1);
+        System.out.println(tempDate);
+        calender3.add(Calendar.DAY_OF_WEEK, 7);
         tempDate2 = calender3.getTime();
-        calender3.add(Calendar.DAY_OF_WEEK, 1);
+        System.out.println(tempDate2);
+        calender3.add(Calendar.DAY_OF_WEEK, 7);
         tempDate3 = calender3.getTime();
-        calender3.add(Calendar.DAY_OF_WEEK, 1);
+        System.out.println(tempDate3);
+        calender3.add(Calendar.DAY_OF_WEEK, 7);
         tempDate4 = calender3.getTime();
-        calender3.add(Calendar.DAY_OF_WEEK, 1);
+        System.out.println(tempDate4);
+        calender3.add(Calendar.DAY_OF_WEEK, 7);
         tempDate5 = calender3.getTime();
-        calender3.add(Calendar.DAY_OF_WEEK, 1);
+        System.out.println(tempDate5);
+        /*calender3.add(Calendar.DAY_OF_WEEK, 1);
         tempDate6 = calender3.getTime();
         calender3.add(Calendar.DAY_OF_WEEK, 1);
         tempDate7 = calender3.getTime();
@@ -164,13 +169,18 @@ public class MonthlyReportActivity extends AppCompatActivity
         calender3.add(Calendar.DAY_OF_WEEK, 1);
         tempDate28 = calender3.getTime();
         calender3.add(Calendar.DAY_OF_WEEK, 1);
-        tempDate29 = calender3.getTime();
+        tempDate29 = calender3.getTime();*/
         dateArr[0] = tempDate;
         dateArr[1] = tempDate2;
         dateArr[2] = tempDate3;
         dateArr[3] = tempDate4;
         dateArr[4] = tempDate5;
-        dateArr[5] = tempDate6;
+        System.out.println(dateArr[0]);
+        System.out.println(dateArr[1]);
+        System.out.println(dateArr[2]);
+        System.out.println(dateArr[3]);
+        System.out.println(dateArr[4]);
+        /*dateArr[5] = tempDate6;
         dateArr[6] = tempDate7;
         dateArr[7] = tempDate8;
         dateArr[8] = tempDate9;
@@ -193,7 +203,7 @@ public class MonthlyReportActivity extends AppCompatActivity
         dateArr[25] = tempDate26;
         dateArr[26] = tempDate27;
         dateArr[27] = tempDate28;
-        dateArr[28] = tempDate29;
+        dateArr[28] = tempDate29;*/
 
         List<Expenses> expensesList = new ArrayList<Expenses>();
 
@@ -204,55 +214,7 @@ public class MonthlyReportActivity extends AppCompatActivity
         // Graph documentation here: https://github.com/jjoe64/GraphView/wiki/Download-and-Getting-Started
 
 
-        int monthTitle = Calendar.getInstance().get(Calendar.MONTH);
-        if(monthTitle == 0)
-        {
-            monthAxis = "Date (Week starting in January)";
-        }
-        if(monthTitle == 1)
-        {
-            monthAxis = "Date (Week starting in February)";
-        }
-        if(monthTitle == 2)
-        {
-            monthAxis = "Date (Week starting in March)";
-        }
-        if(monthTitle == 3)
-        {
-            monthAxis = "Date (Week starting in April)";
-        }
-        if(monthTitle == 4)
-        {
-            monthAxis = "Date (Week starting in May)";
-        }
-        if(monthTitle == 5)
-        {
-            monthAxis = "Date (Week starting in June)";
-        }
-        if(monthTitle == 6)
-        {
-            monthAxis = "Date (Week starting in July)";
-        }
-        if(monthTitle == 7)
-        {
-            monthAxis = "Date (Week starting in August)";
-        }
-        if(monthTitle == 8)
-        {
-            monthAxis = "Date (Week starting in September)";
-        }
-        if(monthTitle == 9)
-        {
-            monthAxis = "Date (Week starting in October)";
-        }
-        if(monthTitle == 10)
-        {
-            monthAxis = "Date (Week starting in November)";
-        }
-        if(monthTitle == 11)
-        {
-            monthAxis = "Date (Week starting in December)";
-        }
+        monthAxis = "Spending by week over the last month";
 
         reff.addValueEventListener(new ValueEventListener() {
             @Override
@@ -265,7 +227,7 @@ public class MonthlyReportActivity extends AppCompatActivity
                 // Also this: https://github.com/jjoe64/GraphView/wiki/Style-options
                 monthlyGraph.getGridLabelRenderer().setHorizontalAxisTitle(monthAxis);
                 monthlyGraph.getGridLabelRenderer().setVerticalAxisTitle("Expenses ($)");
-                monthlyGraph.getGridLabelRenderer().setNumHorizontalLabels(28);
+                monthlyGraph.getGridLabelRenderer().setNumHorizontalLabels(4);
                 monthlyGraph.getGridLabelRenderer().setPadding(40);
                 // Setting graph title:
                 monthlyGraph.setTitle("Monthly Expenses");
@@ -276,30 +238,30 @@ public class MonthlyReportActivity extends AppCompatActivity
                 {
                     Expenses expenses = dataSnapshot.getValue(Expenses.class);
 
-                  if(expenses.creationDate.compareTo(nextMon) <= 0 && expenses.creationDate.compareTo(lastMon) >= 0)
+                  if(expenses.creationDate.compareTo(dateArr[4]) <= 0 && expenses.creationDate.compareTo(dateArr[0]) >= 0)
                     {
                         expensesList.add(expenses);
-                        if(expenses.creationDate.compareTo(dateArr[i+1]) < 0)
+                        if(expenses.creationDate.compareTo(dateArr[1]) < 0)
                         {
-                            spending2[i] = spending2[i]+expenses.spending;
-                            System.out.println(spending2[i]);
+                            spending2[0] = spending2[0]+expenses.spending;
+                            System.out.println(spending2[0]);
                         }
-                        else if(expenses.creationDate.compareTo(dateArr[i+2]) < 0 && expenses.creationDate.compareTo(dateArr[i]) > 0)
+                        else if(expenses.creationDate.compareTo(dateArr[2]) < 0 && expenses.creationDate.compareTo(dateArr[0]) > 0)
                         {
-                            spending2[i+1] = spending2[i+1]+expenses.spending;
-                            System.out.println(spending2[i+1]);
+                            spending2[1] = spending2[1]+expenses.spending;
+                            System.out.println(spending2[1]);
                         }
-                        else if(expenses.creationDate.compareTo(dateArr[i+3]) < 0 && expenses.creationDate.compareTo(dateArr[i+1]) > 0)
+                        else if(expenses.creationDate.compareTo(dateArr[3]) < 0 && expenses.creationDate.compareTo(dateArr[1]) > 0)
                         {
-                            spending2[i+2] = spending2[i+2]+expenses.spending;
-                            System.out.println(spending2[i+2]);
+                            spending2[2] = spending2[2]+expenses.spending;
+                            System.out.println(spending2[2]);
                         }
-                        else if(expenses.creationDate.compareTo(dateArr[i+4]) < 0 && expenses.creationDate.compareTo(dateArr[i+2]) > 0)
+                        else if(expenses.creationDate.compareTo(dateArr[4]) < 0 && expenses.creationDate.compareTo(dateArr[2]) > 0)
                         {
-                            spending2[i+3] = spending2[i+3]+expenses.spending;
-                            System.out.println(spending2[i+3]);
+                            spending2[3] = spending2[3]+expenses.spending;
+                            System.out.println(spending2[3]);
                         }
-                        else if(expenses.creationDate.compareTo(dateArr[i+5]) < 0 && expenses.creationDate.compareTo(dateArr[i+3]) > 0)
+                     /*   else if(expenses.creationDate.compareTo(dateArr[i+5]) < 0 && expenses.creationDate.compareTo(dateArr[i+3]) > 0)
                         {
                             spending2[i+4] = spending2[i+4]+expenses.spending;
                             System.out.println(spending2[i+4]);
@@ -428,23 +390,46 @@ public class MonthlyReportActivity extends AppCompatActivity
                         System.out.println(expenses.creationDate);
                         System.out.println(expenses.creationDate.compareTo(lastMon));
                         System.out.println(expenses.creationDate.compareTo(nextMon));
-                    }
-
+                    }*/
+                   // i++;
+                }
                 }
 
                 int test = calendar2.get(Calendar.DAY_OF_MONTH);
+                //System.out.println(test);
+                //monthly_series.appendData(new DataPoint(test,spending2[0]), true, 10);
+                calendar2.add(Calendar.DAY_OF_YEAR, 7);
+                test = calendar2.get(Calendar.DAY_OF_MONTH);
+                System.out.println(test);
+                //monthly_series.appendData(new DataPoint(0,0.0), true, 10);
+                monthly_series.appendData(new DataPoint(1,spending2[0]), true, 10);
+                calendar2.add(Calendar.DAY_OF_YEAR, 7);
+                test = calendar2.get(Calendar.DAY_OF_MONTH);
+                System.out.println(test);
+                monthly_series.appendData(new DataPoint(2,spending2[1]), true, 10);
+                calendar2.add(Calendar.DAY_OF_YEAR, 7);
+                test = calendar2.get(Calendar.DAY_OF_MONTH);
+                System.out.println(test);
+                monthly_series.appendData(new DataPoint(3,spending2[2]), true, 10);
+                calendar2.add(Calendar.DAY_OF_YEAR, 7);
+                test = calendar2.get(Calendar.DAY_OF_MONTH);
+                System.out.println(test);
+                monthly_series.appendData(new DataPoint(4,spending2[3]), true, 10);
+                //monthly_series.appendData(new DataPoint(5,0.0), true, 10);
+                //monthly_series.appendData(new DataPoint(6,0.0), true, 10);
                 // Populating the graph
-                for(i = 1; i < 29; i++)
-                {
+              //  for(i = 1; i < 5; i++)
+              //  {
                     // We need to change this to dates
-                    y = spending2[i-1];
+                   // y = spending2[i-1];
                     //weekly_series.appendData(new DataPoint(dateCount,y), true, 10);
-                    //monthly_series.appendData(new DataPoint(test,y), true, 40);
-                    calendar2.add(Calendar.DAY_OF_YEAR, 1);
-                    System.out.println(test);
-                    test = calendar2.get(Calendar.DAY_OF_MONTH);
+                 //   System.out.println(test);
+                    //monthly_series.appendData(new DataPoint(test,y), true, 10);
+                //    calendar2.add(Calendar.DAY_OF_YEAR, 7);
 
-                }
+                //    test = calendar2.get(Calendar.DAY_OF_MONTH);
+
+              //  }
                 monthlyGraph.addSeries(monthly_series);
             }
 
