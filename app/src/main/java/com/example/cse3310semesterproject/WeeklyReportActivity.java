@@ -33,13 +33,6 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class WeeklyReportActivity extends AppCompatActivity
 {
-    //LocalDate currDate = LocalDate.now();
-    //LocalDate weekAgoDate = currDate.minusDays(7);
-    //LocalDate monthAgoDate = currDate.minusDays(30);
-    SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-    //Date myDate = dateFormat.parse();
-
-
     Button mReturnHomeFromWeeklyReportBtn, signOutFromWeeklyReportBtn;
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -79,7 +72,7 @@ public class WeeklyReportActivity extends AppCompatActivity
 
         mReturnHomeFromWeeklyReportBtn = findViewById(R.id.returnHomeFromWeeklyReportBtn);
         signOutFromWeeklyReportBtn = findViewById(R.id.signOutFromWeeklyReportBtn);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+
         calendar.setFirstDayOfWeek(Calendar.MONDAY);
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         calendar2.setFirstDayOfWeek(Calendar.MONDAY);
